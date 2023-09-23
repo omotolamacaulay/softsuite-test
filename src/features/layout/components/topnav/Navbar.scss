@@ -1,0 +1,190 @@
+// @use 'variables';
+@use "../../../styles/variables" as var;
+@import "../../../styles/breakpoints";
+
+.navbar {
+  position: fixed;
+  box-shadow: var.$shadow-1;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding: 20px 30px;
+  min-height: var.$navbar-height-mobile;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  top: 0;
+  background-color: #fff;
+  z-index: 150;
+
+  @include md-breakpoint {
+    min-height: var.$navbar-height-web;
+  }
+
+  &__logo {
+    @include md-breakpoint {
+      min-width: var.$sidenav-width;
+    }
+  }
+
+  &__items {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include sm-breakpoint {
+      width: 70%;
+      margin-left: 30px;
+    }
+
+    @include md-breakpoint {
+      width: 100%;
+      margin-left: 10px;
+    }
+  }
+
+  &__search {
+    display: none;
+    @include sm-breakpoint {
+      display: block;
+      width: 40%;
+    }
+
+    &-group {
+      display: flex;
+      max-width: 400px;
+      height: 57px;
+
+      .form-input {
+        border: 1px solid rgba(33, 63, 125, 0.2);
+        border-radius: 6px 0 0 6px;
+        width: 100%;
+        height: 100%;
+        padding-left: 20px;
+
+        &::placeholder {
+          color: rgba(33, 63, 125, 0.7);
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+
+      .icon {
+        background-color: var.$color-secondary;
+        display: flex;
+        align-items: center;
+        padding: 0 16.5px;
+        border-radius: 0 8px 8px 0;
+      }
+    }
+  }
+  &__company {
+    display: none;
+    @include xs-breakpoint {
+      display: block;
+      width: 260px;
+      display: flex;
+    }
+    background-color: #f6f7f9;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 16px;
+    .home {
+      margin-right: 16px;
+    }
+    .arrow {
+      margin-left: 32px;
+    }
+    .company__profile {
+      display: flex;
+      flex-direction: column;
+    }
+    .change-org {
+      color: #2d416f;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .org-name {
+      color: #2d416f;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  &__actions {
+    display: none;
+
+    @include md-breakpoint {
+      min-width: 30%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-right: 10px;
+
+      .notification {
+        margin: 0 20px;
+        @include lg-breakpoint {
+          margin: 0 40px;
+        }
+      }
+
+      .current-user {
+        display: flex;
+        align-items: center;
+
+        img {
+          height: 48px;
+          width: 48px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .username {
+          margin: 0 12px;
+          font-size: 18px;
+          font-weight: 600;
+          color: var.$color-primary;
+          @include lg-breakpoint {
+            margin: 0 21px;
+          }
+        }
+        .role {
+          font-size: 16px;
+          font-weight: 400;
+          margin: 0 12px;
+          color: #818da9;
+          @include lg-breakpoint {
+            margin: 0 21px;
+          }
+        }
+        .user-profile {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+
+    &--mobile {
+      @include md-breakpoint {
+        display: none;
+      }
+
+      img {
+        color: var.$color-primary;
+      }
+
+      &:focus {
+        animation: spin 1s linear infinite;
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+    }
+  }
+}
