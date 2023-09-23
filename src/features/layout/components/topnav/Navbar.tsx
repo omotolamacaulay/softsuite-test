@@ -12,9 +12,9 @@ export default function Navbar({ toggleNav, navIsOpen }: NavbarProps) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentYear(new Date().getFullYear())
-    }, 60000) // Update every minute (you can adjust the interval)
+    }, 60000)
 
-    return () => clearInterval(intervalId) // Clean up the interval on unmount
+    return () => clearInterval(intervalId)
   }, [])
   return (
     <div className="body">
