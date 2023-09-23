@@ -1,0 +1,95 @@
+@use "../../styles/variables" as var;
+@import "../../styles/breakpoints";
+
+.dashboard {
+  min-height: 100vh;
+
+  &__body {
+    background-color: #fbfbfb;
+    width: 100%;
+    margin-top: var.$navbar-height-mobile;
+    padding: 30px 20px;
+    min-height: calc(100vh - var.$navbar-height-mobile);
+
+    @include md-breakpoint {
+      width: calc(100% - var.$sidenav-width);
+      margin-top: var.$navbar-height-web;
+      margin-left: var.$sidenav-width;
+      min-height: calc(100vh - var.$navbar-height-web);
+      padding: 60px 20px;
+    }
+
+    @include lg-breakpoint {
+      padding: 60px;
+    }
+
+    .back-button {
+      margin-bottom: 26px;
+
+      span {
+        display: none;
+
+        @include sm-breakpoint {
+          display: inline-block;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          color: var.$color-primary-alt;
+          margin-left: 14px;
+        }
+      }
+      img {
+        display: inline-block;
+      }
+    }
+
+    .page__header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+
+      h2 {
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+      }
+
+      button {
+        display: none;
+        border-radius: 8px;
+        padding: 12px;
+        background-color: transparent;
+        min-width: 170px;
+
+        @include xs-breakpoint {
+          display: inline-block;
+        }
+
+        &.activate {
+          border: 1px solid #39cdcc;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 16px;
+          text-align: center;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #39cdcc;
+          margin-left: 20px;
+        }
+
+        &.blacklist {
+          border: 1px solid #e4033b;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 16px;
+          text-align: center;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          margin-left: 20px;
+          color: #e4033b;
+        }
+      }
+    }
+  }
+}
