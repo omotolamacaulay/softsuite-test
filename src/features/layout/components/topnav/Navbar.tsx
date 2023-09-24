@@ -71,7 +71,8 @@ export default function Navbar({ toggleNav, navIsOpen }: NavbarProps) {
         </div>
       </nav>
       <footer className="bottom">
-        &copy; {currentYear} SoftSuite. All rights reserved
+        <p>&copy; {currentYear} SoftSuite. All rights reserved</p>
+        <p>support@softsuite.com</p>
       </footer>
     </div>
   )
