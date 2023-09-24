@@ -42,54 +42,5 @@
         display: inline-block;
       }
     }
-
-    .page__header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 40px;
-
-      h2 {
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 28px;
-      }
-
-      button {
-        display: none;
-        border-radius: 8px;
-        padding: 12px;
-        background-color: transparent;
-        min-width: 170px;
-
-        @include xs-breakpoint {
-          display: inline-block;
-        }
-
-        &.activate {
-          border: 1px solid #39cdcc;
-          font-weight: 600;
-          font-size: 14px;
-          line-height: 16px;
-          text-align: center;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: #39cdcc;
-          margin-left: 20px;
-        }
-
-        &.blacklist {
-          border: 1px solid #e4033b;
-          font-weight: 600;
-          font-size: 14px;
-          line-height: 16px;
-          text-align: center;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          margin-left: 20px;
-          color: #e4033b;
-        }
-      }
-    }
   }
 }
