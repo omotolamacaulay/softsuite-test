@@ -15,6 +15,12 @@ import User from "./user.png"
 import Close from "./icon-close.svg"
 import Hamburger from "./icon-hamburger.svg"
 import Employees from "./employees.svg"
+import Filter from "./filter.svg"
+import Prev from "./prev.svg"
+import Next from "./next.svg"
+import FilterBtn from "./filter-btn.svg"
+import Plus from "./plus.svg"
+import More from "./more.svg"
 
 const Icons: { [key: string]: string } = {
   Logo,
@@ -34,6 +40,12 @@ const Icons: { [key: string]: string } = {
   Close,
   Hamburger,
   Employees,
+  Filter,
+  Prev,
+  Next,
+  FilterBtn,
+  Plus,
+  More,
 }
 
 export default Icons
