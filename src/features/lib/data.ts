@@ -6,7 +6,7 @@ const navlinks: navLinksType = [
   {
     title: "Payroll Activities",
     icon: "PayrollAct",
-    path: "/#",
+    path: "/payroll",
     iconClosed: "ArrowDown",
     iconOpen: "ArrowUp",
     subNav: [
@@ -43,12 +43,12 @@ const navlinks: navLinksType = [
   {
     title: "Salary Structure",
     icon: "SalaryStructure",
-    path: "/#",
+    path: "/salary",
   },
   {
     title: "Element Setup",
     icon: "Settings",
-    path: "/#",
+    path: "/settings",
     iconClosed: "ArrowDown",
     iconOpen: "ArrowUp",
     subNav: [
