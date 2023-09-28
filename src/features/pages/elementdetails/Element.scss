@@ -1,0 +1,62 @@
+@use "../../styles/variables" as var;
+@import "../../styles/breakpoints";
+.element {
+  &__detail {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    border-top: 1px #d4d8e2 solid;
+    border-left: 0.5px #d4d8e2 solid;
+    border-bottom: 0.5px #d4d8e2 solid;
+    border-right: 0.5px #d4d8e2 solid;
+
+    @include sm-breakpoint {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .single__detail {
+    padding: 8px 24px;
+    border-top: 0.5px #d4d8e2 solid;
+    border-left: 0.5px #d4d8e2 solid;
+    border-bottom: 0.5px #d4d8e2 solid;
+    border-right: 0.5px #d4d8e2 solid;
+  }
+  .single__detail:first-child {
+    border-top: 0px;
+  }
+
+  .single__detail:nth-child(2) {
+    border-top: 0.5px #d4d8e2 solid;
+    @include sm-breakpoint {
+      border-top: 0px;
+    }
+  }
+
+  &__label {
+    color: #7e7e7e;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 16.5px;
+    letter-spacing: 0.33px;
+    word-wrap: break-word;
+  }
+  &__text {
+    color: #2d416f;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    word-wrap: break-word;
+  }
+  .elementLinkAction {
+    display: flex;
+    gap: 6px;
+  }
+  .links__header {
+    margin-top: 84px;
+    margin-bottom: 16px;
+    color: #2d416f;
+    font-size: 19px;
+    font-weight: 700;
+  }
+}
