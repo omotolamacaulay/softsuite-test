@@ -15,11 +15,16 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
+    "@tanstack/react-table": "^8.10.3",
+    "antd": "^5.9.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.46.2",
     "react-paginate": "^8.2.0",
     "react-redux": "^8.0.1",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "react-step-progress-bar": "^1.0.3",
+    "react-table": "^7.8.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.2.0",
@@ -28,6 +33,7 @@
     "@testing-library/user-event": "^14.2.5",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/react-table": "^7.7.16",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.0.0",

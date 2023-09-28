@@ -1,0 +1,160 @@
+@use "../../styles/variables" as var;
+@import "../../styles/breakpoints";
+.element-form {
+  .ant-input {
+    height: 56px;
+    width: 100%;
+  }
+  .form-group {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+
+    @include md-breakpoint {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .input-group {
+    margin-bottom: 24px;
+  }
+  label {
+    color: #818da9;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .ant-space-item {
+    margin-bottom: 0px;
+  }
+  .ant-space {
+    row-gap: 0px;
+    width: 100%;
+    display: grid;
+  }
+  .ant-select {
+    height: 56px;
+    // width: 325px !important;
+  }
+  .ant-picker,
+  .ant-radio-group {
+    height: 56px;
+    display: grid;
+    border-radius: 1px solid red;
+  }
+  p {
+    color: #e05453;
+    font-size: 12px;
+    font-weight: 500;
+    background-color: #fdf6f6;
+    display: block;
+    width: 100%;
+    padding: 6px 8px;
+    margin-top: 8px;
+  }
+  span {
+    color: #818da9;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .radio-group {
+    padding: 16px 8px;
+    border: 1px #dadada solid;
+    border-radius: 4px;
+    // margin-bottom: 24px;
+  }
+
+  .button-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    @include md-breakpoint {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .btn {
+    border-radius: 4px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 16px;
+    padding: 16px;
+    width: fit-content;
+    margin-left: auto;
+  }
+  .primary-btn {
+    background: #4baa79;
+    color: #fff;
+    width: 100%;
+  }
+  .secondary-btn {
+    background: #fff;
+    color: #4baa79;
+    width: 100%;
+    border: 2px solid #4baa79;
+  }
+  .input {
+    height: 56px;
+    width: 100%;
+    border: 1px #dadada solid;
+    border-radius: 4px;
+  }
+  input[type="date"]::-webkit-datetime-edit-text,
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #818da9;
+    font-size: 14px;
+  }
+
+  /* regular text style */
+  input[type="date"].date-input--has-value::-webkit-datetime-edit-text,
+  input[type="date"].date-input--has-value::-webkit-datetime-edit-month-field,
+  input[type="date"].date-input--has-value::-webkit-datetime-edit-day-field,
+  input[type="date"].date-input--has-value::-webkit-datetime-edit-year-field {
+    color: #818da9;
+    font-size: 14px;
+  }
+  ::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23bbbbbb" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+  }
+  input[type="radio"]:after {
+    width: 11px;
+    height: 11px;
+    border-radius: 14px;
+    top: -5.5px;
+    left: 1px;
+    position: relative;
+    background-color: #fff;
+    content: "";
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+  }
+
+  input[type="radio"]:checked:after {
+    width: 11px;
+    height: 11px;
+    border-radius: 14px;
+    top: -5.5px;
+    left: 1px;
+    position: relative;
+    background-color: #4baa79;
+    content: "";
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+  }
+  .radio {
+    border-radius: 4px;
+    border: 1px #dadada solid;
+    padding: 16px 8px;
+    display: flex;
+    .radiogroup {
+      margin-right: 16px;
+    }
+  }
+}
