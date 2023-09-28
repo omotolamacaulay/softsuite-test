@@ -21,6 +21,9 @@ import Next from "./next.svg"
 import FilterBtn from "./filter-btn.svg"
 import Plus from "./plus.svg"
 import More from "./more.svg"
+import View from "./view.svg"
+import Edit from "./edit.svg"
+import Delete from "./delete.svg"
 
 const Icons: { [key: string]: string } = {
   Logo,
@@ -46,6 +49,9 @@ const Icons: { [key: string]: string } = {
   FilterBtn,
   Plus,
   More,
+  View,
+  Edit,
+  Delete,
 }
 
 export default Icons
