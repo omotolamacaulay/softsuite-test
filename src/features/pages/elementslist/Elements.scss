@@ -190,6 +190,8 @@
   }
 }
 #modal {
+}
+.createElement__modal {
   background-color: rgba(0, 0, 0, 0.4);
   position: fixed;
   left: 0;
@@ -207,19 +209,45 @@
   }
 }
 
-#modal:empty {
+.createElement__modal:empty {
   display: none;
 }
 
-#modal > div {
+.createElement__modal > div {
   background-color: white;
-  max-width: 745px;
+  width: 745px;
   padding: 24px 40px;
   // text-align: center;
   border-radius: 8px;
 }
 
-#modal .buttons button {
+.createElement__modal .buttons button {
   display: inline-block;
   margin-right: 15px;
+}
+.elementLinkDetails {
+  background-color: rgba(0, 0, 0, 0.03);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 100px;
+  z-index: 1000;
+  display: flex;
+  justify-content: end;
+  // align-items: center;
+  h2 {
+    color: #2d416f;
+    font-size: 24px;
+    margin-bottom: 42px;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
+}
+.elementLinkDetails > div {
+  background-color: white;
+  width: 626px;
+  padding: 24px 40px;
+  // text-align: center;
+  // border-radius: 8px;
 }
