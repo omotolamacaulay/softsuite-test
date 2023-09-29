@@ -69,12 +69,18 @@ const ElementForm = () => {
 
   return (
     <div>
+      <h1>Create Element</h1>
       <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {
           {
             pageone: <FormpageOne onButtonClick={nextPage} control={control} />,
-            pagetwo: <FormPageTwo onButtonClick={nextPage} />,
+            pagetwo: (
+              <FormPageTwo
+                onButtonClick={handleSubmit(onSubmit)}
+                control={control}
+              />
+            ),
           }[page]
         }
       </form>

@@ -1,40 +1,16 @@
 import { useForm, Controller } from "react-hook-form"
 import { Select, ConfigProvider, Space, Radio, Switch, DatePicker } from "antd"
 import { Elements } from "../../../../types"
-import { useRef } from "react"
+// import { useRef } from "react"
 
-const FormPageTwo = ({ onButtonClick }) => {
+const FormPageTwo = ({ onButtonClick, control }) => {
   const {
     register,
-    control,
+
     // trigger,
     formState: { errors },
   } = useForm<Elements>()
-  const inputRef = useRef(null)
-  //   const handleChange = (value: string) => {
-  //     console.log(`selected ${value}`)
-  //   }
-
-  //   const radioOnChange = (e: RadioChangeEvent) => {
-  //     console.log("radio checked", e.target.value)
-  //     setValue(e.target.value)
-  //   }
-  //   const onChange = (
-  //     value: DatePickerProps["value"] | RangePickerProps["value"],
-  //     dateString: [string, string] | string,
-  //   ) => {
-  //     console.log("Selected Time: ", value)
-  //     console.log("Formatted Selected Time: ", dateString)
-  //   }
-  //   const onChangeSwitch = (checked: boolean) => {
-  //     console.log(`switch to ${checked}`)
-  //   }
-
-  //   const onOk = (
-  //     value: DatePickerProps["value"] | RangePickerProps["value"],
-  //   ) => {
-  //     console.log("onOk: ", value)
-  //   }
+  // const inputRef = useRef(null)
   return (
     <ConfigProvider
       theme={{
@@ -64,7 +40,7 @@ const FormPageTwo = ({ onButtonClick }) => {
         <div className="form-group">
           <div className="input-group">
             <label htmlFor="effectiveStartDate">Effective Start Date</label>
-            <Controller
+            {/* <Controller
               control={control}
               render={({ field }) => (
                 <input
@@ -78,97 +54,89 @@ const FormPageTwo = ({ onButtonClick }) => {
               {...register("effectiveStartDate", {
                 valueAsDate: true,
               })}
-            />
-            {/* <Space>
+            /> */}
+            <Space>
               <Controller
-                name="effectiveStartDate"
+                // name="effectiveStartDate"
                 control={control}
-                render={({ field }) => <DatePicker {...field} />}
+                render={({ field }) => (
+                  <DatePicker {...field} style={{ width: "100%" }} />
+                )}
+                {...register("effectiveStartDate", {
+                  valueAsDate: true,
+                })}
               />
-            </Space> */}
+            </Space>
 
             {errors.effectiveStartDate && <p>This field is required</p>}
           </div>
           <div className="input-group">
-            <label htmlFor="endDate">Effective End Date</label>
-            <input
-              className="input"
-              type="date"
-              {...register("effectiveEndDate", {
-                valueAsDate: true,
-              })}
-            />
+            <label htmlFor="effectiveEndDate">Effective End Date</label>
+            <Space>
+              <Controller
+                // name="effectiveStartDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker {...field} style={{ width: "100%" }} />
+                )}
+                {...register("effectiveEndDate", {
+                  valueAsDate: true,
+                })}
+              />
+            </Space>
             {errors.effectiveEndDate && <p>This field is required</p>}
           </div>
         </div>
         <div className="form-group">
           <div className="input-group">
             <label htmlFor="processingType">Processing Type</label>
-            <div className="radio">
-              <div className="radiogroup">
-                <input
-                  {...register("processingType", {
-                    required: true,
-                  })}
-                  type="radio"
-                  value={1}
-                />
-                <span>Open</span>
-              </div>
-              <div className="radiogroup">
-                <input
-                  {...register("processingType", {
-                    required: true,
-                  })}
-                  type="radio"
-                  value={2}
-                />
-                <span>Closed</span>
-              </div>
+            <div className="">
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <Radio.Group {...field} className="radio">
+                    <Radio value={1}>Open</Radio>
+                    <Radio value={2}>Closed</Radio>
+                  </Radio.Group>
+                )}
+                {...register("processingType", {
+                  valueAsDate: true,
+                })}
+              />
             </div>
 
             {errors.processingType && <p>This field is required</p>}
           </div>
           <div className="input-group">
+            <label htmlFor="payFrequency">Pay Frequency</label>
             <div className="">
-              <label htmlFor="payFrequency">Pay Frequency</label>
-              <div className="radio">
-                <div className="radiogroup">
-                  <input
-                    {...register("payFrequency", {
-                      required: true,
-                    })}
-                    type="radio"
-                    value={1}
-                  />
-                  <span>Monthly</span>
-                </div>
-                <div className="radiogroup">
-                  <input
-                    {...register("payFrequency", {
-                      required: true,
-                    })}
-                    type="radio"
-                    value={2}
-                  />
-                  <span>Selected Months</span>
-                </div>
-              </div>
-
-              {errors.payFrequency && <p>This field is required</p>}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <Radio.Group {...field} className="radio">
+                    <Radio value={1}>Monthly</Radio>
+                    <Radio value={2}>Selected Months</Radio>
+                  </Radio.Group>
+                )}
+                {...register("payFrequency", {
+                  valueAsDate: true,
+                })}
+              />
             </div>
+
+            {errors.payFrequency && <p>This field is required</p>}
           </div>
         </div>
         <div className="input-group">
           <Space wrap>
             <label>Selected Pay Months</label>
             <Controller
+              // name="classificationId"
               control={control}
               render={({ field }) => (
                 <Select
                   {...field}
                   mode="multiple"
-                  //   disabled
                   style={{ width: "100%" }}
                   options={[
                     {
@@ -201,31 +169,24 @@ const FormPageTwo = ({ onButtonClick }) => {
         <div className="form-group">
           <div className="input-group">
             <label htmlFor="prorate">Prorate</label>
-            <div className="radio">
-              <div className="radiogroup">
-                <input
-                  {...register("prorate", {
-                    required: true,
-                  })}
-                  type="radio"
-                  value={1}
-                />
-                <span>Yes</span>
-              </div>
-              <div className="radiogroup">
-                <input
-                  {...register("prorate", {
-                    required: true,
-                  })}
-                  type="radio"
-                  value={2}
-                />
-                <span>No</span>
-              </div>
+            <div className="">
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <Radio.Group {...field} className="radio">
+                    <Radio value={1}>Yes</Radio>
+                    <Radio value={2}>No</Radio>
+                  </Radio.Group>
+                )}
+                {...register("prorate", {
+                  valueAsDate: true,
+                })}
+              />
             </div>
 
             {errors.prorate && <p>This field is required</p>}
           </div>
+
           <div className="input-group">
             <Space wrap>
               <label>Element Classification</label>

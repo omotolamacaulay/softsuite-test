@@ -63,7 +63,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    style={{ width: 300 }}
+                    style={{ width: "100%" }}
                     options={[
                       {
                         value: 0,
@@ -94,7 +94,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    style={{ width: 300 }}
+                    style={{ width: "100%" }}
                     options={[
                       {
                         value: 0,
@@ -123,7 +123,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    style={{ width: 300 }}
+                    style={{ width: "100%" }}
                     options={[
                       {
                         value: 0,
@@ -189,7 +189,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
             type="button"
             value="Next"
             onClick={() => {
-              //   onButtonClick("pagetwo")
+              onButtonClick("pagetwo")
               trigger([
                 "name",
                 // "classificationId",
