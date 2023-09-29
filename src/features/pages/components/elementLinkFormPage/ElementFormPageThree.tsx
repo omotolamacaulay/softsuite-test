@@ -1,16 +1,48 @@
 import { useForm, Controller } from "react-hook-form"
-import { Select, ConfigProvider, Space, Radio, Switch, DatePicker } from "antd"
-import { Elements } from "../../../../types"
-// import { useRef } from "react"
+import {
+  Select,
+  ConfigProvider,
+  Space,
+  Radio,
+  Switch,
+  DatePicker,
+  Input,
+} from "antd"
+import { ElementDetail } from "../../../../types"
+import { useRef } from "react"
 
-const FormPageTwo = ({ onButtonClick, control }) => {
+const ElementFormPageThree = ({ onButtonClick, control }) => {
   const {
     register,
 
     // trigger,
     formState: { errors },
-  } = useForm<Elements>()
-  // const inputRef = useRef(null)
+  } = useForm<ElementDetail>()
+  const inputRef = useRef(null)
+  //   const handleChange = (value: string) => {
+  //     console.log(`selected ${value}`)
+  //   }
+
+  //   const radioOnChange = (e: RadioChangeEvent) => {
+  //     console.log("radio checked", e.target.value)
+  //     setValue(e.target.value)
+  //   }
+  //   const onChange = (
+  //     value: DatePickerProps["value"] | RangePickerProps["value"],
+  //     dateString: [string, string] | string,
+  //   ) => {
+  //     console.log("Selected Time: ", value)
+  //     console.log("Formatted Selected Time: ", dateString)
+  //   }
+  //   const onChangeSwitch = (checked: boolean) => {
+  //     console.log(`switch to ${checked}`)
+  //   }
+
+  //   const onOk = (
+  //     value: DatePickerProps["value"] | RangePickerProps["value"],
+  //   ) => {
+  //     console.log("onOk: ", value)
+  //   }
   return (
     <ConfigProvider
       theme={{
@@ -39,55 +71,76 @@ const FormPageTwo = ({ onButtonClick, control }) => {
       <div className="pg-1">
         <div className="form-group">
           <div className="input-group">
-            <label htmlFor="effectiveStartDate">Effective Start Date</label>
-            {/* <Controller
+            <Space wrap>
+              <label>Amount Type</label>
+              <Controller
+                // name="amountType"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    style={{ width: "100%" }}
+                    options={[
+                      {
+                        value: 0,
+                        label: "Select an Amount Type",
+                      },
+                      { value: 1, label: "Deduction" },
+                      { value: 2, label: "Variation" },
+                      { value: 3, label: "Payroll" },
+                    ]}
+                  />
+                )}
+                {...register("amountType", {
+                  required: true,
+                })}
+              />
+
+              {errors.amountType && <p>This field is required</p>}
+            </Space>
+          </div>
+          <div className="input-group">
+            <label>Enter Amount</label>
+            <Controller
               control={control}
+              //   name="name"
               render={({ field }) => (
-                <input
-                  {...field}
-                  ref={inputRef}
-                  className="input"
-                  type="date"
-                  defaultValue="Initial value"
-                />
+                <Input {...field} placeholder="Input Name" />
               )}
-              {...register("effectiveStartDate", {
-                valueAsDate: true,
+              {...register("amount", {
+                required: true,
               })}
-            /> */}
+            />
+            {errors?.name?.type === "required" && <p>This field is required</p>}
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="input-group">
+            <label htmlFor="effectiveStartDate">Effective Start Date</label>
             <Space>
               <Controller
-                // name="effectiveStartDate"
+                name="effectiveStartDate"
                 control={control}
                 render={({ field }) => (
                   <DatePicker {...field} style={{ width: "100%" }} />
                 )}
-                {...register("effectiveStartDate", {
-                  valueAsDate: true,
-                })}
               />
             </Space>
-
-            {errors.effectiveStartDate && <p>This field is required</p>}
           </div>
           <div className="input-group">
             <label htmlFor="effectiveEndDate">Effective End Date</label>
             <Space>
               <Controller
-                // name="effectiveStartDate"
+                name="effectiveStartDate"
                 control={control}
                 render={({ field }) => (
                   <DatePicker {...field} style={{ width: "100%" }} />
                 )}
-                {...register("effectiveEndDate", {
-                  valueAsDate: true,
-                })}
               />
             </Space>
-            {errors.effectiveEndDate && <p>This field is required</p>}
           </div>
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <div className="input-group">
             <label htmlFor="processingType">Processing Type</label>
             <div className="">
@@ -164,11 +217,11 @@ const FormPageTwo = ({ onButtonClick, control }) => {
 
             {errors.selectedMonths && <p>This field is required</p>}
           </Space>
-        </div>
+        </div> */}
 
         <div className="form-group">
           <div className="input-group">
-            <label htmlFor="prorate">Prorate</label>
+            <label htmlFor="automate">Automate</label>
             <div className="">
               <Controller
                 control={control}
@@ -178,18 +231,14 @@ const FormPageTwo = ({ onButtonClick, control }) => {
                     <Radio value={2}>No</Radio>
                   </Radio.Group>
                 )}
-                {...register("prorate", {
-                  valueAsDate: true,
-                })}
+                {...register("automate", {})}
               />
             </div>
-
-            {errors.prorate && <p>This field is required</p>}
           </div>
 
           <div className="input-group">
             <Space wrap>
-              <label>Element Classification</label>
+              <label>Status</label>
               <div className="radio">
                 <Controller
                   name="status"
@@ -204,7 +253,6 @@ const FormPageTwo = ({ onButtonClick, control }) => {
                 />
                 <span>Active</span>
               </div>
-              {errors.status && <p>This field is required</p>}
             </Space>
           </div>
         </div>
@@ -213,15 +261,15 @@ const FormPageTwo = ({ onButtonClick, control }) => {
           <button
             className="btn secondary-btn"
             type="button"
-            onClick={() => onButtonClick("pageone")}
+            onClick={() => onButtonClick("pagetwo")}
           >
             Back
           </button>
-          <button className="btn primary-btn">Create New Element</button>
+          <button className="btn primary-btn">Create A New Element Link</button>
         </div>
       </div>
     </ConfigProvider>
   )
 }
 
-export default FormPageTwo
+export default ElementFormPageThree

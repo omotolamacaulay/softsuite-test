@@ -1,12 +1,13 @@
 import "./Element.scss"
 import { useParams, Link } from "react-router-dom"
-import { useEffect, useMemo } from "react"
-// import ElementsTable from "../components/ElementsTable"
+import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { fetchSingleElement } from "../../counter/elementSlice"
-import { Elements } from "../../../types"
+import { ElementDetail, Elements } from "../../../types"
 import Icons from "../../assets/images"
+import ElementLinkForm from "../components/ElementLinkForm"
 import "../components/ElementsTable.scss"
+import ReactPaginate from "react-paginate"
 import { useState } from "react"
 import Modal from "../components/Modal"
 
@@ -28,15 +29,20 @@ interface ElementsTableProps {
 const Element: React.FC<ElementsTableProps> = ({ users }) => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
   const [showModal, setShowModal] = useState(false)
-  // const dispatch = useAppDispatch()
-  // const element = useAppSelector((state) => state.elements.elementsDetail)
-  // const { id } = useParams() as { id: string }
-  // // const [user] = useUser(id);
-  // useEffect(() => {
-  //   dispatch(fetchSingleElement(id))
-  //   console.log(element)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  const [showElementModal, setShowElementModal] = useState(false)
+
+  const [pageCount, setPageCount] = useState(0)
+  const [itemOffset, setItemOffset] = useState(0)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const dispatch = useAppDispatch()
+  const element = useAppSelector((state) => state.elements.elementsDetail)
+  const { id } = useParams() as { id: string }
+  // const [user] = useUser(id);
+  useEffect(() => {
+    dispatch(fetchSingleElement(id))
+    console.log(element)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   //   const formatDate = (date: string) => {
   //     return moment(date).format("MMM DD YYYY, h:mm a")
@@ -45,13 +51,26 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen)
   }
-  const filterUsers = () => {
-    toggleForm()
-  }
+  // useEffect(() => {
+  //   // const endOffset = itemOffset + itemsPerPage
+  //   setPageCount(Math.ceil(users.length / itemsPerPage))
+  // }, [itemOffset, itemsPerPage, users])
 
-  const resetFilter = () => {
-    toggleForm()
-  }
+  // const handlePageClick = (event: { selected: number }) => {
+  //   const newOffset = (event.selected * itemsPerPage) % users.length
+  //   setItemOffset(newOffset)
+  // }
+
+  // const selectPageCount = (e: ChangeEvent<HTMLSelectElement>) => {
+  //   setItemsPerPage(+e.currentTarget.value)
+  // }
+  // const filterUsers = () => {
+  //   toggleForm()
+  // }
+
+  // const resetFilter = () => {
+  //   toggleForm()
+  // }
   const getRandomElement = (arr: string | any[]) =>
     arr[Math.floor(Math.random() * arr.length)]
 
@@ -111,7 +130,12 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
     <div className="elements">
       <div className="element">
         <div className="page__header">
-          <h2>Element Detail</h2>
+          <div className="element__back">
+            <Link to="/elements">
+              <img src={Icons["Back"]} alt="SVG logo" />
+            </Link>
+          </div>
+          <h2>Element Details</h2>
           <div className="element__detail">
             <div className="single__detail">
               <p className="element__label">Element Name</p>
@@ -179,10 +203,17 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
               </div>
             </div>
           </div>
-          <button className="add-btn" onClick={() => setShowModal(true)}>
+          <button className="add-btn" onClick={() => setShowElementModal(true)}>
             Create Element Link
             <img src={Icons["Plus"]} alt="SVG logo" />
           </button>
+          {showElementModal ? (
+            <Modal>
+              <div className="createElement__modal">
+                <ElementLinkForm />
+              </div>
+            </Modal>
+          ) : null}
         </div>
         <div className="users__tabBody" onClick={() => setIsFormOpen(false)}>
           <div className="mobile-header">
@@ -286,9 +317,7 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
               {elements.map((user, index: number) => (
                 <tr key={index}>
                   <td data-name="usename" className="username">
-                    <Link to={`/elements/${index}/elementlinks/${index}`}>
-                      {user.name}
-                    </Link>
+                    {user.name}
                     <span className={`status-span mobile ${user.status}`}>
                       {user.status}
                     </span>
@@ -303,11 +332,109 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
                     NGN {user.ammount}
                   </td>
                   <td data-name="organization">
-                    <Link to={`/elements/${index}/elementlinks/${index}`}>
+                    <Link to={() => {}} onClick={() => setShowModal(true)}>
                       View Details
                     </Link>
                   </td>
-
+                  {showModal ? (
+                    <Modal>
+                      <div className="elementLinkDetails">
+                        <div
+                          className="page__header"
+                          style={{ padding: "32px" }}
+                        >
+                          <button
+                            // type="button"
+                            className="closeElementLink"
+                            onClick={() => setShowModal(false)}
+                          >
+                            <img src={Icons["CloseModal"]} alt="" />
+                          </button>
+                          <h2>Element Detail</h2>
+                          <div className="element__detail">
+                            <div className="single__detail">
+                              <p className="element__label">NAME</p>
+                              <p className="element__text">{user.name}</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">sub organization</p>
+                              <p className="elementLinkDetails__text">
+                                {user.subOrganization}
+                              </p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Department</p>
+                              <p className="element__text">{user.department}</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Location</p>
+                              <p className="element__text">Monthly Run</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Employee Type</p>
+                              <p className="element__text">18-09-2023</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">
+                                Employee Category
+                              </p>
+                              <p className="element__text">
+                                {user.employeeCategory}
+                              </p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Effective Date</p>
+                              <p className="element__text">Open</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Status</p>
+                              <p className="element__text">{user.status}</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">GRADE</p>
+                              <p className="element__text">
+                                January, February, March, April
+                              </p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Grade Step</p>
+                              <p className="element__text">Yes</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Amount Type</p>
+                              <p className="element__text">Active</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Amount</p>
+                              <p className="element__text">
+                                NGN {user.ammount}
+                              </p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">PENSION</p>
+                              <p className="element__text">Yes</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">Housing</p>
+                              <p className="element__text">Yes</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">
+                                Effective Start Date
+                              </p>
+                              <p className="element__text">Yes</p>
+                            </div>
+                            <div className="single__detail">
+                              <p className="element__label">
+                                Effective End Date
+                              </p>
+                              <p className="element__text">Yes</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Modal>
+                  ) : null}
                   <td data-name="action" className="elementLinkAction">
                     <img src={Icons["Edit"]} alt="" />
                     <img src={Icons["Delete"]} alt="" />
@@ -316,6 +443,53 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
               ))}
             </tbody>
           </table>
+          {/* <div className="pagination_wrapper">
+            <ReactPaginate
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item prev"
+              previousLinkClassName="page-link"
+              nextClassName="page-item next"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+
+            {users.length > 0 && (
+              <div className="select-box">
+                <span>
+                  Showing out
+                  <span>
+                    <label htmlFor="pageitems" hidden></label>
+                    <select
+                      className="pageitems"
+                      name="page Items"
+                      id="pageitems"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        selectPageCount(e)
+                      }
+                    >
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </span>
+                  of {users.length}
+                </span>
+              </div>
+            )}
+          </div> */}
         </div>
       </div>
     </div>

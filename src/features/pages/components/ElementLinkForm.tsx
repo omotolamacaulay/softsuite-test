@@ -1,36 +1,47 @@
 import { useState } from "react"
-import MultiStepProgressBar from "./progressBar/MultiStepProgressBar"
+
 // import ReactDOM from "react-dom"
-import FormpageOne from "./formpage/FormpageOne"
-import FormPageTwo from "./formpage/FormPageTwo"
+import ElementFormPageOne from "./elementLinkFormPage/ElementFormPageOne"
+import ElementFormPageTwo from "./elementLinkFormPage/ElementFormPageTwo"
+import ElementFormPageThree from "./elementLinkFormPage/ElementFormPageThree"
+import MultiProgressElement from "./elementLinkFormPage/MultiProgressElement"
 import { useForm } from "react-hook-form"
 
 import { Elements } from "../../../types"
 import "./ElementForm.scss"
 import Modal from "../components/Modal"
 
-const ElementForm = () => {
+const ElementLinkForm = () => {
   const [page, setPage] = useState("pageone")
   const [showModal, setShowModal] = useState(false)
   const { handleSubmit, control } = useForm<Elements>({
     defaultValues: {
+      elementId: 0,
+      suborganizationId: 0,
       name: "",
-      description: "",
-      payRunId: 0,
-      payRunValueId: 0,
-      classificationId: 0,
-      classificationValueId: 0,
-      categoryId: 0,
-      categoryValueId: 0,
-      reportingName: "",
-      processingType: "",
-      status: "",
-      prorate: "",
+      locationId: 0,
+      departmentId: 0,
+      employeeCategoryId: 0,
+      employeeCategoryValueId: 0,
+      employeeTypeId: 0,
+      employeeTypeValueId: 0,
+      jobTitleId: 0,
+      grade: 0,
+      gradeStep: 0,
+      unionId: 0,
+      amountType: "",
+      amount: 0,
+      rate: 0,
       effectiveStartDate: "",
       effectiveEndDate: "",
-      selectedMonths: [],
-      payFrequency: "",
-      modifiedBy: ",",
+      status: "",
+      automate: "",
+      additionalInfo: [
+        {
+          lookupId: 0,
+          lookupValueId: 0,
+        },
+      ],
     },
   })
   const nextPage = (page: string) => {
@@ -52,12 +63,10 @@ const ElementForm = () => {
       case "2":
         setPage("pagetwo")
         break
-      //   case "3":
-      //     setPage("pagethree")
-      //     break
-      //   case "4":
-      //     alert("Ooops! Seems like you did not fill the form.")
-      //     break
+      case "3":
+        setPage("pagethree")
+        break
+
       default:
         setPage("1")
     }
@@ -70,14 +79,19 @@ const ElementForm = () => {
   return (
     <div>
       <h1>Create Element</h1>
-      <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
+      <MultiProgressElement page={page} onPageNumberClick={nextPageNumber} />
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {
           {
-            pageone: <FormpageOne onButtonClick={nextPage} control={control} />,
+            pageone: (
+              <ElementFormPageOne onButtonClick={nextPage} control={control} />
+            ),
             pagetwo: (
-              <FormPageTwo
-                onButtonClick={handleSubmit(onSubmit)}
+              <ElementFormPageTwo onButtonClick={nextPage} control={control} />
+            ),
+            pagethree: (
+              <ElementFormPageThree
+                onButtonClick={nextPage}
                 control={control}
               />
             ),
@@ -88,4 +102,4 @@ const ElementForm = () => {
   )
 }
 
-export default ElementForm
+export default ElementLinkForm

@@ -1,6 +1,9 @@
 @use "../../styles/variables" as var;
 @import "../../styles/breakpoints";
 .element {
+  &__back {
+    margin-bottom: 16px;
+  }
   &__detail {
     display: grid;
     width: 100%;
@@ -59,4 +62,41 @@
     font-size: 19px;
     font-weight: 700;
   }
+}
+.elementLinkDetails {
+  &__detail {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    border-top: 1px #d4d8e2 solid;
+    border-left: 0.5px #d4d8e2 solid;
+    border-bottom: 0.5px #d4d8e2 solid;
+    border-right: 0.5px #d4d8e2 solid;
+
+    @include xs-breakpoint {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .single__detail {
+    padding: 8px 24px;
+    border-top: 0.5px #d4d8e2 solid;
+    border-left: 0.5px #d4d8e2 solid;
+    border-bottom: 0.5px #d4d8e2 solid;
+    border-right: 0.5px #d4d8e2 solid;
+  }
+  .single__detail:first-child {
+    border-top: 0px;
+  }
+
+  .single__detail:nth-child(2) {
+    border-top: 0.5px #d4d8e2 solid;
+    @include sm-breakpoint {
+      border-top: 0px;
+    }
+  }
+}
+.closeElementLink {
+  background-color: #fff;
+  border: none;
+  margin-bottom: 42px;
 }

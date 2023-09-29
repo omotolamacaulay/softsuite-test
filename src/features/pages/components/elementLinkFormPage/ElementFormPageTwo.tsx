@@ -1,13 +1,13 @@
 import { useForm, Controller } from "react-hook-form"
 import { Select, ConfigProvider, Space, Input } from "antd"
-import { Elements } from "../../../../types"
-const { TextArea } = Input
-const FormpageOne = ({ onButtonClick, control }) => {
+import { ElementDetail } from "../../../../types"
+
+const ElementFormPageTwo = ({ onButtonClick, control }) => {
   const {
     register,
     trigger,
     formState: { errors },
-  } = useForm<Elements>()
+  } = useForm<ElementDetail>()
   //   const handleChange = (value: string) => {
   //     console.log(`selected ${value}`)
   //   }
@@ -31,9 +31,9 @@ const FormpageOne = ({ onButtonClick, control }) => {
       }}
     >
       <div className="pg-1">
-        <div className="form-group">
+        {/* <div className="form-group">
           <div className="input-group">
-            <label>Name</label>
+            <label>Element Link Name</label>
             <Controller
               control={control}
               //   name="name"
@@ -48,17 +48,19 @@ const FormpageOne = ({ onButtonClick, control }) => {
             />
             {errors?.name?.type === "required" && <p>This field is required</p>}
             {errors?.name?.type === "maxLength" && (
-              <p>Name cannot exceed 20 characters</p>
+              <p>Name cannot exceed 30 characters</p>
             )}
             {errors?.name?.type === "pattern" && (
               <p>Alphabetical characters only</p>
             )}
           </div>
+        </div> */}
+        <div className="form-group">
           <div className="input-group">
             <Space wrap>
-              <label>Element Classification</label>
+              <label>Grade</label>
               <Controller
-                name="classificationId"
+                name="grade"
                 control={control}
                 render={({ field }) => (
                   <Select
@@ -67,7 +69,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     options={[
                       {
                         value: 0,
-                        label: "Select Classification",
+                        label: "Select a Grade",
                       },
                       { value: 1, label: "Pre-tax Deduction" },
                       { value: 2, label: "Variation" },
@@ -75,22 +77,41 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     ]}
                   />
                 )}
-                // {...register("classificationId", {
-                //   required: true,
-                // })}
               />
-
-              {errors.classificationId && <p>This field is required</p>}
+            </Space>
+          </div>
+          <div className="input-group">
+            <Space wrap>
+              <label>Grade Step</label>
+              <Controller
+                name="gradeStep"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    style={{ width: "100%" }}
+                    options={[
+                      {
+                        value: 0,
+                        label: "Select a Grade Step",
+                      },
+                      { value: 1, label: "Deduction" },
+                      { value: 2, label: "Variation" },
+                      { value: 3, label: "Payroll" },
+                    ]}
+                  />
+                )}
+              />
             </Space>
           </div>
         </div>
         <div className="form-group">
           <div className="input-group">
             <Space wrap>
-              <label>Element Category</label>
+              <label>Union</label>
               <Controller
-                name="classificationValueId"
                 control={control}
+                name="unionId"
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -98,7 +119,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     options={[
                       {
                         value: 0,
-                        label: "Select Element Category",
+                        label: "Select a Union",
                       },
                       { value: 1, label: "Deduction" },
                       { value: 2, label: "Variation" },
@@ -106,20 +127,44 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     ]}
                   />
                 )}
-                // {...register("classificationValueId", {
-                //   required: true,
-                // })}
               />
-
-              {errors.classificationValueId && <p>This field is required</p>}
             </Space>
+          </div>
+        </div>
+        <label htmlFor="">Additional Assignment Information</label>
+        <div className="form-group">
+          <div className="input-group">
+            <div>
+              <Space wrap>
+                <label>Pension</label>
+                <Controller
+                  control={control}
+                  name="lookupId"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      style={{ width: "100%" }}
+                      options={[
+                        {
+                          value: 0,
+                          label: "Select Pension",
+                        },
+                        { value: 1, label: "Deduction" },
+                        { value: 2, label: "Variation" },
+                        { value: 3, label: "Payroll" },
+                      ]}
+                    />
+                  )}
+                />
+              </Space>
+            </div>
           </div>
           <div className="input-group">
             <Space wrap>
-              <label>Payrun</label>
+              <label>Housing</label>
               <Controller
                 control={control}
-                name="payRunId"
+                name="lookupValueId"
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -127,7 +172,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     options={[
                       {
                         value: 0,
-                        label: "Select Payrun",
+                        label: "Select Housing",
                       },
                       { value: 1, label: "Deduction" },
                       { value: 2, label: "Variation" },
@@ -135,80 +180,48 @@ const FormpageOne = ({ onButtonClick, control }) => {
                     ]}
                   />
                 )}
-                // {...register("payRunId", {
-                //   required: true,
-                // })}
               />
-
-              {errors.payRunId && <p>This field is required</p>}
             </Space>
           </div>
         </div>
         <div className="input-group">
-          <div>
-            <label htmlFor="">Description</label>
+          <Space wrap>
+            <label>Loyalty Bonus</label>
             <Controller
               control={control}
-              name="description"
+              name="lookupValueId"
               render={({ field }) => (
-                <TextArea {...field} placeholder="Input Description" />
+                <Select
+                  {...field}
+                  style={{ width: "100%" }}
+                  options={[
+                    {
+                      value: 0,
+                      label: "Select Loyalty Bonus",
+                    },
+                    { value: 1, label: "Deduction" },
+                    { value: 2, label: "Variation" },
+                    { value: 3, label: "Payroll" },
+                  ]}
+                />
               )}
-              //   {...register("description", {
-              //     required: true,
-              //   })}
             />
-            {errors.description && <p>This field is required</p>}
-          </div>
-        </div>
-        <div className="input-group">
-          <div>
-            <label htmlFor="">Reporting Name</label>
-            <Controller
-              control={control}
-              name="reportingName"
-              render={({ field }) => (
-                <TextArea {...field} placeholder="Input Reporting Name" />
-              )}
-              //   {...register("reportingName", {
-              //     required: true,
-              //   })}
-            />
-            {errors.reportingName && <p>This field is required</p>}
-          </div>
+          </Space>
         </div>
         <div className="button-group">
           <button
             className="btn secondary-btn"
             type="button"
-            //   onClick={() => setShowModal(false)}
+            onClick={() => onButtonClick("pageone")}
           >
-            Cancel
+            Back
           </button>
           <button
             className="btn primary-btn"
             type="button"
             value="Next"
             onClick={() => {
-              onButtonClick("pagetwo")
-              trigger([
-                "name",
-                // "classificationId",
-                // "classificationValueId",
-                // "payRunId",
-                // "description",
-                // "reportingName",
-              ])
-              console.log(trigger())
-              //   onButtonClick("pagetwo")
-              //   console.log(trigger())
-              //   trigger().then((res) => {
-              //     console.log(res)
-              //     // if (!res) {
-              //     //   return
-              //     // } else {
-              //     //   onButtonClick("pagetwo")
-              //     // }
-              //   })
+              onButtonClick("pagethree")
             }}
           >
             Next
@@ -219,4 +232,4 @@ const FormpageOne = ({ onButtonClick, control }) => {
   )
 }
 
-export default FormpageOne
+export default ElementFormPageTwo
