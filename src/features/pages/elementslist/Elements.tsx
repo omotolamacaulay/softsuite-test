@@ -5,11 +5,12 @@ import { ChangeEvent, useEffect, useState } from "react"
 import ReactPaginate from "react-paginate"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { fetchElements } from "../../counter/elementSlice"
-import Modal from "../components/Modal"
 import ElementForm from "../components/ElementForm"
+import DefaultModal from "../components/DefaultModal/DefaultModal"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
+  const [formType, setFormType] = useState<"ADD" | "EDIT">("ADD")
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
@@ -18,7 +19,6 @@ function Elements() {
 
   useEffect(() => {
     dispatch(fetchElements())
-    console.log(elements.elements)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -58,22 +58,34 @@ function Elements() {
               <img src={Icons["FilterBtn"]} alt="SVG logo" />
             </button>
           </div>
-          <button className="add-btn" onClick={() => setShowModal(true)}>
+          <button
+            className="add-btn"
+            onClick={() => {
+              setFormType("ADD")
+              setShowModal(true)
+            }}
+          >
             Create Element
             <img src={Icons["Plus"]} alt="SVG logo" />
           </button>
         </div>
       </div>
       {showModal ? (
-        <Modal>
-          <div className="createElement__modal">
-            <ElementForm />
-          </div>
-        </Modal>
+        <DefaultModal>
+          {formType === "ADD" ? (
+            <ElementForm setShowModal={setShowModal} />
+          ) : (
+            <p>Editttt</p>
+          )}
+        </DefaultModal>
       ) : null}
       <div className="elements__body">
         <ElementsTable
-          users={elements.elements.slice(itemOffset, itemOffset + itemsPerPage)}
+          elements={elements.elements.slice(
+            itemOffset,
+            itemOffset + itemsPerPage,
+          )}
+          setShowModal={setShowModal}
         />
 
         <div className="pagination_wrapper">
