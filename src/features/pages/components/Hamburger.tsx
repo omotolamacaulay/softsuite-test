@@ -4,19 +4,32 @@ import type { MenuProps } from "antd"
 import { Button, Dropdown } from "antd"
 import { Link } from "react-router-dom"
 import Icons from "../../assets/images"
+import { useAppDispatch } from "../../../app/hooks"
+import {
+  fetchSingleElement,
+  setCurrentEditElement,
+  deleteSingleElement,
+} from "../../counter/elementSlice"
 
 // interface UserIdProps {
 //   user: Elements
 // }
 
-const HamburgerButton = ({ id }: { id: string | undefined }) => {
+const HamburgerButton = ({
+  user,
+  setShowModal,
+}: {
+  user: Element
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const dispatch = useAppDispatch()
   const items: MenuProps["items"] = [
     {
       key: "1",
       label: (
         <Link
           rel="noopener noreferrer"
-          to={`/elements/${id}`}
+          to={`/elements/${user.id}`}
           className="dropdown-item"
         >
           <img src={Icons["View"]} alt="" /> View Element Links
@@ -26,7 +39,14 @@ const HamburgerButton = ({ id }: { id: string | undefined }) => {
     {
       key: "2",
       label: (
-        <span role="button" className="dropdown-item">
+        <span
+          role="button"
+          className="dropdown-item"
+          onClick={() => {
+            dispatch(setCurrentEditElement(user))
+            setShowModal(true)
+          }}
+        >
           <img src={Icons["Edit"]} alt="" /> Edit Element
         </span>
       ),
@@ -34,7 +54,13 @@ const HamburgerButton = ({ id }: { id: string | undefined }) => {
     {
       key: "3",
       label: (
-        <span role="button" className=" danger-item">
+        <span
+          role="button"
+          className=" danger-item"
+          onClick={() => {
+            dispatch(deleteSingleElement(user.id))
+          }}
+        >
           <img src={Icons["Delete"]} alt="" />
           Delete Element
         </span>

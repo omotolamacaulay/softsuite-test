@@ -1,48 +1,56 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import MultiStepProgressBar from "./progressBar/MultiStepProgressBar"
-// import ReactDOM from "react-dom"
 import FormpageOne from "./formpage/FormpageOne"
 import FormPageTwo from "./formpage/FormPageTwo"
 import { useForm } from "react-hook-form"
-
 import { Elements } from "../../../types"
 import "./ElementForm.scss"
-import Modal from "../components/Modal"
+import {
+  addSingleElement,
+  updateElement,
+  fetchSingleElement,
+} from "../../counter/elementSlice"
+import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 
-const ElementForm = () => {
+const ElementForm = ({
+  setShowModal,
+}: {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const [page, setPage] = useState("pageone")
-  const [showModal, setShowModal] = useState(false)
+  const navigate = useNavigate()
+  const element = useAppSelector((state) => state.elements.currentEditElement)
+  const isLoading = useAppSelector((state) => state.elements.loading)
+  const emptyState = {
+    name: "",
+    description: "",
+    payRunId: 0,
+    payRunValueId: 0,
+    classificationId: 0,
+    classificationValueId: 0,
+    categoryId: 0,
+    categoryValueId: 0,
+    reportingName: "",
+    processingType: "",
+    status: "",
+    prorate: "",
+    effectiveStartDate: "",
+    effectiveEndDate: "",
+    selectedMonths: [],
+    payFrequency: "",
+    modifiedBy: ",",
+  }
+
   const { handleSubmit, control } = useForm<Elements>({
-    defaultValues: {
-      name: "",
-      description: "",
-      payRunId: 0,
-      payRunValueId: 0,
-      classificationId: 0,
-      classificationValueId: 0,
-      categoryId: 0,
-      categoryValueId: 0,
-      reportingName: "",
-      processingType: "",
-      status: "",
-      prorate: "",
-      effectiveStartDate: "",
-      effectiveEndDate: "",
-      selectedMonths: [],
-      payFrequency: "",
-      modifiedBy: ",",
-    },
+    defaultValues: element || emptyState,
   })
   const nextPage = (page: string) => {
     setPage(page)
   }
-  // const { control, handleSubmit } = useForm({
-  //   defaultValues: {
-  //     firstName: '',
-  //     select: {}
-  //   }
-  // });
-  // const onSubmit = (data) => console.log(data)
+  const closeModal = () => setShowModal(false)
+
+  const dispatch = useAppDispatch()
 
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
@@ -63,8 +71,29 @@ const ElementForm = () => {
     }
   }
 
-  const onSubmit = (data: Elements) => {
-    console.log(data)
+  // const onSubmit = (data: Elements) => {
+  //   console.log(data)
+  // }
+  const onSubmit = async (data: Elements) => {
+    data.modifiedBy = "Omotola Macaulay"
+    let id: string = ""
+    try {
+      if (data.id) {
+        id = data.id
+        dispatch(updateElement(data))
+      } else {
+        const actionResult = await dispatch(addSingleElement(data))
+
+        if (addSingleElement.fulfilled.match(actionResult)) {
+          console.log("Element updated successfully:", actionResult.payload)
+          id = actionResult.payload.id
+        }
+      }
+      setShowModal(false)
+      navigate(`/elements/${id}`)
+    } catch (error) {
+      console.error("An error occurred while processing the element:", error)
+    }
   }
 
   return (
@@ -74,7 +103,13 @@ const ElementForm = () => {
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {
           {
-            pageone: <FormpageOne onButtonClick={nextPage} control={control} />,
+            pageone: (
+              <FormpageOne
+                closeModal={closeModal}
+                onButtonClick={nextPage}
+                control={control}
+              />
+            ),
             pagetwo: (
               <FormPageTwo
                 onButtonClick={handleSubmit(onSubmit)}

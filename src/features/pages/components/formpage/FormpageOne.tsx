@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form"
 import { Select, ConfigProvider, Space, Input } from "antd"
 import { Elements } from "../../../../types"
 const { TextArea } = Input
-const FormpageOne = ({ onButtonClick, control }) => {
+const FormpageOne = ({ onButtonClick, control, closeModal }) => {
   const {
     register,
     trigger,
@@ -180,7 +180,7 @@ const FormpageOne = ({ onButtonClick, control }) => {
           <button
             className="btn secondary-btn"
             type="button"
-            //   onClick={() => setShowModal(false)}
+            onClick={closeModal}
           >
             Cancel
           </button>
