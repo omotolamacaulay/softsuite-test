@@ -59,3 +59,39 @@ export interface ElementLink {
     },
   ]
 }
+export type InputProps = {
+  label: string
+  register: Record<string, string | any>
+  required: boolean
+  placeholder: string
+  id: string
+  type?: string
+}
+export type TextAreaProps = {
+  label: string
+  register: Record<string, string | any>
+  required: boolean
+  placeholder?: string
+  id: string
+}
+export type RadioButtonProps = {
+  label: string
+  register: Record<string, string | any>
+  required: boolean
+  id: string
+  options: { value: number; label: string }[]
+}
+export interface SelectInputProps {
+  label: string
+  register: Record<string, string | any>
+  required: boolean
+  id: string
+  children: React.ReactNode
+  multiple?: boolean
+}
+export interface CheckboxProps {
+  label: string
+  register: Record<string, string | any>
+  required: boolean
+  id: string
+}
