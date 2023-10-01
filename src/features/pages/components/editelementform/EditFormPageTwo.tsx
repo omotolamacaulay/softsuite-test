@@ -29,7 +29,7 @@ const monthOptions = [
 //   return arg === "active" ? true : false
 // }
 
-const FormPageTwo = ({
+const EditFormPageTwo = ({
   onButtonClick,
   register,
 }: {
@@ -153,10 +153,10 @@ const FormPageTwo = ({
         >
           Back
         </button>
-        <button className="btn primary-btn">Create New Element</button>
+        <button className="btn primary-btn">Edit Element</button>
       </div>
     </div>
   )
 }
 
-export default FormPageTwo
+export default EditFormPageTwo

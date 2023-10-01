@@ -1,12 +1,12 @@
 import { UseFormRegister } from "react-hook-form"
 // import { Select, ConfigProvider, Space, Input } from "antd"
 import { Element } from "../../../../types"
-import "../addelementform/ElementForm.scss"
+import "./EditFormPageOne.scss"
 import Input from "../../../layout/components/common/Input"
 import TextArea from "../../../layout/components/common/TextArea"
 import SelectInput from "../../../layout/components/common/SelectInput"
 
-const FormpageOne = ({
+const EditFormPageOne = ({
   onButtonClick,
   closeModal,
   register,
@@ -140,4 +140,4 @@ const FormpageOne = ({
   )
 }
 
-export default FormpageOne
+export default EditFormPageOne
