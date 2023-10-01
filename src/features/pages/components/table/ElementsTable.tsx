@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useMemo } from "react"
 import { useTable, useSortBy } from "react-table"
 import { Link } from "react-router-dom"
-import Icons from "../../assets/images"
+import Icons from "../../../assets/images"
 import "./ElementsTable.scss"
-import { Element } from "../../../types"
-import HamburgerButton from "./Hamburger"
+import { Element } from "../../../../types"
+import HamburgerButton from "../hamburger/Hamburger"
 
 interface ElementProps {
   name: string
@@ -20,11 +20,13 @@ interface ElementProps {
 interface ElementsTableProps {
   elements: Element[]
   setShowModal: Dispatch<SetStateAction<boolean>>
+  setFormType: Dispatch<SetStateAction<"ADD" | "EDIT">>
 }
 
 const ElementsTable: React.FC<ElementsTableProps> = ({
   elements,
   setShowModal,
+  setFormType,
 }) => {
   const columns = useMemo(
     () => [
@@ -75,7 +77,11 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "id",
         Cell: ({ row }) => (
           <span className="action">
-            <HamburgerButton user={row.original} setShowModal={setShowModal} />
+            <HamburgerButton
+              user={row.original}
+              setShowModal={setShowModal}
+              setFormType={setFormType}
+            />
           </span>
         ),
       },

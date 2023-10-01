@@ -1,13 +1,13 @@
 import { useForm, Controller } from "react-hook-form"
 import { Select, ConfigProvider, Space, Input } from "antd"
-import { ElementDetail } from "../../../../types"
+import { Element } from "../../../../types"
 
 const ElementFormPageOne = ({ onButtonClick, control }) => {
   const {
     register,
     trigger,
     formState: { errors },
-  } = useForm<ElementDetail>()
+  } = useForm<Element>()
   //   const handleChange = (value: string) => {
   //     console.log(`selected ${value}`)
   //   }

@@ -1,4 +1,4 @@
-import "../../components/progressBar/MultiStepProgressBar.scss"
+import "../../components/formpage/progressBar/MultiStepProgressBar.scss"
 import { ProgressBar, Step } from "react-step-progress-bar"
 
 const MultiProgressElement = ({ page, onPageNumberClick }) => {

@@ -1,17 +1,17 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import MultiStepProgressBar from "./progressBar/MultiStepProgressBar"
-import FormpageOne from "./formpage/FormpageOne"
-import FormPageTwo from "./formpage/FormPageTwo"
+import MultiStepProgressBar from "../formpage/progressBar/MultiStepProgressBar"
+import FormpageOne from "../formpage/FormpageOne"
+import FormPageTwo from "../formpage/FormPageTwo"
 import { useForm } from "react-hook-form"
-import { Elements } from "../../../types"
+import { Element } from "../../../../types"
 import "./ElementForm.scss"
 import {
   addSingleElement,
   updateElement,
   fetchSingleElement,
-} from "../../counter/elementSlice"
-import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+} from "../../../counter/elementSlice"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
 const ElementForm = ({
   setShowModal,
@@ -21,7 +21,7 @@ const ElementForm = ({
   const [page, setPage] = useState("pageone")
   const navigate = useNavigate()
   const element = useAppSelector((state) => state.elements.currentEditElement)
-  const isLoading = useAppSelector((state) => state.elements.loading)
+  // const isLoading = useAppSelector((state) => state.elements.loading)
   const emptyState = {
     name: "",
     description: "",
@@ -42,7 +42,7 @@ const ElementForm = ({
     modifiedBy: ",",
   }
 
-  const { handleSubmit, control } = useForm<Elements>({
+  const { handleSubmit, control } = useForm<Element>({
     defaultValues: element || emptyState,
   })
   const nextPage = (page: string) => {
@@ -74,7 +74,7 @@ const ElementForm = ({
   // const onSubmit = (data: Elements) => {
   //   console.log(data)
   // }
-  const onSubmit = async (data: Elements) => {
+  const onSubmit = async (data: Element) => {
     data.modifiedBy = "Omotola Macaulay"
     let id: string = ""
     try {

@@ -1,20 +1,20 @@
 import { useState } from "react"
 
 // import ReactDOM from "react-dom"
-import ElementFormPageOne from "./elementLinkFormPage/ElementFormPageOne"
-import ElementFormPageTwo from "./elementLinkFormPage/ElementFormPageTwo"
-import ElementFormPageThree from "./elementLinkFormPage/ElementFormPageThree"
-import MultiProgressElement from "./elementLinkFormPage/MultiProgressElement"
+import ElementFormPageOne from "./ElementFormPageOne"
+import ElementFormPageTwo from "./ElementFormPageTwo"
+import ElementFormPageThree from "./ElementFormPageThree"
+import MultiProgressElement from "./MultiProgressElement"
 import { useForm } from "react-hook-form"
 
-import { Elements } from "../../../types"
-import "./ElementForm.scss"
-import Modal from "../components/Modal"
+import { Element } from "../../../../types"
+// import "./ElementForm.scss"
+import Modal from "../Modal"
 
 const ElementLinkForm = () => {
   const [page, setPage] = useState("pageone")
   const [showModal, setShowModal] = useState(false)
-  const { handleSubmit, control } = useForm<Elements>({
+  const { handleSubmit, control } = useForm<Element>({
     defaultValues: {
       elementId: 0,
       suborganizationId: 0,
