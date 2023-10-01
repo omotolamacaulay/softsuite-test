@@ -10,7 +10,7 @@ export type NavItem = {
   }[]
 }
 
-export interface Elements {
+export interface Element {
   id: string
   name: string
   description: string
@@ -31,7 +31,7 @@ export interface Elements {
   modifiedBy: string
 }
 
-export interface ElementDetail extends Elements {
+export interface ElementLink {
   name: string
   elementId: number
   suborganizationId: number
