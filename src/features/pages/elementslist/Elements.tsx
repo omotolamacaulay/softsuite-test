@@ -1,16 +1,17 @@
-import ElementsTable from "../components/ElementsTable"
+import ElementsTable from "../components/table/ElementsTable"
 import "./Elements.scss"
 import Icons from "../../assets/images"
 import { ChangeEvent, useEffect, useState } from "react"
 import ReactPaginate from "react-paginate"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { fetchElements } from "../../counter/elementSlice"
-import ElementForm from "../components/ElementForm"
+import ElementForm from "../components/addelementform/ElementForm"
 import DefaultModal from "../components/DefaultModal/DefaultModal"
+import EditElementForm from "../components/editelementform/EditElementForm"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
-  const [formType, setFormType] = useState<"ADD" | "EDIT">("ADD")
+  const [formType, setFormType] = useState<"ADD" | "EDIT">("EDIT")
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
@@ -75,7 +76,7 @@ function Elements() {
           {formType === "ADD" ? (
             <ElementForm setShowModal={setShowModal} />
           ) : (
-            <p>Editttt</p>
+            <EditElementForm setShowModal={setShowModal} />
           )}
         </DefaultModal>
       ) : null}
@@ -86,6 +87,7 @@ function Elements() {
             itemOffset + itemsPerPage,
           )}
           setShowModal={setShowModal}
+          setFormType={setFormType}
         />
 
         <div className="pagination_wrapper">
