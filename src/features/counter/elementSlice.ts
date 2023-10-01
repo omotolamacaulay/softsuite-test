@@ -5,14 +5,14 @@ import { Element } from "../../types"
 type ElementData = {
   loading: boolean
   elements: Element[]
-  element: Element | null
+  element: Element | {}
   error: string[]
   currentEditElement: Element | null
 }
 
 const initialState: ElementData = {
   elements: [],
-  element: null,
+  element: {},
   loading: false,
   error: [],
   currentEditElement: null,
@@ -111,7 +111,8 @@ export const updateElement = createAsyncThunk(
       }
 
       const res = await response.json()
-      return res.message
+      console.log(res, "yyyyyy")
+      return { msg: res.message, elementId: res.data.id }
     } catch (error) {
       if (error instanceof Error) {
         throw error
@@ -202,7 +203,7 @@ export const elementSlice = createSlice({
         state.loading = false
       })
       .addCase(fetchSingleElement.pending, (state) => {
-        state.element = null
+        state.element = {}
         state.loading = true
       })
       .addCase(fetchSingleElement.fulfilled, (state, action) => {
@@ -212,23 +213,25 @@ export const elementSlice = createSlice({
       })
       .addCase(fetchSingleElement.rejected, (state) => {
         state.loading = false
-        state.element = null
+        state.element = {}
       })
       .addCase(updateElement.rejected, (state) => {
         state.loading = false
-        state.element = null
+        state.element = {}
       })
       .addCase(updateElement.pending, (state) => {
         state.loading = true
       })
-      .addCase(updateElement.fulfilled, (state, action) => {
-        state.loading = false
-        state.error = []
-        state.element = action.payload
-      })
+      .addCase(
+        updateElement.fulfilled,
+        (state, action: PayloadAction<{ msg: string; elementId: string }>) => {
+          state.loading = false
+          state.error = []
+        },
+      )
       .addCase(deleteSingleElement.rejected, (state) => {
         state.loading = false
-        state.element = null
+        state.element = {}
       })
       .addCase(deleteSingleElement.pending, (state) => {
         state.loading = true

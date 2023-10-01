@@ -1,15 +1,16 @@
 // import { Elements } from "../../../types"
+import { SetStateAction } from "react"
 import "./Hamburger.scss"
 import type { MenuProps } from "antd"
 import { Button, Dropdown } from "antd"
 import { Link } from "react-router-dom"
-import Icons from "../../assets/images"
-import { useAppDispatch } from "../../../app/hooks"
+import Icons from "../../../assets/images"
+import { useAppDispatch } from "../../../../app/hooks"
 import {
   fetchSingleElement,
   setCurrentEditElement,
   deleteSingleElement,
-} from "../../counter/elementSlice"
+} from "../../../counter/elementSlice"
 
 // interface UserIdProps {
 //   user: Elements
@@ -18,9 +19,11 @@ import {
 const HamburgerButton = ({
   user,
   setShowModal,
+  setFormType,
 }: {
   user: Element
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  setFormType: React.Dispatch<SetStateAction<"ADD" | "EDIT">>
 }) => {
   const dispatch = useAppDispatch()
   const items: MenuProps["items"] = [
@@ -44,6 +47,7 @@ const HamburgerButton = ({
           className="dropdown-item"
           onClick={() => {
             dispatch(setCurrentEditElement(user))
+            setFormType("EDIT")
             setShowModal(true)
           }}
         >
