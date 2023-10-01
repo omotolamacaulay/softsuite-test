@@ -42,7 +42,7 @@ const ElementForm = ({
     modifiedBy: ",",
   }
 
-  const { handleSubmit, control } = useForm<Element>({
+  const { handleSubmit, register } = useForm<Element>({
     defaultValues: element || emptyState,
   })
   const nextPage = (page: string) => {
@@ -60,20 +60,11 @@ const ElementForm = ({
       case "2":
         setPage("pagetwo")
         break
-      //   case "3":
-      //     setPage("pagethree")
-      //     break
-      //   case "4":
-      //     alert("Ooops! Seems like you did not fill the form.")
-      //     break
       default:
         setPage("1")
     }
   }
 
-  // const onSubmit = (data: Elements) => {
-  //   console.log(data)
-  // }
   const onSubmit = async (data: Element) => {
     data.modifiedBy = "Omotola Macaulay"
     let id: string = ""
@@ -107,14 +98,11 @@ const ElementForm = ({
               <FormpageOne
                 closeModal={closeModal}
                 onButtonClick={nextPage}
-                control={control}
+                register={register}
               />
             ),
             pagetwo: (
-              <FormPageTwo
-                onButtonClick={handleSubmit(onSubmit)}
-                control={control}
-              />
+              <FormPageTwo onButtonClick={nextPage} register={register} />
             ),
           }[page]
         }
