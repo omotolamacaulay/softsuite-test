@@ -1,12 +1,21 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 // import { RootState, AppThunk } from "../../app/store"
-// import { Elements, ElementDetail } from "../../types"
+import { Element } from "../../types"
 
-const initialState = {
+type ElementData = {
+  loading: boolean
+  elements: Element[]
+  element: Element | null
+  error: string[]
+  currentEditElement: Element | null
+}
+
+const initialState: ElementData = {
   elements: [],
-  elementsDetail: {},
+  element: null,
   loading: false,
-  error: "",
+  error: [],
+  currentEditElement: null,
 }
 const ENDPOINT = "https://650af6bedfd73d1fab094cf7.mockapi.io/elements"
 // const SINGLEENDPOINT = `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/{id}`
@@ -24,25 +33,125 @@ export const fetchElements = createAsyncThunk(
     return response.data.content
   },
 )
+
 export const fetchSingleElement = createAsyncThunk(
   "elements/fetchSingleElement",
-  async ({ id }) => {
-    const response = await fetch(
-      `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}`,
-      {
-        method: "DELETE",
-      },
-    ).then((response) => response.json())
-    // The value we return becomes the `fulfilled` action payload
-    // return response.data
+  async (id: string) => {
+    try {
+      const response = await fetch(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}`,
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to retrieve element")
+      }
+
+      const data = await response.json()
+      return data.data
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      } else {
+        throw new Error("An error occurred while retrieving the element")
+      }
+    }
   },
 )
+export const addSingleElement = createAsyncThunk(
+  "elements/addSingleElement",
+  async (data: Element) => {
+    const formObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+    try {
+      const response = await fetch(ENDPOINT, formObj)
+
+      if (!response.ok) {
+        throw new Error("Failed to retrieve element")
+      }
+
+      const res = await response.json()
+      // console.log(res, "res data")
+      return res.data
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      } else {
+        throw new Error("An error occurred while retrieving the element")
+      }
+    }
+  },
+)
+// type Update = {
+//   id: string
+// }
+export const updateElement = createAsyncThunk(
+  "elements/updateElement",
+  async (data: Element) => {
+    const config = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+
+    try {
+      const response = await fetch(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${data.id}`,
+        config,
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to update element")
+      }
+
+      const res = await response.json()
+      return res.message
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      } else {
+        throw new Error("An error occurred while updating the element")
+      }
+    }
+  },
+)
+
 export const deleteSingleElement = createAsyncThunk(
   "elements/deleteSingleElement",
-  async () => {
-    const response = await fetch(ENDPOINT).then((response) => response.json())
-    // The value we return becomes the `fulfilled` action payload
-    return response.data
+  async (id: string) => {
+    const config = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    console.log(id)
+    try {
+      const response = await fetch(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}`,
+        config,
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to delete element")
+      }
+
+      const data = await response.json()
+
+      return { msg: data.message, elementId: id }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      } else {
+        throw new Error("An error occurred while deleting the element")
+      }
+    }
   },
 )
 
@@ -56,7 +165,13 @@ export const elementSlice = createSlice({
       state.elements = action.payload
     },
     loadSingleElements: (state, action) => {
-      state.elementsDetail = action.payload
+      state.element = action.payload
+    },
+    inputSingleElement: (state, action) => {
+      state.element = action.payload
+    },
+    setCurrentEditElement: (state, action: PayloadAction<Element>) => {
+      state.currentEditElement = action.payload
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -68,29 +183,73 @@ export const elementSlice = createSlice({
       })
       .addCase(fetchElements.fulfilled, (state, action) => {
         state.loading = false
-        state.error = ""
+        state.error = []
         state.elements = action.payload
       })
       .addCase(fetchElements.rejected, (state) => {
         state.loading = false
         state.elements = []
       })
+      .addCase(addSingleElement.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(addSingleElement.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.element = action.payload
+      })
+      .addCase(addSingleElement.rejected, (state) => {
+        state.loading = false
+      })
       .addCase(fetchSingleElement.pending, (state) => {
+        state.element = null
         state.loading = true
       })
       .addCase(fetchSingleElement.fulfilled, (state, action) => {
         state.loading = false
-        state.error = ""
-        state.elementsDetail = action.payload
+        state.error = []
+        state.element = action.payload
       })
       .addCase(fetchSingleElement.rejected, (state) => {
         state.loading = false
-        state.elementsDetail = {}
+        state.element = null
+      })
+      .addCase(updateElement.rejected, (state) => {
+        state.loading = false
+        state.element = null
+      })
+      .addCase(updateElement.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(updateElement.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.element = action.payload
+      })
+      .addCase(deleteSingleElement.rejected, (state) => {
+        state.loading = false
+        state.element = null
+      })
+      .addCase(deleteSingleElement.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteSingleElement.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        console.log(action)
+        state.elements = state.elements.filter(
+          (element) => element.id !== action.payload.elementId,
+        )
       })
   },
 })
 
-export const { loadElements, loadSingleElements } = elementSlice.actions
+export const {
+  loadElements,
+  loadSingleElements,
+  inputSingleElement,
+  setCurrentEditElement,
+} = elementSlice.actions
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

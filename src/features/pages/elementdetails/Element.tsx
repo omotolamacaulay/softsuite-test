@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect } from "react"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { fetchSingleElement } from "../../counter/elementSlice"
-import { ElementDetail, Elements } from "../../../types"
+import { ElementLink, Element } from "../../../types"
 import Icons from "../../assets/images"
 import ElementLinkForm from "../components/ElementLinkForm"
 import "../components/ElementsTable.scss"
@@ -22,11 +22,7 @@ import Modal from "../components/Modal"
 //   effectiveStartDate: string
 // }
 
-interface ElementsTableProps {
-  users: ElementDetail[]
-  user: Elements
-}
-const Element: React.FC<ElementsTableProps> = ({ users }) => {
+const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
   const [showModal, setShowModal] = useState(false)
   const [showElementModal, setShowElementModal] = useState(false)
@@ -35,14 +31,15 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
   const [itemOffset, setItemOffset] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const dispatch = useAppDispatch()
-  const element = useAppSelector((state) => state.elements.elementsDetail)
   const { id } = useParams() as { id: string }
-  // const [user] = useUser(id);
+  // dispatch(fetchSingleElement(id))
+  const element = useAppSelector((state) => state.elements.element)
+  const loading = useAppSelector((state) => state.elements.loading)
+
   useEffect(() => {
     dispatch(fetchSingleElement(id))
-    console.log(element)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   //   const formatDate = (date: string) => {
   //     return moment(date).format("MMM DD YYYY, h:mm a")
@@ -82,49 +79,53 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
     )
   }
 
-  const names = [
-    "ABC Corporation",
-    "XYZ Inc",
-    "LMN Co.",
-    "PQR Enterprises",
-    "Object E",
-  ]
-  const subOrganizations = [
-    "Solutions Delivery",
-    "Management",
-    "Office Administration",
-  ]
-  const department = [
-    "Software Development",
-    "Human Resources",
-    "Software Development",
-    "Cleaning",
-  ]
-  const employeeCategory = ["Junior Staff", "Senior Staff", "Consultant"]
-  const ammount = [
-    "10,000.00",
-    "30,000.00",
-    "70,000.00",
-    "80,000.00",
-    "100,000.00",
-  ]
+  // const names = [
+  //   "ABC Corporation",
+  //   "XYZ Inc",
+  //   "LMN Co.",
+  //   "PQR Enterprises",
+  //   "Object E",
+  // ]
+  // const subOrganizations = [
+  //   "Solutions Delivery",
+  //   "Management",
+  //   "Office Administration",
+  // ]
+  // const department = [
+  //   "Software Development",
+  //   "Human Resources",
+  //   "Software Development",
+  //   "Cleaning",
+  // ]
+  // const employeeCategory = ["Junior Staff", "Senior Staff", "Consultant"]
+  // const ammount = [
+  //   "10,000.00",
+  //   "30,000.00",
+  //   "70,000.00",
+  //   "80,000.00",
+  //   "100,000.00",
+  // ]
 
-  const statusOptions = ["Active", "Inactive"]
+  // const statusOptions = ["Active", "Inactive"]
 
-  const elements = []
+  // const elements = []
 
-  for (let i = 0; i < 20; i++) {
-    const randomObject = {
-      name: getRandomElement(names),
-      subOrganization: getRandomElement(subOrganizations),
-      department: getRandomElement(department),
-      employeeCategory: getRandomElement(employeeCategory),
-      ammount: getRandomElement(ammount),
-      // employeeCategory: getRandomElement(employeeCategory),
-      status: getRandomElement(statusOptions),
-    }
+  // for (let i = 0; i < 20; i++) {
+  //   const randomObject = {
+  //     name: getRandomElement(names),
+  //     subOrganization: getRandomElement(subOrganizations),
+  //     department: getRandomElement(department),
+  //     employeeCategory: getRandomElement(employeeCategory),
+  //     ammount: getRandomElement(ammount),
+  //     // employeeCategory: getRandomElement(employeeCategory),
+  //     status: getRandomElement(statusOptions),
+  //   }
 
-    elements.push(randomObject)
+  //   elements.push(randomObject)
+  // }
+
+  if (loading) {
+    return <div>Loading...</div>
   }
   return (
     <div className="elements">
@@ -139,7 +140,7 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
           <div className="element__detail">
             <div className="single__detail">
               <p className="element__label">Element Name</p>
-              <p className="element__text">fff</p>
+              <p className="element__text">{element?.name}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Element Classification</p>
@@ -229,7 +230,7 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
               <img src={Icons["Filter"]} alt="" />
             </span>
           </div>
-          <table>
+          {/* <table>
             <thead>
               <tr>
                 <th>
@@ -442,7 +443,7 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
           {/* <div className="pagination_wrapper">
             <ReactPaginate
               nextLabel=">"
@@ -496,4 +497,4 @@ const Element: React.FC<ElementsTableProps> = ({ users }) => {
   )
 }
 
-export default Element
+export default ElementDetail

@@ -1,12 +1,12 @@
-import { useMemo } from "react"
+import { Dispatch, SetStateAction, useMemo } from "react"
 import { useTable, useSortBy } from "react-table"
 import { Link } from "react-router-dom"
 import Icons from "../../assets/images"
 import "./ElementsTable.scss"
-import { Elements } from "../../../types"
+import { Element } from "../../../types"
 import HamburgerButton from "./Hamburger"
 
-interface Element {
+interface ElementProps {
   name: string
   categoryValueId: number
   classificationValueId: number
@@ -18,11 +18,14 @@ interface Element {
 }
 
 interface ElementsTableProps {
-  users: Element[]
-  user: Elements
+  elements: Element[]
+  setShowModal: Dispatch<SetStateAction<boolean>>
 }
 
-const ElementsTable: React.FC<ElementsTableProps> = ({ users }) => {
+const ElementsTable: React.FC<ElementsTableProps> = ({
+  elements,
+  setShowModal,
+}) => {
   const columns = useMemo(
     () => [
       {
@@ -30,7 +33,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({ users }) => {
         accessor: "name",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            <Link to={`/elements/${row.index}`}>{row.original.name}</Link>
+            <Link to={`/elements/${row.original.id}`}>{row.original.name}</Link>
             <span className={`status-span mobile ${row.original.status}`}>
               {row.original.status}
             </span>
@@ -69,10 +72,10 @@ const ElementsTable: React.FC<ElementsTableProps> = ({ users }) => {
       },
       {
         Header: "Actions",
-        accessor: "actions",
+        accessor: "id",
         Cell: ({ row }) => (
           <span className="action">
-            <HamburgerButton id={row.index} />
+            <HamburgerButton user={row.original} setShowModal={setShowModal} />
           </span>
         ),
       },
@@ -80,7 +83,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({ users }) => {
     [],
   )
 
-  const data = useMemo(() => users, [users])
+  const data = useMemo(() => elements, [elements])
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(

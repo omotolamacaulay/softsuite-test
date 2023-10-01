@@ -1,7 +1,10 @@
 import { useForm, Controller } from "react-hook-form"
 import { Select, ConfigProvider, Space, Radio, Switch, DatePicker } from "antd"
 import { Elements } from "../../../../types"
+import dayjs from "dayjs"
 // import { useRef } from "react"
+
+const dateFormat = "DD-MM-YYYY"
 
 const FormPageTwo = ({ onButtonClick, control }) => {
   const {
@@ -60,7 +63,12 @@ const FormPageTwo = ({ onButtonClick, control }) => {
                 // name="effectiveStartDate"
                 control={control}
                 render={({ field }) => (
-                  <DatePicker {...field} style={{ width: "100%" }} />
+                  <DatePicker
+                    {...field}
+                    // defaultValue={dayjs}
+                    format={dateFormat}
+                    style={{ width: "100%" }}
+                  />
                 )}
                 {...register("effectiveStartDate", {
                   valueAsDate: true,
@@ -77,7 +85,11 @@ const FormPageTwo = ({ onButtonClick, control }) => {
                 // name="effectiveStartDate"
                 control={control}
                 render={({ field }) => (
-                  <DatePicker {...field} style={{ width: "100%" }} />
+                  <DatePicker
+                    {...field}
+                    format={dateFormat}
+                    style={{ width: "100%" }}
+                  />
                 )}
                 {...register("effectiveEndDate", {
                   valueAsDate: true,
