@@ -6,11 +6,7 @@ import EditFormPageTwo from "./EditFormPageTwo"
 import { useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import "./EditElementForm.scss"
-import {
-  addSingleElement,
-  updateElement,
-  fetchSingleElement,
-} from "../../../counter/elementSlice"
+import { updateElement } from "../../../counter/elementSlice"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
 const ElementForm = ({
@@ -23,7 +19,6 @@ const ElementForm = ({
   const element = useAppSelector(
     (state) => state.elements.currentEditElement,
   ) as Element
-  // const isLoading = useAppSelector((state) => state.elements.loading)
 
   const { handleSubmit, register } = useForm<Element>({
     defaultValues: element,
@@ -44,12 +39,6 @@ const ElementForm = ({
       case "2":
         setPage("pagetwo")
         break
-      //   case "3":
-      //     setPage("pagethree")
-      //     break
-      //   case "4":
-      //     alert("Ooops! Seems like you did not fill the form.")
-      //     break
       default:
         setPage("1")
     }
@@ -57,7 +46,6 @@ const ElementForm = ({
 
   const onSubmit = async (data: Element) => {
     let id: string = ""
-    console.log(data)
     try {
       if (data.id) {
         const actionResult = await dispatch(updateElement(data))
@@ -90,7 +78,7 @@ const ElementForm = ({
               <EditFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
-                submitForm={onSubmit}
+                // submitForm={onSubmit}
               />
             ),
           }[page]

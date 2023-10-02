@@ -191,15 +191,6 @@
 }
 
 .elementLinkDetails {
-  background-color: rgba(0, 0, 0, 0.03);
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 100px;
-  z-index: 1000;
-  display: flex;
-  justify-content: end;
   // align-items: center;
   h2 {
     color: #2d416f;
@@ -215,4 +206,8 @@
   padding: 24px 40px;
   // text-align: center;
   // border-radius: 8px;
+}
+.modaldetails {
+  color: var.$color-secondary;
+  text-decoration: underline;
 }

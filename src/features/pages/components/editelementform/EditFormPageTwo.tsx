@@ -1,11 +1,9 @@
-// import React, { useState } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import SelectInput from "../../../layout/components/common/SelectInput"
-import Checkbox from "../../../layout/components/common/Checkbox"
-// import dayjs from "dayjs"
+// import Checkbox from "../../../layout/components/common/Checkbox"
 
 const monthOptions = [
   {
