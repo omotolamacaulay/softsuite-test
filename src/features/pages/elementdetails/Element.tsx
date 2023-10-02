@@ -1,128 +1,151 @@
 import "./Element.scss"
 import { useParams, Link } from "react-router-dom"
-import { useEffect } from "react"
+import { useMemo, useEffect, useState, ChangeEvent } from "react"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { fetchSingleElement } from "../../counter/elementSlice"
-import { ElementLink, Element } from "../../../types"
+import {
+  fetchElementLink,
+  setCurrentEditElementLink,
+  deleteSingleElementLink,
+} from "../../counter/elementLinkSlice"
+import { ElementLink } from "../../../types"
 import Icons from "../../assets/images"
+import { useTable, useSortBy } from "react-table"
 import ElementLinkForm from "../components/elementLinkFormPage/ElementLinkForm"
+import EditElementLinkForm from "../components/EditElementLinkForm/EditElementLinkForm"
 import "../components/table/ElementsTable.scss"
 import ReactPaginate from "react-paginate"
-import { useState } from "react"
-import Modal from "../components/Modal"
-
-// interface ElementDetail {
-//   name: string
-//   categoryValueId: number
-//   classificationValueId: number
-//   elementClassification: string
-//   effectiveEndDate: string
-//   modifiedBy: string
-//   status: string
-//   effectiveStartDate: string
-// }
+import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
+import SideModal from "../components/sideModal/SideModal"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
-  const [showModal, setShowModal] = useState(false)
+  const [showSideModal, setShowSideModal] = useState(false)
   const [showElementModal, setShowElementModal] = useState(false)
-
+  const [formType, setFormType] = useState<"ADD" | "EDIT">("EDIT")
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [currentLinkDetails, setCurrentLinkDetails] = useState<ElementLink>()
   const dispatch = useAppDispatch()
   const { id } = useParams() as { id: string }
-  // dispatch(fetchSingleElement(id))
   const element = useAppSelector((state) => state.elements.element)
   const loading = useAppSelector((state) => state.elements.loading)
+  const elementLinks = useAppSelector(
+    (state) => state.elementlinks.elementLinks,
+  )
 
   useEffect(() => {
     dispatch(fetchSingleElement(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
-
+  useEffect(() => {
+    dispatch(fetchElementLink(id))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
   //   const formatDate = (date: string) => {
   //     return moment(date).format("MMM DD YYYY, h:mm a")
   //   }
+  const viewLinkDetails = (id: any) => {
+    setShowSideModal(true)
+    const index = elementLinks.findIndex((link) => link.id === id)
+    setCurrentLinkDetails(elementLinks[index])
+  }
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+      },
+      {
+        Header: "Sub-Organization",
+        accessor: "suborganizationId",
+      },
+      {
+        Header: "Department",
+        accessor: "departmentId",
+      },
+      {
+        Header: "Employee Category",
+        accessor: "employeeCategoryId",
+      },
+      {
+        Header: "Amount",
+        accessor: "amount",
+      },
+      {
+        Header: "Details",
+        // accessor: "id",
+        Cell: ({ row }) => (
+          <span
+            role="button"
+            className="modaldetails"
+            onClick={() => viewLinkDetails(row.original.id)}
+          >
+            View Details
+          </span>
+        ),
+      },
+      {
+        Header: "Actions",
+        accessor: "id",
+        Cell: ({ row }) => (
+          <div className="elementLinkAction">
+            <img
+              src={Icons["Edit"]}
+              alt=""
+              onClick={() => {
+                setFormType("EDIT")
+                setShowElementModal(true)
+                dispatch(setCurrentEditElementLink(row.original))
+              }}
+            />
 
+            <img
+              src={Icons["Delete"]}
+              alt=""
+              onClick={() => {
+                dispatch(
+                  deleteSingleElementLink({
+                    id: row.original.id,
+                    elementId: row.original.elementId,
+                  }),
+                )
+              }}
+            />
+          </div>
+        ),
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  const data = useMemo(() => elementLinks, [elementLinks])
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+      {
+        columns,
+        data,
+      },
+      useSortBy,
+    )
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen)
   }
-  // useEffect(() => {
-  //   // const endOffset = itemOffset + itemsPerPage
-  //   setPageCount(Math.ceil(users.length / itemsPerPage))
-  // }, [itemOffset, itemsPerPage, users])
+  useEffect(() => {
+    // const endOffset = itemOffset + itemsPerPage
+    setPageCount(Math.ceil(elementLinks.length / itemsPerPage))
+  }, [itemOffset, itemsPerPage, elementLinks])
 
-  // const handlePageClick = (event: { selected: number }) => {
-  //   const newOffset = (event.selected * itemsPerPage) % users.length
-  //   setItemOffset(newOffset)
-  // }
-
-  // const selectPageCount = (e: ChangeEvent<HTMLSelectElement>) => {
-  //   setItemsPerPage(+e.currentTarget.value)
-  // }
-  // const filterUsers = () => {
-  //   toggleForm()
-  // }
-
-  // const resetFilter = () => {
-  //   toggleForm()
-  // }
-  const getRandomElement = (arr: string | any[]) =>
-    arr[Math.floor(Math.random() * arr.length)]
-
-  const getRandomDate = () => {
-    const start = new Date(2010, 0, 1)
-    const end = new Date()
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-    )
+  const handlePageClick = (event: { selected: number }) => {
+    const newOffset = (event.selected * itemsPerPage) % elementLinks.length
+    setItemOffset(newOffset)
   }
 
-  // const names = [
-  //   "ABC Corporation",
-  //   "XYZ Inc",
-  //   "LMN Co.",
-  //   "PQR Enterprises",
-  //   "Object E",
-  // ]
-  // const subOrganizations = [
-  //   "Solutions Delivery",
-  //   "Management",
-  //   "Office Administration",
-  // ]
-  // const department = [
-  //   "Software Development",
-  //   "Human Resources",
-  //   "Software Development",
-  //   "Cleaning",
-  // ]
-  // const employeeCategory = ["Junior Staff", "Senior Staff", "Consultant"]
-  // const ammount = [
-  //   "10,000.00",
-  //   "30,000.00",
-  //   "70,000.00",
-  //   "80,000.00",
-  //   "100,000.00",
-  // ]
-
-  // const statusOptions = ["Active", "Inactive"]
-
-  // const elements = []
-
-  // for (let i = 0; i < 20; i++) {
-  //   const randomObject = {
-  //     name: getRandomElement(names),
-  //     subOrganization: getRandomElement(subOrganizations),
-  //     department: getRandomElement(department),
-  //     employeeCategory: getRandomElement(employeeCategory),
-  //     ammount: getRandomElement(ammount),
-  //     // employeeCategory: getRandomElement(employeeCategory),
-  //     status: getRandomElement(statusOptions),
-  //   }
-
-  //   elements.push(randomObject)
-  // }
+  const selectPageCount = (e: ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(+e.currentTarget.value)
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -156,35 +179,39 @@ const ElementDetail = () => {
             </div>
             <div className="single__detail">
               <p className="element__label">Effective Start Date</p>
-              <p className="element__text">18-09-2023</p>
+              <p className="element__text">{element?.effectiveStartDate}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Effective END Date</p>
-              <p className="element__text">22-09-2023</p>
+              <p className="element__text">{element?.effectiveEndDate}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">PROCESSING TYPE</p>
-              <p className="element__text">Open</p>
+              <p className="element__text">{element?.processingType}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">PAY frequency</p>
-              <p className="element__text">Selected Months</p>
+              <p className="element__text">{element?.payFrequency}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Pay Months</p>
-              <p className="element__text">January, February, March, April</p>
+              <p className="element__text">{element?.selectedMonths}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Prorate</p>
-              <p className="element__text">Yes</p>
+              <p className="element__text">{element?.prorate}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Status</p>
-              <p className="element__text">Active</p>
+              <p className="element__text">{element?.status}</p>
             </div>
             <div className="single__detail">
-              <p className="element__label">Prorate</p>
-              <p className="element__text">Yes</p>
+              <p className="element__label" style={{ display: "none" }}>
+                Prorate
+              </p>
+              <p className="element__text" style={{ display: "none" }}>
+                Yes
+              </p>
             </div>
           </div>
         </div>
@@ -204,16 +231,26 @@ const ElementDetail = () => {
               </div>
             </div>
           </div>
-          <button className="add-btn" onClick={() => setShowElementModal(true)}>
+          <button
+            className="add-btn"
+            onClick={() => {
+              setShowElementModal(true)
+              setFormType("ADD")
+            }}
+          >
             Create Element Link
             <img src={Icons["Plus"]} alt="SVG logo" />
           </button>
           {showElementModal ? (
-            <Modal>
-              <div className="createElement__modal">
-                <ElementLinkForm />
-              </div>
-            </Modal>
+            <ElementLinkModal>
+              {formType === "ADD" ? (
+                <ElementLinkForm setShowElementModal={setShowElementModal} />
+              ) : (
+                <EditElementLinkForm
+                  setShowElementModal={setShowElementModal}
+                />
+              )}
+            </ElementLinkModal>
           ) : null}
         </div>
         <div className="users__tabBody" onClick={() => setIsFormOpen(false)}>
@@ -230,221 +267,163 @@ const ElementDetail = () => {
               <img src={Icons["Filter"]} alt="" />
             </span>
           </div>
-          {/* <table>
-            <thead>
-              <tr>
-                <th>
-                  Name{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
+          <div className="users__tabBody">
+            <table {...getTableProps()}>
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps(),
+                        )}
+                      >
+                        {column.render("Header")}
+                        <span>
+                          {column.isSorted ? (
+                            column.isSortedDesc ? (
+                              <img src={Icons["Filter"]} alt="" />
+                            ) : (
+                              <img src={Icons["Filter"]} alt="" />
+                            )
+                          ) : (
+                            ""
+                          )}
+                        </span>
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row)
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <td {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          {showSideModal ? (
+            <SideModal>
+              <div className="elementLinkDetails">
+                <div className="page__header" style={{ padding: "32px" }}>
+                  <button
+                    // type="button"
+                    className="closeElementLink"
+                    onClick={() => setShowSideModal(false)}
                   >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th>
-                  Sub-Organization{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
-                  >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th>
-                  Department{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
-                  >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th>
-                  Employee Category{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
-                  >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th className="date">
-                  Amount{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
-                  >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th>
-                  Details{" "}
-                  <span
-                    role="button"
-                    className="open-filter"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleForm()
-                    }}
-                  >
-                    <img src={Icons["Filter"]} alt="" />
-                  </span>
-                </th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {elements.map((user, index: number) => (
-                <tr key={index}>
-                  <td data-name="usename" className="username">
-                    {user.name}
-                    <span className={`status-span mobile ${user.status}`}>
-                      {user.status}
-                    </span>
-                  </td>
-                  <td data-name="email">{user.subOrganization}</td>
-                  <td data-name="phoneumber">{user.department}</td>
-
-                  <td className="status">
-                    <span className="">{user.employeeCategory}</span>
-                  </td>
-                  <td data-name="date joined" className="date">
-                    NGN {user.ammount}
-                  </td>
-                  <td data-name="organization">
-                    <Link to={() => {}} onClick={() => setShowModal(true)}>
-                      View Details
-                    </Link>
-                  </td>
-                  {showModal ? (
-                    <Modal>
-                      <div className="elementLinkDetails">
-                        <div
-                          className="page__header"
-                          style={{ padding: "32px" }}
-                        >
-                          <button
-                            // type="button"
-                            className="closeElementLink"
-                            onClick={() => setShowModal(false)}
-                          >
-                            <img src={Icons["CloseModal"]} alt="" />
-                          </button>
-                          <h2>Element Detail</h2>
-                          <div className="element__detail">
-                            <div className="single__detail">
-                              <p className="element__label">NAME</p>
-                              <p className="element__text">{user.name}</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">sub organization</p>
-                              <p className="elementLinkDetails__text">
-                                {user.subOrganization}
-                              </p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Department</p>
-                              <p className="element__text">{user.department}</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Location</p>
-                              <p className="element__text">Monthly Run</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Employee Type</p>
-                              <p className="element__text">18-09-2023</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">
-                                Employee Category
-                              </p>
-                              <p className="element__text">
-                                {user.employeeCategory}
-                              </p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Effective Date</p>
-                              <p className="element__text">Open</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Status</p>
-                              <p className="element__text">{user.status}</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">GRADE</p>
-                              <p className="element__text">
-                                January, February, March, April
-                              </p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Grade Step</p>
-                              <p className="element__text">Yes</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Amount Type</p>
-                              <p className="element__text">Active</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Amount</p>
-                              <p className="element__text">
-                                NGN {user.ammount}
-                              </p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">PENSION</p>
-                              <p className="element__text">Yes</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">Housing</p>
-                              <p className="element__text">Yes</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">
-                                Effective Start Date
-                              </p>
-                              <p className="element__text">Yes</p>
-                            </div>
-                            <div className="single__detail">
-                              <p className="element__label">
-                                Effective End Date
-                              </p>
-                              <p className="element__text">Yes</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Modal>
-                  ) : null}
-                  <td data-name="action" className="elementLinkAction">
-                    <img src={Icons["Edit"]} alt="" />
-                    <img src={Icons["Delete"]} alt="" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-          {/* <div className="pagination_wrapper">
+                    <img src={Icons["CloseModal"]} alt="" />
+                  </button>
+                  <h2>Element Detail</h2>
+                  <div className="element__detail">
+                    <div className="single__detail">
+                      <p className="element__label">NAME</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.name}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">sub organization</p>
+                      <p className="elementLinkDetails__text">
+                        {currentLinkDetails?.suborganizationId}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Department</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.departmentId}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Location</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.locationId}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Employee Type</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.employeeTypeId}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Employee Category</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.employeeCategoryId}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Effective Date</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.effectiveStartDate}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Status</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.status}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">GRADE</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.grade}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Grade Step</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.gradeStep}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Amount Type</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.amountType}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Amount</p>
+                      <p className="element__text">
+                        NGN {currentLinkDetails?.amount}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">PENSION</p>
+                      <p className="element__text">p</p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Housing</p>
+                      <p className="element__text">Yes</p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Effective Start Date</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.effectiveStartDate}
+                      </p>
+                    </div>
+                    <div className="single__detail">
+                      <p className="element__label">Effective End Date</p>
+                      <p className="element__text">
+                        {currentLinkDetails?.effectiveEndDate}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SideModal>
+          ) : null}
+          <div className="pagination_wrapper">
             <ReactPaginate
               nextLabel=">"
               onPageChange={handlePageClick}
@@ -466,7 +445,7 @@ const ElementDetail = () => {
               renderOnZeroPageCount={null}
             />
 
-            {users.length > 0 && (
+            {elementLinks.length > 0 && (
               <div className="select-box">
                 <span>
                   Showing out
@@ -486,11 +465,11 @@ const ElementDetail = () => {
                       <option value="100">100</option>
                     </select>
                   </span>
-                  of {users.length}
+                  of {elementLinks.length}
                 </span>
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
