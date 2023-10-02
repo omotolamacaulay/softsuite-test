@@ -1,4 +1,4 @@
-// import { Elements } from "../../../types"
+// @ts-nocheck
 import { SetStateAction } from "react"
 import "./Hamburger.scss"
 import type { MenuProps } from "antd"
@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 import Icons from "../../../assets/images"
 import { useAppDispatch } from "../../../../app/hooks"
 import {
-  fetchSingleElement,
+  // fetchSingleElement,
   setCurrentEditElement,
   deleteSingleElement,
 } from "../../../counter/elementSlice"

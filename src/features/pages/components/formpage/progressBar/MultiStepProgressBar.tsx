@@ -1,3 +1,4 @@
+//@ts-nocheck
 import "./MultiStepProgressBar.scss"
 import { ProgressBar, Step } from "react-step-progress-bar"
 

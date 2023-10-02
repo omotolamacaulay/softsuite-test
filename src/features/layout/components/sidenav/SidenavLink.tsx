@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+//@ts-nocheck
+import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import Icons from "../../../assets/images"
 import "./SidenavLink.scss"

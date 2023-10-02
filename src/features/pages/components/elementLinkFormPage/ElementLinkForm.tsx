@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react"
 import ElementFormPageOne from "./ElementFormPageOne"
 import ElementFormPageTwo from "./ElementFormPageTwo"

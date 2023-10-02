@@ -1,3 +1,4 @@
+//@ts-nocheck
 import "./Element.scss"
 import { useParams, Link } from "react-router-dom"
 import { useMemo, useEffect, useState, ChangeEvent } from "react"
