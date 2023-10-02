@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import elementsReducer from "../features/counter/elementSlice"
+import elementLinksReducer from "../features/counter/elementLinkSlice"
 
 export const store = configureStore({
   reducer: {
     elements: elementsReducer,
+    elementlinks: elementLinksReducer,
   },
 })
 

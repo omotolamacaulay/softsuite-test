@@ -75,7 +75,6 @@ export const addSingleElement = createAsyncThunk(
       }
 
       const res = await response.json()
-      // console.log(res, "res data")
       return res.data
     } catch (error) {
       if (error instanceof Error) {
@@ -111,7 +110,6 @@ export const updateElement = createAsyncThunk(
       }
 
       const res = await response.json()
-      console.log(res, "yyyyyy")
       return { msg: res.message, elementId: res.data.id }
     } catch (error) {
       if (error instanceof Error) {
@@ -132,7 +130,6 @@ export const deleteSingleElement = createAsyncThunk(
         "Content-Type": "application/json",
       },
     }
-    console.log(id)
     try {
       const response = await fetch(
         `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}`,
@@ -239,7 +236,6 @@ export const elementSlice = createSlice({
       .addCase(deleteSingleElement.fulfilled, (state, action) => {
         state.loading = false
         state.error = []
-        console.log(action)
         state.elements = state.elements.filter(
           (element) => element.id !== action.payload.elementId,
         )
