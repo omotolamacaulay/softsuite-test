@@ -1,25 +1,23 @@
 import { useState } from "react"
-import ElementFormPageOne from "./ElementFormPageOne"
-import ElementFormPageTwo from "./ElementFormPageTwo"
-import ElementFormPageThree from "./ElementFormPageThree"
-import MultiProgressElement from "./MultiProgressElement"
+import EditElementLinkFormPageOne from "./EditElementLinkFormPageOne"
+import EditElementLinkFormPageTwo from "./EditElementLinkFormPageTwo"
+import EditElementLinkFormPageThree from "./EditElementLinkFormPageThree"
+import MultiProgressElement from "../elementLinkFormPage/MultiProgressElement"
 import { useForm } from "react-hook-form"
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks"
 import { ElementLink } from "../../../../types"
 import "../addelementform/ElementForm.scss"
-import { addSingleElementLink } from "../../../counter/elementLinkSlice"
+import { updateElementLink } from "../../../counter/elementLinkSlice"
 
-const ElementLinkForm = ({
+const EditElementLinkForm = ({
   setShowElementModal,
 }: {
   setShowElementModal: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [page, setPage] = useState("pageone")
-
   const elementLink = useAppSelector(
     (state) => state.elementlinks.currentEditElementLink,
   )
-  const element = useAppSelector((state) => state.elements.element)
   const emptyState = {
     elementId: 0,
     suborganizationId: 0,
@@ -56,7 +54,6 @@ const ElementLinkForm = ({
   }
   const closeModal = () => setShowElementModal(false)
   const dispatch = useAppDispatch()
-
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
       case "1":
@@ -75,10 +72,8 @@ const ElementLinkForm = ({
   }
 
   const onSubmit = async (data: ElementLink) => {
-    const elementId = element.id
-    data.elementId = elementId
-    const actionResult = await dispatch(addSingleElementLink(data))
-    if (addSingleElementLink.fulfilled.match(actionResult)) {
+    const actionResult = await dispatch(updateElementLink(data))
+    if (updateElementLink.fulfilled.match(actionResult)) {
       console.log("Element updated successfully:", actionResult.payload)
     }
     setShowElementModal(false)
@@ -86,26 +81,26 @@ const ElementLinkForm = ({
 
   return (
     <div>
-      <h1>Create Element Link</h1>
+      <h1>Edit Element Link</h1>
       <MultiProgressElement page={page} onPageNumberClick={nextPageNumber} />
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {
           {
             pageone: (
-              <ElementFormPageOne
+              <EditElementLinkFormPageOne
                 closeModal={closeModal}
                 onButtonClick={nextPage}
                 register={register}
               />
             ),
             pagetwo: (
-              <ElementFormPageTwo
+              <EditElementLinkFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
               />
             ),
             pagethree: (
-              <ElementFormPageThree
+              <EditElementLinkFormPageThree
                 onButtonClick={nextPage}
                 register={register}
                 closeModal={closeModal}
@@ -118,4 +113,4 @@ const ElementLinkForm = ({
   )
 }
 
-export default ElementLinkForm
+export default EditElementLinkForm
