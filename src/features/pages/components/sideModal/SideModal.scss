@@ -1,0 +1,24 @@
+.side__modal {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 100px;
+  z-index: 10000;
+  display: flex;
+  justify-content: end;
+  h1 {
+    color: #2d416f;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  &-body {
+    background-color: white;
+    width: 745px;
+    padding: 24px 40px;
+    // text-align: center;
+    border-radius: 8px;
+  }
+}

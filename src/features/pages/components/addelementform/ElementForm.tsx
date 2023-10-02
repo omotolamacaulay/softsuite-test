@@ -6,11 +6,7 @@ import FormPageTwo from "../formpage/FormPageTwo"
 import { useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import "./ElementForm.scss"
-import {
-  addSingleElement,
-  updateElement,
-  fetchSingleElement,
-} from "../../../counter/elementSlice"
+import { addSingleElement, updateElement } from "../../../counter/elementSlice"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
 const ElementForm = ({
@@ -21,7 +17,6 @@ const ElementForm = ({
   const [page, setPage] = useState("pageone")
   const navigate = useNavigate()
   const element = useAppSelector((state) => state.elements.currentEditElement)
-  // const isLoading = useAppSelector((state) => state.elements.loading)
   const emptyState = {
     name: "",
     description: "",

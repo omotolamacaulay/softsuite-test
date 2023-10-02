@@ -1,21 +1,23 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 // import { RootState, AppThunk } from "../../app/store"
-import { ElementDetail } from "../../types"
+import { ElementLink } from "../../types"
 
-type ElementDetailType = {
+type ElementLinkType = {
   loading: boolean
-  singleElementLink: ElementDetail | null
-  elementsLink: ElementDetail[] | null
+  singleElementLink: ElementLink | {}
+  elementLinks: ElementLink[]
   error: string[]
+  currentEditElementLink: ElementLink | null
 }
 
-const initialState: ElementDetailType = {
+const initialState: ElementLinkType = {
   loading: false,
-  singleElementLink: null,
-  elementsLink: null,
+  singleElementLink: {},
+  elementLinks: [],
   error: [],
+  currentEditElementLink: null,
 }
-const ENDPOINT = "https://650af6bedfd73d1fab094cf7.mockapi.io/elements"
+// const ENDPOINT = "https://650af6bedfd73d1fab094cf7.mockapi.io/elements"
 // const SINGLEENDPOINT = `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/{id}`
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -33,60 +35,30 @@ const ENDPOINT = "https://650af6bedfd73d1fab094cf7.mockapi.io/elements"
 // )
 
 export const fetchElementLink = createAsyncThunk(
-  "elementLink/fetchElementLink",
-  async (id: string) => {
-    const config = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-
-    try {
-      const response = await fetch(
-        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}/elementlinks`,
-        config,
-      )
-
-      if (!response.ok) {
-        throw new Error("Failed to retrieve element links")
-      }
-
-      const data = await response.json()
-      return data.data
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error
-      } else {
-        throw new Error("An error occurred while retrieving element links")
-      }
-    }
+  "elements/fetchElementLink",
+  async (path: string) => {
+    const response = await fetch(
+      `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${path}/elementlinks`,
+    ).then((response) => response.json())
+    // The value we return becomes the `fulfilled` action payload
+    return response.data.content
   },
 )
 
-type ElementLink = {
+type ElementLinkIds = {
   id: string
   elementId: string
 }
-
 export const fetchSingleElementLink = createAsyncThunk(
-  "elementLink/fetchSingleElementLink",
-  async (value: ElementLink) => {
-    const config = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-
+  "elements/fetchSingleElementLink",
+  async (value: ElementLinkIds) => {
     try {
       const response = await fetch(
-        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${value.id}/elementlinks/${value.elementId}`,
-        config,
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${value.elementId}/elementlinks/${value.id}`,
       )
 
       if (!response.ok) {
-        throw new Error("Failed to retrieve element links")
+        throw new Error("Failed to retrieve element")
       }
 
       const data = await response.json()
@@ -95,40 +67,74 @@ export const fetchSingleElementLink = createAsyncThunk(
       if (error instanceof Error) {
         throw error
       } else {
-        throw new Error("An error occurred while retrieving element links")
+        throw new Error("An error occurred while retrieving the element")
       }
     }
   },
 )
+// type ElementLinkParams = {
+//   data: ElementLink
+//   path: string
+// }
+export const addSingleElementLink = createAsyncThunk(
+  "elements/addSingleElement",
+  async (data: ElementLink) => {
+    const formObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+    try {
+      const response = await fetch(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${data.elementId}/elementlinks`,
+        formObj,
+      )
 
-export const editSingleElementLink = createAsyncThunk(
-  "elementLink/editSingleElementLink",
-  async (values: ElementLink) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve element")
+      }
+
+      const res = await response.json()
+      return res.data
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      } else {
+        throw new Error("An error occurred while retrieving the element")
+      }
+    }
+  },
+)
+export const updateElementLink = createAsyncThunk(
+  "elements/updateElementLink",
+  async (data: ElementLink) => {
     const config = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(data),
     }
 
     try {
       const response = await fetch(
-        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/elements/${values.id}/elementlinks/${values.elementId}`,
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${data.elementId}/elementlinks/${data.id}`,
         config,
       )
 
       if (!response.ok) {
-        throw new Error("Failed to update element link")
+        throw new Error("Failed to update element")
       }
 
-      const data = await response.json()
-      return data.message
+      const res = await response.json()
+      return { msg: res.message, data: res.data }
     } catch (error) {
       if (error instanceof Error) {
         throw error
       } else {
-        throw new Error("An error occurred while updating the element link")
+        throw new Error("An error occurred while updating the element")
       }
     }
   },
@@ -136,7 +142,7 @@ export const editSingleElementLink = createAsyncThunk(
 
 export const deleteSingleElementLink = createAsyncThunk(
   "elementLink/deleteSingleElementLink",
-  async (values: ElementLink) => {
+  async (data: { id: string; elementId: string }) => {
     const config = {
       method: "DELETE",
       headers: {
@@ -146,7 +152,7 @@ export const deleteSingleElementLink = createAsyncThunk(
 
     try {
       const response = await fetch(
-        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/elements/${values.id}/elementlinks/${values.elementId}`,
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${data.elementId}/elementlinks/${data.id}`,
         config,
       )
 
@@ -154,44 +160,48 @@ export const deleteSingleElementLink = createAsyncThunk(
         throw new Error("Failed to delete element link")
       }
 
-      const data = await response.json()
-      return values.id
+      const res = await response.json()
+
+      return { msg: res.message, id: data.id }
     } catch (error) {
       if (error instanceof Error) {
         throw error
       } else {
-        throw new Error("An error occurred while deleting the element link")
+        throw new Error("An error occurred while deleting the element")
       }
     }
   },
 )
 
 export const elementLinkSlice = createSlice({
-  name: "elementLink",
+  name: "elementLinks",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    loadElementsLink: (state, action) => {
-      state.elementsLink = action.payload
+    loadElementLinks: (state, action) => {
+      state.elementLinks = action.payload
     },
     loadSingleElementLink: (state, action) => {
       state.singleElementLink = action.payload
     },
-    updateSingleElementLink: (state, action) => {
-      const indexToUpdate = state.elementsLink.findIndex(
-        (element) => element.id === action.payload.id,
-      )
+    // updateSingleElementLink: (state, action) => {
+    //   const indexToUpdate = state.elementLinks.findIndex(
+    //     (element) => element.id === action.payload.id,
+    //   )
 
-      if (indexToUpdate !== -1) {
-        state.elementsLink[indexToUpdate] = action.payload
-      }
-      if (
-        state.singleElementLink &&
-        state.singleElementLink.id === action.payload.id
-      ) {
-        state.singleElementLink = action.payload
-      }
+    //   if (indexToUpdate !== -1) {
+    //     state.elementLinks[indexToUpdate] = action.payload
+    //   }
+    //   if (
+    //     state.singleElementLink &&
+    //     state.singleElementLink.id === action.payload.id
+    //   ) {
+    //     state.singleElementLink = action.payload
+    //   }
+    // },
+    setCurrentEditElementLink: (state, action: PayloadAction<ElementLink>) => {
+      state.currentEditElementLink = action.payload
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -204,7 +214,7 @@ export const elementLinkSlice = createSlice({
       .addCase(fetchElementLink.fulfilled, (state, action) => {
         state.loading = false
         state.error = []
-        state.singleElementLink = action.payload
+        state.elementLinks = action.payload
       })
       .addCase(fetchElementLink.rejected, (state) => {
         state.loading = false
@@ -220,17 +230,31 @@ export const elementLinkSlice = createSlice({
       .addCase(fetchSingleElementLink.rejected, (state) => {
         state.loading = false
       })
-      .addCase(editSingleElementLink.rejected, (state) => {
+      .addCase(updateElementLink.rejected, (state) => {
         state.loading = false
       })
-      .addCase(editSingleElementLink.pending, (state) => {
+      .addCase(updateElementLink.pending, (state) => {
         state.loading = true
       })
-      .addCase(editSingleElementLink.fulfilled, (state, action) => {
+      .addCase(updateElementLink.fulfilled, (state, action) => {
         state.loading = false
         state.error = []
-        state.singleElementLink = action.payload
+        const index = state.elementLinks.findIndex(
+          (link) => link.id === action.payload.data.id,
+        )
+        state.elementLinks[index] = action.payload.data
       })
+      // .addCase(addSingleElementLink.pending, (state) => {
+      //   state.loading = true
+      // })
+      // .addCase(addSingleElementLink.fulfilled, (state, action) => {
+      //   state.loading = false
+      //   state.error = []
+      //   state.elementLinks = action.payload.data
+      // })
+      // .addCase(addSingleElementLink.rejected, (state) => {
+      //   state.loading = false
+      // })
       .addCase(deleteSingleElementLink.rejected, (state) => {
         state.loading = false
       })
@@ -240,18 +264,18 @@ export const elementLinkSlice = createSlice({
       .addCase(deleteSingleElementLink.fulfilled, (state, action) => {
         state.loading = false
         state.error = []
-        state.elementsLink =
-          state.elementsLink?.filter(
-            (item) => item.id !== Number(action.payload),
-          ) || []
+        state.elementLinks = state.elementLinks?.filter(
+          (link) => link.id !== action.payload.id,
+        )
       })
   },
 })
 
 export const {
-  loadElementsLink,
+  loadElementLinks,
   loadSingleElementLink,
-  updateSingleElementLink,
+  // updateSingleElementLink,
+  setCurrentEditElementLink,
 } = elementLinkSlice.actions
 
 // The function below is called a selector and allows us to select a value from

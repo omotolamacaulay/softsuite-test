@@ -1,10 +1,9 @@
-// import React, { useState } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import SelectInput from "../../../layout/components/common/SelectInput"
-import Checkbox from "../../../layout/components/common/Checkbox"
+// import Checkbox from "../../../layout/components/common/Checkbox"
 // import dayjs from "dayjs"
 
 const monthOptions = [
@@ -25,10 +24,6 @@ const monthOptions = [
   { value: "December", label: "December" },
 ]
 
-// const statusBoolean = (arg: string): boolean => {
-//   return arg === "active" ? true : false
-// }
-
 const FormPageTwo = ({
   onButtonClick,
   register,
@@ -36,14 +31,6 @@ const FormPageTwo = ({
   register: UseFormRegister<Element>
   onButtonClick: (arg: string) => void
 }) => {
-  // const {
-  // register,
-
-  // trigger,
-  //   formState: { errors },
-  // } = useForm<Element>()
-
-  // const inputRef = useRef(null)
   return (
     <div className="pg-1">
       <div className="form-group">

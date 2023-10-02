@@ -32,6 +32,7 @@ export interface Element {
 }
 
 export interface ElementLink {
+  id: any
   name: string
   elementId: number
   suborganizationId: number
@@ -62,8 +63,8 @@ export interface ElementLink {
 export type InputProps = {
   label: string
   register: Record<string, string | any>
-  required: boolean
-  placeholder: string
+  required?: boolean
+  placeholder?: string
   id: string
   type?: string
 }

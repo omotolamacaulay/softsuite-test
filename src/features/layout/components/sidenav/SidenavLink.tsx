@@ -1,8 +1,8 @@
+import React, { useState } from "react"
 import { NavLink } from "react-router-dom"
-import { NavItem } from "../../../../types"
 import Icons from "../../../assets/images"
 import "./SidenavLink.scss"
-import { useState } from "react"
+import { NavItem } from "../../../../types"
 
 type SidenavLinkProps = {
   link: NavItem
@@ -10,12 +10,13 @@ type SidenavLinkProps = {
 
 export default function SidenavLink({ link }: SidenavLinkProps) {
   const [subnav, setSubnav] = useState(false)
-  const [active, setActive] = useState(false)
+  const [isActive, setIsActive] = useState(false)
 
   const showSubNav = () => {
     setSubnav(!subnav)
-    setActive(true)
+    setIsActive(true)
   }
+
   return (
     <div
       className={
@@ -26,8 +27,7 @@ export default function SidenavLink({ link }: SidenavLinkProps) {
     >
       <NavLink
         to={link.path}
-        className={`navlink ${active ? "notActive" : "active"}`}
-        // data-testid="navlink"
+        className={`navlink ${isActive ? "active" : ""}`}
         onClick={link.subNav && showSubNav}
       >
         <img src={Icons[link.icon]} alt="" className="navIcons" />
@@ -74,6 +74,7 @@ export default function SidenavLink({ link }: SidenavLinkProps) {
                     ? "subNav__link"
                     : "null"
                 }
+                onClick={() => setIsActive(!isActive)}
               >
                 {item.title}
               </NavLink>

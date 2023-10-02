@@ -3,7 +3,7 @@ import { ElementLink } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import SelectInput from "../../../layout/components/common/SelectInput"
 
-const ElementFormPageOne = ({
+const EditElementLinkFormPageOne = ({
   onButtonClick,
   closeModal,
   register,
@@ -29,7 +29,7 @@ const ElementFormPageOne = ({
             id="suborganizationId"
             label="Suborganization"
             required
-            register={{ ...register("suborganizationId") }}
+            register={{ ...register("suborganizationId", { required: true }) }}
           >
             <>
               <option disabled value="">
@@ -44,7 +44,7 @@ const ElementFormPageOne = ({
             id="departmentId"
             label="Department"
             required
-            register={{ ...register("departmentId") }}
+            register={{ ...register("departmentId", { required: true }) }}
           >
             <>
               <option disabled value="">
@@ -61,7 +61,7 @@ const ElementFormPageOne = ({
             id="jobTitleId"
             label="Job Title"
             required
-            register={{ ...register("jobTitleId") }}
+            register={{ ...register("jobTitleId", { required: true }) }}
           >
             <>
               <option disabled value="">
@@ -142,4 +142,4 @@ const ElementFormPageOne = ({
   )
 }
 
-export default ElementFormPageOne
+export default EditElementLinkFormPageOne

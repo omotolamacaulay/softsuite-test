@@ -26,6 +26,7 @@ import Edit from "./edit.svg"
 import Delete from "./delete.svg"
 import CloseModal from "./close.svg"
 import Back from "./goback.svg"
+import Empty from "./emptystate.png"
 
 const Icons: { [key: string]: string } = {
   Logo,
@@ -56,6 +57,7 @@ const Icons: { [key: string]: string } = {
   Delete,
   CloseModal,
   Back,
+  Empty,
 }
 
 export default Icons

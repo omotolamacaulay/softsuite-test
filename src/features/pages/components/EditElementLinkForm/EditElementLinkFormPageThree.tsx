@@ -4,7 +4,7 @@ import SelectInput from "../../../layout/components/common/SelectInput"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import { ElementLink } from "../../../../types"
 
-const ElementFormPageThree = ({
+const EditElementLinkFormPageThree = ({
   onButtonClick,
   closeModal,
   register,
@@ -99,10 +99,10 @@ const ElementFormPageThree = ({
         >
           Back
         </button>
-        <button className="btn primary-btn">Create A New Element Link</button>
+        <button className="btn primary-btn">Edit Element Link</button>
       </div>
     </div>
   )
 }
 
-export default ElementFormPageThree
+export default EditElementLinkFormPageThree

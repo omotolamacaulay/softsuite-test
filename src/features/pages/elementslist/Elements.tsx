@@ -8,6 +8,7 @@ import { fetchElements } from "../../counter/elementSlice"
 import ElementForm from "../components/addelementform/ElementForm"
 import DefaultModal from "../components/DefaultModal/DefaultModal"
 import EditElementForm from "../components/editelementform/EditElementForm"
+import EmptyState from "../components/EmptyState/EmptyState"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
@@ -22,7 +23,6 @@ function Elements() {
     dispatch(fetchElements())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   useEffect(() => {
     // const endOffset = itemOffset + itemsPerPage
     setPageCount(Math.ceil(elements.elements.length / itemsPerPage))
@@ -80,64 +80,68 @@ function Elements() {
           )}
         </DefaultModal>
       ) : null}
-      <div className="elements__body">
-        <ElementsTable
-          elements={elements.elements.slice(
-            itemOffset,
-            itemOffset + itemsPerPage,
-          )}
-          setShowModal={setShowModal}
-          setFormType={setFormType}
-        />
-
-        <div className="pagination_wrapper">
-          <ReactPaginate
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item prev"
-            previousLinkClassName="page-link"
-            nextClassName="page-item next"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            activeClassName="active"
-            renderOnZeroPageCount={null}
+      {elements.elements.length > 0 ? (
+        <div className="elements__body">
+          <ElementsTable
+            elements={elements.elements.slice(
+              itemOffset,
+              itemOffset + itemsPerPage,
+            )}
+            setShowModal={setShowModal}
+            setFormType={setFormType}
           />
 
-          {elements.elements.length > 0 && (
-            <div className="select-box">
-              <span>
-                Showing out
+          <div className="pagination_wrapper">
+            <ReactPaginate
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item prev"
+              previousLinkClassName="page-link"
+              nextClassName="page-item next"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+
+            {elements.elements.length > 0 && (
+              <div className="select-box">
                 <span>
-                  <label htmlFor="pageitems" hidden></label>
-                  <select
-                    className="pageitems"
-                    name="page Items"
-                    id="pageitems"
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      selectPageCount(e)
-                    }
-                  >
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
+                  Showing out
+                  <span>
+                    <label htmlFor="pageitems" hidden></label>
+                    <select
+                      className="pageitems"
+                      name="page Items"
+                      id="pageitems"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        selectPageCount(e)
+                      }
+                    >
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </span>
+                  of {elements.elements.length}
                 </span>
-                of {elements.elements.length}
-              </span>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <EmptyState text="Elements" />
+      )}
     </div>
   )
 }
