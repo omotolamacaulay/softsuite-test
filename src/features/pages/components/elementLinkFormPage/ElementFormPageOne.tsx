@@ -1,239 +1,144 @@
-import { useForm, Controller } from "react-hook-form"
-import { Select, ConfigProvider, Space, Input } from "antd"
-import { Element } from "../../../../types"
+import { UseFormRegister } from "react-hook-form"
+import { ElementLink } from "../../../../types"
+import Input from "../../../layout/components/common/Input"
+import SelectInput from "../../../layout/components/common/SelectInput"
 
-const ElementFormPageOne = ({ onButtonClick, control }) => {
-  const {
-    register,
-    trigger,
-    formState: { errors },
-  } = useForm<Element>()
-  //   const handleChange = (value: string) => {
-  //     console.log(`selected ${value}`)
-  //   }
+const ElementFormPageOne = ({
+  onButtonClick,
+  closeModal,
+  register,
+}: {
+  onButtonClick: (arg: string) => void
+  closeModal: () => void
+  register: UseFormRegister<ElementLink>
+}) => {
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Switch: {
-            colorPrimary: "#4BAA79",
-            colorPrimaryHover: "#4BAA79",
-            colorTextQuaternary: "#E05453",
-            colorTextTertiary: "#E05453",
-          },
-          Radio: {
-            colorPrimary: "#4BAA79",
-          },
-          Select: {
-            optionSelectedBg: "#f3fff1",
-          },
-        },
-      }}
-    >
-      <div className="pg-1">
-        <div className="form-group">
-          <div className="input-group">
-            <label>Element Link Name</label>
-            <Controller
-              control={control}
-              //   name="name"
-              render={({ field }) => (
-                <Input {...field} placeholder="Input Name" />
-              )}
-              {...register("name", {
-                required: true,
-                maxLength: 20,
-                pattern: /^[A-Za-z]+$/i,
-              })}
-            />
-            {errors?.name?.type === "required" && <p>This field is required</p>}
-            {errors?.name?.type === "maxLength" && (
-              <p>Name cannot exceed 30 characters</p>
-            )}
-            {errors?.name?.type === "pattern" && (
-              <p>Alphabetical characters only</p>
-            )}
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="input-group">
-            <Space wrap>
-              <label>Suborganization</label>
-              <Controller
-                name="suborganizationId"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select a Suborganization",
-                      },
-                      { value: 1, label: "Pre-tax Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-
-              {errors.suborganizationId && <p>This field is required</p>}
-            </Space>
-          </div>
-          <div className="input-group">
-            <Space wrap>
-              <label>Department</label>
-              <Controller
-                name="departmentId"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select a Department",
-                      },
-                      { value: 1, label: "Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-
-              {errors.departmentId && <p>This field is required</p>}
-            </Space>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="input-group">
-            <Space wrap>
-              <label>Job Title</label>
-              <Controller
-                control={control}
-                name="jobTitleId"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select a Job Title",
-                      },
-                      { value: 1, label: "Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-
-              {errors.payRunId && <p>This field is required</p>}
-            </Space>
-          </div>
-          <div className="input-group">
-            <Space wrap>
-              <label>Location</label>
-              <Controller
-                control={control}
-                name="locationId"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select a Location",
-                      },
-                      { value: 1, label: "Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-
-              {errors.payRunId && <p>This field is required</p>}
-            </Space>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="input-group">
-            <Space wrap>
-              <label>Employee Type</label>
-              <Controller
-                control={control}
-                name="jobTitleId"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select an employee Type",
-                      },
-                      { value: 1, label: "Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-            </Space>
-          </div>
-          <div className="input-group">
-            <Space wrap>
-              <label>Employee Category</label>
-              <Controller
-                control={control}
-                name="employeeCategoryId"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    style={{ width: "100%" }}
-                    options={[
-                      {
-                        value: 0,
-                        label: "Select a Employee Category",
-                      },
-                      { value: 1, label: "Deduction" },
-                      { value: 2, label: "Variation" },
-                      { value: 3, label: "Payroll" },
-                    ]}
-                  />
-                )}
-              />
-            </Space>
-          </div>
-        </div>
-        <div className="button-group">
-          <button
-            className="btn secondary-btn"
-            type="button"
-            //   onClick={() => setShowModal(false)}
+    <div className="pg-1">
+      <div className="input-group">
+        <Input
+          id="name"
+          label="Element Link Name"
+          register={{ ...register("name", { required: true }) }}
+          required
+          placeholder="Input Name"
+        />
+      </div>
+      <div className="form-group">
+        <div className="input-group">
+          <SelectInput
+            id="suborganizationId"
+            label="Suborganization"
+            required
+            register={{ ...register("suborganizationId") }}
           >
-            Cancel
-          </button>
-          <button
-            className="btn primary-btn"
-            type="button"
-            value="Next"
-            onClick={() => {
-              onButtonClick("pagetwo")
-            }}
+            <>
+              <option disabled value="">
+                Suborganization
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
+        </div>
+        <div className="input-group">
+          <SelectInput
+            id="departmentId"
+            label="Department"
+            required
+            register={{ ...register("departmentId") }}
           >
-            Next
-          </button>
+            <>
+              <option disabled value="">
+                Select a Department
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
         </div>
       </div>
-    </ConfigProvider>
+      <div className="form-group">
+        <div className="input-group">
+          <SelectInput
+            id="jobTitleId"
+            label="Job Title"
+            required
+            register={{ ...register("jobTitleId") }}
+          >
+            <>
+              <option disabled value="">
+                Select a Job Title
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
+        </div>
+        <div className="input-group">
+          <SelectInput
+            id="locationId"
+            label="Job Title"
+            required
+            register={{ ...register("locationId") }}
+          >
+            <>
+              <option disabled value="">
+                Select a Location
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
+        </div>
+      </div>
+      <div className="form-group">
+        <div className="input-group">
+          <SelectInput
+            id="employeeTypeId"
+            label="Employee Type"
+            required
+            register={{ ...register("employeeTypeId") }}
+          >
+            <>
+              <option disabled value="">
+                Select an employee Type
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
+        </div>
+        <div className="input-group">
+          <SelectInput
+            id="employeeCategoryId"
+            label="Employee Category"
+            required
+            register={{ ...register("employeeCategoryId") }}
+          >
+            <>
+              <option disabled value="">
+                Select a Employee Category
+              </option>
+              <option>gdsyds</option>
+            </>
+          </SelectInput>
+        </div>
+      </div>
+      <div className="button-group">
+        <button
+          className="btn secondary-btn"
+          type="button"
+          onClick={closeModal}
+        >
+          Cancel
+        </button>
+        <button
+          className="btn primary-btn"
+          type="button"
+          value="Next"
+          onClick={() => {
+            onButtonClick("pagetwo")
+          }}
+        >
+          Next
+        </button>
+      </div>
+    </div>
   )
 }
 
