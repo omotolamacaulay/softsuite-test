@@ -6,37 +6,37 @@ const navlinks: navLinksType = [
   {
     title: "Payroll Activities",
     icon: "PayrollAct",
-    path: "#",
+    path: "#/",
     iconClosed: "ArrowDown",
     iconOpen: "ArrowUp",
     subNav: [
       {
         title: "Payroll Run",
-        path: "link",
+        path: "#/",
       },
       {
         title: "Payroll Reversal",
-        path: "link",
+        path: "#/",
       },
       {
         title: "Payroll History",
-        path: "link",
+        path: "/history",
       },
       {
         title: "Payroll Lock",
-        path: "link",
+        path: "/lock",
       },
       {
         title: "Payroll Payslip",
-        path: "link",
+        path: "/payslip",
       },
       {
         title: "Payroll Log",
-        path: "link",
+        path: "/log",
       },
       {
         title: "Payroll Approval",
-        path: "link",
+        path: "/approval",
       },
     ],
   },
@@ -48,24 +48,24 @@ const navlinks: navLinksType = [
   {
     title: "Element Setup",
     icon: "Settings",
-    path: "#",
+    path: "/#",
     iconClosed: "ArrowDown",
     iconOpen: "ArrowUp",
     subNav: [
       {
         title: "Elements",
-        path: "/elements",
+        path: "/",
       },
       {
         title: "Balances",
-        path: "link",
+        path: "/balances",
       },
     ],
   },
   {
     title: "Employees",
     icon: "Employees",
-    path: "/#",
+    path: "/employees",
   },
   {
     title: "Payroll Settings",
@@ -76,30 +76,30 @@ const navlinks: navLinksType = [
     subNav: [
       {
         title: "Payroll Options",
-        path: "link",
+        path: "/options",
       },
       {
         title: "Deduction Account Setup",
-        path: "link",
+        path: "/account",
       },
       {
         title: "Variation Portal Period",
-        path: "link",
+        path: "/period",
       },
       {
         title: "Payrgroup Setup",
-        path: "link",
+        path: "/setup",
       },
       {
         title: "Tax Setup",
-        path: "link",
+        path: "/tax",
       },
     ],
   },
   {
     title: "My Account",
     icon: "Profile",
-    path: "/#",
+    path: "/profile",
   },
 ]
 

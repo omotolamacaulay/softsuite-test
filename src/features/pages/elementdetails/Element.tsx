@@ -155,7 +155,7 @@ const ElementDetail = () => {
       <div className="element">
         <div className="page__header">
           <div className="element__back">
-            <Link to="/elements">
+            <Link to="/">
               <img src={Icons["Back"]} alt="SVG logo" />
             </Link>
           </div>
