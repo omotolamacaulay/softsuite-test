@@ -18,6 +18,7 @@ import "../components/table/ElementsTable.scss"
 import ReactPaginate from "react-paginate"
 import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
 import SideModal from "../components/sideModal/SideModal"
+import EmptyState from "../components/EmptyState/EmptyState"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -256,7 +257,7 @@ const ElementDetail = () => {
         </div>
         <div className="users__tabBody" onClick={() => setIsFormOpen(false)}>
           <div className="mobile-header">
-            <p>Elements</p>
+            <p>Element Links</p>
             <span
               role="button"
               className="open-filter"
@@ -268,52 +269,56 @@ const ElementDetail = () => {
               <img src={Icons["Filter"]} alt="" />
             </span>
           </div>
-          <div className="users__tabBody">
-            <table {...getTableProps()}>
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        {...column.getHeaderProps(
-                          column.getSortByToggleProps(),
-                        )}
-                      >
-                        {column.render("Header")}
-                        <span>
-                          {column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <img src={Icons["Filter"]} alt="" />
-                            ) : (
-                              <img src={Icons["Filter"]} alt="" />
-                            )
-                          ) : (
-                            ""
+          {elementLinks.length > 0 ? (
+            <div className="users__tabBody">
+              <table {...getTableProps()}>
+                <thead>
+                  {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        <th
+                          {...column.getHeaderProps(
+                            column.getSortByToggleProps(),
                           )}
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                  prepareRow(row)
-                  return (
-                    <tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <td {...cell.getCellProps()}>
-                            {cell.render("Cell")}
-                          </td>
-                        )
-                      })}
+                        >
+                          {column.render("Header")}
+                          <span>
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
+                                <img src={Icons["Filter"]} alt="" />
+                              ) : (
+                                <img src={Icons["Filter"]} alt="" />
+                              )
+                            ) : (
+                              ""
+                            )}
+                          </span>
+                        </th>
+                      ))}
                     </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+                  ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                  {rows.map((row) => {
+                    prepareRow(row)
+                    return (
+                      <tr {...row.getRowProps()}>
+                        {row.cells.map((cell) => {
+                          return (
+                            <td {...cell.getCellProps()}>
+                              {cell.render("Cell")}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState text="Element Links" />
+          )}
           {showSideModal ? (
             <SideModal>
               <div className="elementLinkDetails">
