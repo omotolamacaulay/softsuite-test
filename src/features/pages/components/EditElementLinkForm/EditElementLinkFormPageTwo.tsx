@@ -31,7 +31,10 @@ const EditElementLinkFormPageTwo = ({
               <option disabled value="">
                 Select a Grade
               </option>
-              <option>gdsyds</option>
+              <option>Intern</option>
+              <option>Junior Level</option>
+              <option>Intermediate Level</option>
+              <option>Senior Level</option>
             </>
           </SelectInput>
         </div>
@@ -46,7 +49,15 @@ const EditElementLinkFormPageTwo = ({
               <option disabled value="">
                 Select a Grade Step
               </option>
-              <option>gdsyds</option>
+              <option>Undergraduate</option>
+              <option>Post-graduate</option>
+              <option>Novice</option>
+              <option>Learned</option>
+              <option>Experienced</option>
+              <option>Well-Experienced</option>
+              <option>Expert</option>
+              <option>Supervisor</option>
+              <option>Team Lead</option>
             </>
           </SelectInput>
         </div>
@@ -60,9 +71,10 @@ const EditElementLinkFormPageTwo = ({
         >
           <>
             <option disabled value="">
-              Select a Grade Union
+              Select a Union
             </option>
-            <option>gdsyds</option>
+            <option>PPND</option>
+            <option>HNLD</option>
           </>
         </SelectInput>
       </div>
@@ -81,7 +93,8 @@ const EditElementLinkFormPageTwo = ({
               <option disabled value="">
                 Select Pension
               </option>
-              <option>gdsyds</option>
+              <option>Pencom</option>
+              <option>Pension Partners</option>
             </>
           </SelectInput>
         </div>
@@ -96,7 +109,9 @@ const EditElementLinkFormPageTwo = ({
               <option disabled value="">
                 Select Housing
               </option>
-              <option>gdsyds</option>
+              <option>Standard</option>
+              <option>Luxury</option>
+              <option>Presidential</option>
             </>
           </SelectInput>
         </div>
@@ -112,7 +127,9 @@ const EditElementLinkFormPageTwo = ({
             <option disabled value="">
               Select Loyalty Bonus
             </option>
-            <option>gdsyds</option>
+            <option>Standard</option>
+            <option>Luxury</option>
+            <option>Presidential</option>
           </>
         </SelectInput>
       </div>

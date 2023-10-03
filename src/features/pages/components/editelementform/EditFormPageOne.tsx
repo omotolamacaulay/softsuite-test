@@ -41,9 +41,11 @@ const EditFormPageOne = ({
           >
             <>
               <option disabled value="">
-                Classification Id
+                Select Element Classification
               </option>
-              <option>gdsyds</option>
+              <option>Deduction</option>
+              <option>Earning</option>
+              <option>Non-Grossable Earning</option>
             </>
           </SelectInput>
         </div>
@@ -58,9 +60,14 @@ const EditFormPageOne = ({
           >
             <>
               <option disabled value="">
-                Category Value
+                Select Element Category
               </option>
-              <option>gdsyds</option>
+              <option>Pre-Tax Deduction</option>
+              <option>Post Tax Deduction</option>
+              <option>Non Taxable Earning</option>
+              <option>Taxable Earning</option>
+              <option>Employee Contribution</option>
+              <option>Employer Contribution</option>
             </>
           </SelectInput>
         </div>
@@ -73,9 +80,10 @@ const EditFormPageOne = ({
           >
             <>
               <option disabled value="">
-                Category Value
+                Select a payrun
               </option>
-              <option>gdsyds</option>
+              <option>Monthly Run</option>
+              <option>Supplementary Run</option>
             </>
           </SelectInput>
         </div>

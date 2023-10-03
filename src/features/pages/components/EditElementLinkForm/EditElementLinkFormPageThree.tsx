@@ -27,7 +27,11 @@ const EditElementLinkFormPageThree = ({
               <option disabled value="">
                 Select an Amount Type
               </option>
-              <option>gdsyds</option>
+              <option>Dollars</option>
+              <option>Naira</option>
+              <option>Pounds</option>
+              <option>Euros</option>
+              <option>Yen</option>
             </>
           </SelectInput>
         </div>

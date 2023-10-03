@@ -168,15 +168,15 @@ const ElementDetail = () => {
             </div>
             <div className="single__detail">
               <p className="element__label">Element Classification</p>
-              <p className="element__text">Deduction</p>
+              <p className="element__text">{element?.classificationId}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">ELEMENT category</p>
-              <p className="element__text">Pre-Tax Deduction</p>
+              <p className="element__text">{element?.categoryId}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">payrun</p>
-              <p className="element__text">Monthly Run</p>
+              <p className="element__text">{element?.payRunId}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Effective Start Date</p>
