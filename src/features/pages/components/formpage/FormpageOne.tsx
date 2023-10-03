@@ -35,15 +35,17 @@ const FormpageOne = ({
         <div className="input-group">
           <SelectInput
             id="classificationId"
-            label="Classification Id"
+            label="Element Classification"
             required
             register={{ ...register("classificationId", { required: true }) }}
           >
             <>
               <option disabled value="">
-                Classification Id
+                Select Element Classification
               </option>
-              <option>gdsyds</option>
+              <option>Deduction</option>
+              <option>Earning</option>
+              <option>Non-Grossable Earning</option>
             </>
           </SelectInput>
         </div>
@@ -52,30 +54,36 @@ const FormpageOne = ({
         <div className="input-group">
           <SelectInput
             id="categoryValueId"
-            label="Category Value Id"
+            label="Element Category"
             required
             register={{ ...register("categoryValueId", { required: true }) }}
           >
             <>
               <option disabled value="">
-                Category Value
+                Select Element Category
               </option>
-              <option>gdsyds</option>
+              <option>Pre-Tax Deduction</option>
+              <option>Post Tax Deduction</option>
+              <option>Non Taxable Earning</option>
+              <option>Taxable Earning</option>
+              <option>Employee Contribution</option>
+              <option>Employer Contribution</option>
             </>
           </SelectInput>
         </div>
         <div className="input-group">
           <SelectInput
-            label="Payrun id"
+            label="Payrun"
             id="payRunId"
             register={{ ...register("payRunId") }}
             required
           >
             <>
               <option disabled value="">
-                Category Value
+                Select a payrun
               </option>
-              <option>gdsyds</option>
+              <option>Monthly Run</option>
+              <option>Supplementary Run</option>
             </>
           </SelectInput>
         </div>

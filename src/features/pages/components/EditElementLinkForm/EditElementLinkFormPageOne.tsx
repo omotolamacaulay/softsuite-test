@@ -35,7 +35,8 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Suborganization
               </option>
-              <option>gdsyds</option>
+              <option>Solution Delivery</option>
+              <option>Service Provision</option>
             </>
           </SelectInput>
         </div>
@@ -50,7 +51,10 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Department
               </option>
-              <option>gdsyds</option>
+              <option>Bills and Payment</option>
+              <option>Procurement</option>
+              <option>IT</option>
+              <option>Human Resources</option>
             </>
           </SelectInput>
         </div>
@@ -67,7 +71,11 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Job Title
               </option>
-              <option>gdsyds</option>
+              <option>Backend Developer</option>
+              <option>Frontend Developer</option>
+              <option>QA Engineer</option>
+              <option>Product Designer</option>
+              <option>Product Manager</option>
             </>
           </SelectInput>
         </div>
@@ -82,7 +90,9 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Location
               </option>
-              <option>gdsyds</option>
+              <option>Headquarters</option>
+              <option>Subsidiary Branch</option>
+              <option>Overseas</option>
             </>
           </SelectInput>
         </div>
@@ -99,7 +109,10 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select an employee Type
               </option>
-              <option>gdsyds</option>
+              <option>Full Time</option>
+              <option>Trainee</option>
+              <option>Part Time</option>
+              <option>Contract</option>
             </>
           </SelectInput>
         </div>
@@ -114,7 +127,10 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Employee Category
               </option>
-              <option>gdsyds</option>
+              <option>Full Time</option>
+              <option>Trainee</option>
+              <option>Part Time</option>
+              <option>Contract</option>
             </>
           </SelectInput>
         </div>

@@ -27,6 +27,18 @@
     width: 100%;
     border: 1px #dadada solid;
     border-radius: 4px;
+    padding: 16px;
+    // &:not(:placeholder-shown) {
+    //   font-size: 16px;
+    //   line-height: 20px;
+    //   color: red;
+    //   font-weight: 500;
+    // }
+    // & ::placeholder {
+    //   font-size: 14px;
+    //   line-height: 20px;
+    //   font-weight: 400;
+    // }
   }
   input[type="date"]::-webkit-datetime-edit-text,
   input[type="date"]::-webkit-datetime-edit-month-field,
