@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks"
 import { ElementLink } from "../../../../types"
 import "../addelementform/ElementForm.scss"
+import "./ElementLinkForm.scss"
 import { addSingleElementLink } from "../../../counter/elementLinkSlice"
 
 const ElementLinkForm = ({
@@ -91,6 +92,11 @@ const ElementLinkForm = ({
   return (
     <div>
       <h1>Create Element Link</h1>
+      <div className="page-link-labels">
+        <p>Staff Information</p>
+        <p>Additional Information</p>
+        <p>Processing Information</p>
+      </div>
       <MultiProgressElement page={page} onPageNumberClick={nextPageNumber} />
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {
