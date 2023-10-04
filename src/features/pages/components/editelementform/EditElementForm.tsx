@@ -63,6 +63,10 @@ const ElementForm = ({
   return (
     <div>
       <h1>Edit Element</h1>
+      <div className="page-labels">
+        <p>Element Details</p>
+        <p>Aditional Details</p>
+      </div>
       <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
       <form className="editElement-form" onSubmit={handleSubmit(onSubmit)}>
         {

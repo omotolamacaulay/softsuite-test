@@ -18,7 +18,9 @@ const MultiProgressElement = ({ page, onPageNumberClick }) => {
       <Step>
         {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? "accomplished" : null}`}
+            className={`indexedStep-link-1 ${
+              accomplished ? "accomplished" : null
+            }`}
             onClick={() => onPageNumberClick("1")}
           >
             {index + 1}
@@ -28,7 +30,9 @@ const MultiProgressElement = ({ page, onPageNumberClick }) => {
       <Step>
         {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? "accomplished" : null}`}
+            className={`indexedStep-link-2 ${
+              accomplished ? "accomplished" : null
+            }`}
             onClick={() => onPageNumberClick("2")}
           >
             {index + 1}
@@ -38,7 +42,9 @@ const MultiProgressElement = ({ page, onPageNumberClick }) => {
       <Step>
         {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? "accomplished" : null}`}
+            className={`indexedStep-link-3 ${
+              accomplished ? "accomplished" : null
+            }`}
             onClick={() => onPageNumberClick("3")}
           >
             {index + 1}

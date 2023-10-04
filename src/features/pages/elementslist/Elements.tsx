@@ -9,6 +9,7 @@ import ElementForm from "../components/addelementform/ElementForm"
 import DefaultModal from "../components/DefaultModal/DefaultModal"
 import EditElementForm from "../components/editelementform/EditElementForm"
 import EmptyState from "../components/EmptyState/EmptyState"
+import Spinner from "../components/spinner/Spinner"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
@@ -18,6 +19,7 @@ function Elements() {
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const dispatch = useAppDispatch()
   const elements = useAppSelector((state) => state.elements)
+  const loading = useAppSelector((state) => state.elements.loading)
 
   useEffect(() => {
     dispatch(fetchElements())
@@ -35,6 +37,13 @@ function Elements() {
 
   const selectPageCount = (e: ChangeEvent<HTMLSelectElement>) => {
     setItemsPerPage(+e.currentTarget.value)
+  }
+  if (loading) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    )
   }
 
   return (

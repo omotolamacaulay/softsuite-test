@@ -18,6 +18,7 @@ import "../components/table/ElementsTable.scss"
 import ReactPaginate from "react-paginate"
 import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
 import SideModal from "../components/sideModal/SideModal"
+import Spinner from "../components/spinner/Spinner"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -149,7 +150,11 @@ const ElementDetail = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div>
+        <Spinner />
+      </div>
+    )
   }
   return (
     <div className="elements">

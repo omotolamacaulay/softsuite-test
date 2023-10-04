@@ -1,4 +1,4 @@
-.indexedStep {
+.indexedStep-1 {
   color: #4baa79;
   width: 30px;
   height: 30px;
@@ -12,9 +12,99 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  left: 130px !important;
+  position: absolute;
+}
+.indexedStep-2 {
+  color: #4baa79;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(206, 206, 206);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: -150px !important;
+  position: absolute;
+}
+.indexedStep-link-1 {
+  color: #4baa79;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(206, 206, 206);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: 40px !important;
+  position: absolute;
+}
+.indexedStep-link-2 {
+  color: #4baa79;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(206, 206, 206);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: -20px !important;
+  position: absolute;
+}
+.indexedStep-link-3 {
+  color: #4baa79;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(206, 206, 206);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: -80px !important;
+  position: absolute;
 }
 
-.indexedStep.accomplished {
+.indexedStep-1.accomplished {
+  background-color: #4baa79;
+  color: white;
+  border-style: none;
+}
+.indexedStep-2.accomplished {
+  background-color: #4baa79;
+  color: white;
+  border-style: none;
+}
+.indexedStep-link-1.accomplished {
+  background-color: #4baa79;
+  color: white;
+  border-style: none;
+}
+.indexedStep-link-2.accomplished {
+  background-color: #4baa79;
+  color: white;
+  border-style: none;
+}
+.indexedStep-link-3.accomplished {
   background-color: #4baa79;
   color: white;
   border-style: none;
@@ -28,10 +118,14 @@
   position: relative;
   background-color: #cdcdcd;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   z-index: 0;
-  margin: 44px auto;
+  margin: 20px auto;
+  display: none;
+  @media screen and (min-width: 576px) {
+    display: block;
+  }
 }
 
 .RSPBprogressBar .RSPBstep {

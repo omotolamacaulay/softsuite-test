@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks"
 import { ElementLink } from "../../../../types"
 import "../addelementform/ElementForm.scss"
+import "../elementLinkFormPage/ElementLinkForm.scss"
 import { updateElementLink } from "../../../counter/elementLinkSlice"
 
 const EditElementLinkForm = ({
@@ -83,6 +84,11 @@ const EditElementLinkForm = ({
   return (
     <div>
       <h1>Edit Element Link</h1>
+      <div className="page-link-labels">
+        <p>Staff Information</p>
+        <p>Additional Information</p>
+        <p>Processing Information</p>
+      </div>
       <MultiProgressElement page={page} onPageNumberClick={nextPageNumber} />
       <form className="element-form" onSubmit={handleSubmit(onSubmit)}>
         {

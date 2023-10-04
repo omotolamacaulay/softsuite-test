@@ -1,6 +1,7 @@
 //@ts-nocheck
 import "./MultiStepProgressBar.scss"
 import { ProgressBar, Step } from "react-step-progress-bar"
+// import Icons from "../../../../assets/images"
 
 const MultiStepProgressBar = ({ page, onPageNumberClick }) => {
   var stepPercentage = 0
@@ -17,7 +18,7 @@ const MultiStepProgressBar = ({ page, onPageNumberClick }) => {
       <Step>
         {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? "accomplished" : null}`}
+            className={`indexedStep-1 ${accomplished ? "accomplished" : null}`}
             onClick={() => onPageNumberClick("1")}
           >
             {index + 1}
@@ -27,8 +28,8 @@ const MultiStepProgressBar = ({ page, onPageNumberClick }) => {
       <Step>
         {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? "accomplished" : null}`}
-            onClick={() => onPageNumberClick("2")}
+            className={`indexedStep-2 ${accomplished ? "accomplished" : null}`}
+            // onClick={() => onPageNumberClick("2")}
           >
             {index + 1}
           </div>
