@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import ElementFormPageOne from "./ElementFormPageOne"
 import ElementFormPageTwo from "./ElementFormPageTwo"
 import ElementFormPageThree from "./ElementFormPageThree"
@@ -16,6 +17,7 @@ const ElementLinkForm = ({
   setShowElementModal: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [page, setPage] = useState("pageone")
+  const navigate = useNavigate()
 
   const elementLink = useAppSelector(
     (state) => state.elementlinks.currentEditElementLink,
@@ -83,6 +85,7 @@ const ElementLinkForm = ({
       console.log("Element updated successfully:", actionResult.payload)
     }
     setShowElementModal(false)
+    navigate(0)
   }
 
   return (

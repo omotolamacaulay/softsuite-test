@@ -189,3 +189,18 @@
     transform: translateX(26px);
   }
 }
+.page-labels {
+  display: none;
+  width: 75%;
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-top: 40px;
+  @include md-breakpoint {
+    display: flex;
+  }
+  p {
+    color: #4baa79;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}

@@ -27,6 +27,8 @@ import Delete from "./delete.svg"
 import CloseModal from "./close.svg"
 import Back from "./goback.svg"
 import Empty from "./emptystate.png"
+import Spinner from "./spinner.svg"
+import Check from "./check.svg"
 
 const Icons: { [key: string]: string } = {
   Logo,
@@ -58,6 +60,8 @@ const Icons: { [key: string]: string } = {
   CloseModal,
   Back,
   Empty,
+  Spinner,
+  Check,
 }
 
 export default Icons
