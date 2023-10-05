@@ -117,7 +117,8 @@
   .searchArea {
     display: block;
     @include sm-breakpoint {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
   }
@@ -162,7 +163,7 @@
 
     &-group {
       display: flex;
-      max-width: 350px;
+      width: 300px;
       height: 40px;
 
       .form-input {
