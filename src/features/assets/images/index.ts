@@ -29,6 +29,8 @@ import Back from "./goback.svg"
 import Empty from "./emptystate.png"
 import Spinner from "./spinner.svg"
 import Check from "./check.svg"
+import Approve from "./approve.svg"
+import Confirm from "./confirm.svg"
 
 const Icons: { [key: string]: string } = {
   Logo,
@@ -62,6 +64,8 @@ const Icons: { [key: string]: string } = {
   Empty,
   Spinner,
   Check,
+  Approve,
+  Confirm,
 }
 
 export default Icons

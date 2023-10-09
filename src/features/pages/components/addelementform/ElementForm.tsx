@@ -9,6 +9,8 @@ import { Element } from "../../../../types"
 import "./ElementForm.scss"
 import { addSingleElement, updateElement } from "../../../counter/elementSlice"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import AlertModal from "../AlertModal/AlertMotal"
+import SuccessModal from "../SuccessModal/SuccessModal"
 
 const ElementForm = ({
   setShowModal,
@@ -16,6 +18,7 @@ const ElementForm = ({
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [page, setPage] = useState("pageone")
+  const [alertModal, setAlertModal] = useState(false)
   const navigate = useNavigate()
   const element = useAppSelector((state) => state.elements.currentEditElement)
   const emptyState = {
@@ -61,10 +64,12 @@ const ElementForm = ({
     }
   }
 
-  const onSubmit = async (data: Element) => {
+  const onSubmit = async (data: Element, e?: Event) => {
+    e.preventDefault()
     data.modifiedBy = "Omotola Macaulay"
     let id: string = ""
     try {
+      // setAlertModal(true)
       if (data.id) {
         id = data.id
         dispatch(updateElement(data))
@@ -75,12 +80,14 @@ const ElementForm = ({
           console.log("Element updated successfully:", actionResult.payload)
           id = actionResult.payload.id
         }
+        setShowModal(false)
+        navigate(`/elements/${id}`)
+        setAlertModal(true)
       }
-      setShowModal(false)
-      navigate(`/elements/${id}`)
     } catch (error) {
       console.error("An error occurred while processing the element:", error)
     }
+    setAlertModal(true)
   }
 
   return (
@@ -107,6 +114,14 @@ const ElementForm = ({
           }[page]
         }
       </form>
+      {alertModal && (
+        <AlertModal>
+          <SuccessModal
+            text="Element Added successfully"
+            closeSuccessModal={() => setAlertModal(false)}
+          />
+        </AlertModal>
+      )}
     </div>
   )
 }
