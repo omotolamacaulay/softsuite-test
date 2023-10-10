@@ -49,9 +49,9 @@ const ElementDetail = () => {
   //     return moment(date).format("MMM DD YYYY, h:mm a")
   //   }
   const viewLinkDetails = (id: any) => {
-    setShowSideModal(true)
     const index = elementLinks.findIndex((link) => link.id === id)
     setCurrentLinkDetails(elementLinks[index])
+    setShowSideModal(true)
   }
   const columns = useMemo(
     () => [

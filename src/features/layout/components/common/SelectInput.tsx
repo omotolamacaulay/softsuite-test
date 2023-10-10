@@ -7,11 +7,18 @@ const SelectInput: React.FC<SelectInputProps> = ({
   id,
   children,
   multiple,
+  disabled,
 }) => {
   return (
     <div>
       <label htmlFor={id}>{label}</label>
-      <select {...register} id={id} required={required} multiple={multiple}>
+      <select
+        {...register}
+        id={id}
+        required={required}
+        multiple={multiple}
+        disabled={disabled}
+      >
         {children}
       </select>
     </div>

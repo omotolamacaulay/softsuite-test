@@ -10,6 +10,11 @@ import DefaultModal from "../components/DefaultModal/DefaultModal"
 import EditElementForm from "../components/editelementform/EditElementForm"
 import EmptyState from "../components/EmptyState/EmptyState"
 import Spinner from "../components/spinner/Spinner"
+import {
+  fetchElementCategory,
+  fetchElementClassification,
+  fetchPayrun,
+} from "../../counter/lookupSlice"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
@@ -20,9 +25,19 @@ function Elements() {
   const dispatch = useAppDispatch()
   const elements = useAppSelector((state) => state.elements)
   const loading = useAppSelector((state) => state.elements.loading)
+  const elementClassificationData = useAppSelector(
+    (state) => state.lookups.elementClassification,
+  )
+  const elementCategoryData = useAppSelector(
+    (state) => state.lookups.elementCategory,
+  )
+  const payrunData = useAppSelector((state) => state.lookups.payrun)
 
   useEffect(() => {
     dispatch(fetchElements())
+    dispatch(fetchElementCategory())
+    dispatch(fetchElementClassification())
+    dispatch(fetchPayrun())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
@@ -83,9 +98,19 @@ function Elements() {
       {showModal ? (
         <DefaultModal>
           {formType === "ADD" ? (
-            <ElementForm setShowModal={setShowModal} />
+            <ElementForm
+              setShowModal={setShowModal}
+              elementClassificationData={elementClassificationData}
+              elementCategoryData={elementCategoryData}
+              payrunData={payrunData}
+            />
           ) : (
-            <EditElementForm setShowModal={setShowModal} />
+            <EditElementForm
+              setShowModal={setShowModal}
+              elementClassificationData={elementClassificationData}
+              elementCategoryData={elementCategoryData}
+              payrunData={payrunData}
+            />
           )}
         </DefaultModal>
       ) : null}

@@ -1,25 +1,54 @@
-import { UseFormRegister } from "react-hook-form"
+//@ts-nocheck
+import { UseFormRegister, useForm } from "react-hook-form"
 // import { Select, ConfigProvider, Space, Input } from "antd"
 import { Element } from "../../../../types"
 import "../addelementform/ElementForm.scss"
 import Input from "../../../layout/components/common/Input"
 import TextArea from "../../../layout/components/common/TextArea"
 import SelectInput from "../../../layout/components/common/SelectInput"
+// import { ErrorMessage } from "@hookform/error-message"
 
+interface FormPageOneProps {
+  onButtonClick: (arg: string) => void
+  closeModal: () => void
+  register: UseFormRegister<Element>
+  watch: (arg: string) => void
+  // formStateErrors: Record<string, any>
+  elementClassificationData: {
+    id: number
+    name: string
+  }[]
+  payrunData: {
+    id: number
+    name: string
+  }[]
+  elementCategoryData: {
+    id: number
+    name: string
+  }[]
+}
 const FormpageOne = ({
   onButtonClick,
   closeModal,
   register,
-}: {
-  onButtonClick: (arg: string) => void
-  closeModal: () => void
-  register: UseFormRegister<Element>
-}) => {
-  // const {
-  // trigger,
-  // formState: { errors },
-  // } = useForm<Element>()
+  watch,
+  // formStateErrors,
+  elementClassificationData,
+  payrunData,
+  elementCategoryData,
+}: FormPageOneProps) => {
+  const {
+    formState: { errors },
+  } = useForm<Element>()
+  const selectedClassificationId = watch("classificationId")
+  const selectedClassification = elementClassificationData.find(
+    (classification) => classification.id === selectedClassificationId,
+  )
+  const selectedClassificationName = selectedClassification
+    ? selectedClassification.name
+    : ""
 
+  console.log(errors)
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -27,11 +56,24 @@ const FormpageOne = ({
           <Input
             id="name"
             label="Name"
-            register={{ ...register("name", { required: true }) }}
+            register={{
+              ...register("name", {
+                required: true,
+                maxLength: 50,
+                pattern: /^[A-Za-z]+$/i,
+              }),
+            }}
             required
-            placeholder="Name"
+            placeholder="Input Name"
           />
         </div>
+        {errors?.name?.type === "required" && <p>This field is required</p>}
+        {errors?.name?.type === "maxLength" && (
+          <p>First name cannot exceed 50 characters</p>
+        )}
+        {errors?.name?.type === "pattern" && (
+          <p>Alphabetical characters only</p>
+        )}
         <div className="input-group">
           <SelectInput
             id="classificationId"
@@ -40,12 +82,12 @@ const FormpageOne = ({
             register={{ ...register("classificationId", { required: true }) }}
           >
             <>
-              <option disabled value="">
-                Select Element Classification
-              </option>
-              <option>Deduction</option>
-              <option>Earning</option>
-              <option>Non-Grossable Earning</option>
+              <option value="">Select Element Classification</option>
+              {elementClassificationData.map((classification) => (
+                <option key={classification.id} value={classification.id}>
+                  {classification.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>
@@ -57,17 +99,27 @@ const FormpageOne = ({
             label="Element Category"
             required
             register={{ ...register("categoryValueId", { required: true }) }}
+            disabled={!selectedClassificationName}
           >
             <>
-              <option disabled value="">
-                Select Element Category
-              </option>
-              <option>Pre-Tax Deduction</option>
-              <option>Post Tax Deduction</option>
-              <option>Non Taxable Earning</option>
-              <option>Taxable Earning</option>
-              <option>Employee Contribution</option>
-              <option>Employer Contribution</option>
+              <option value="">Select Element Category</option>
+              {elementCategoryData.map((category) => {
+                if (
+                  (selectedClassificationName === "Deduction" &&
+                    category.name.includes("Deduction")) ||
+                  (selectedClassificationName === "Earning" &&
+                    category.name.includes("Earning")) ||
+                  (selectedClassificationName === "Non-Grossable Earning" &&
+                    !category.name.includes("Deduction"))
+                ) {
+                  return (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  )
+                }
+                return null
+              })}
             </>
           </SelectInput>
         </div>
@@ -79,11 +131,12 @@ const FormpageOne = ({
             required
           >
             <>
-              <option disabled value="">
-                Select a payrun
-              </option>
-              <option>Monthly Run</option>
-              <option>Supplementary Run</option>
+              <option value="">Select a payrun</option>
+              {payrunData.map((payrun) => (
+                <option key={payrun.id} value={payrun.id}>
+                  {payrun.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>

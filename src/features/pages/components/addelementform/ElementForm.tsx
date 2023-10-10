@@ -14,13 +14,21 @@ import SuccessModal from "../SuccessModal/SuccessModal"
 
 const ElementForm = ({
   setShowModal,
+  elementClassificationData,
+  payrunData,
+  elementCategoryData,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  elementCategoryData
+  payrunData
+  elementClassificationData
 }) => {
   const [page, setPage] = useState("pageone")
   const [alertModal, setAlertModal] = useState(false)
   const navigate = useNavigate()
   const element = useAppSelector((state) => state.elements.currentEditElement)
+
+  const dispatch = useAppDispatch()
   const emptyState = {
     name: "",
     description: "",
@@ -41,16 +49,19 @@ const ElementForm = ({
     modifiedBy: ",",
   }
 
-  const { handleSubmit, register } = useForm<Element>({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+  } = useForm<Element>({
     defaultValues: element || emptyState,
   })
   const nextPage = (page: string) => {
     setPage(page)
   }
   const closeModal = () => setShowModal(false)
-
-  const dispatch = useAppDispatch()
-
+  console.log(errors)
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
       case "1":
@@ -106,10 +117,19 @@ const ElementForm = ({
                 closeModal={closeModal}
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
+                formStateErrors={errors}
+                elementClassificationData={elementClassificationData}
+                payrunData={payrunData}
+                elementCategoryData={elementCategoryData}
               />
             ),
             pagetwo: (
-              <FormPageTwo onButtonClick={nextPage} register={register} />
+              <FormPageTwo
+                onButtonClick={nextPage}
+                register={register}
+                watch={watch}
+              />
             ),
           }[page]
         }

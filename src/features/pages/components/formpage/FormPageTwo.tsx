@@ -1,4 +1,5 @@
-import { UseFormRegister } from "react-hook-form"
+//@ts-nocheck
+import { UseFormRegister, useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
@@ -23,14 +24,17 @@ const monthOptions = [
   { value: "November", label: "November" },
   { value: "December", label: "December" },
 ]
-
-const FormPageTwo = ({
-  onButtonClick,
-  register,
-}: {
-  register: UseFormRegister<Element>
+interface FormPageTwoProps {
   onButtonClick: (arg: string) => void
-}) => {
+  register: UseFormRegister<Element>
+  watch: (arg: string) => void
+}
+const FormPageTwo = ({ onButtonClick, register, watch }: FormPageTwoProps) => {
+  const selectedPayFrequency = watch("payFrequency")
+  const {
+    formState: { errors },
+  } = useForm<Element>()
+  console.log(errors)
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -49,6 +53,9 @@ const FormPageTwo = ({
             type="date"
           />
         </div>
+        {errors?.effectiveStartDate?.type === "required" && (
+          <p>This field is required</p>
+        )}
         <div className="input-group">
           <Input
             label="Effective End Date"
@@ -97,6 +104,7 @@ const FormPageTwo = ({
           id="selectedMonths"
           register={{ ...register("selectedMonths", { required: true }) }}
           required={true}
+          disabled={selectedPayFrequency !== "2"}
           multiple={true}
         >
           {monthOptions.map((option) => (

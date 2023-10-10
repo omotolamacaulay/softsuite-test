@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import MultiStepProgressBar from "../formpage/progressBar/MultiStepProgressBar"
@@ -9,10 +10,16 @@ import "./EditElementForm.scss"
 import { updateElement } from "../../../counter/elementSlice"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
-const ElementForm = ({
+const EditElementForm = ({
   setShowModal,
+  elementClassificationData,
+  payrunData,
+  elementCategoryData,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  elementClassificationData
+  payrunData
+  elementCategoryData
 }) => {
   const [page, setPage] = useState("pageone")
   const navigate = useNavigate()
@@ -20,7 +27,7 @@ const ElementForm = ({
     (state) => state.elements.currentEditElement,
   ) as Element
 
-  const { handleSubmit, register } = useForm<Element>({
+  const { handleSubmit, register, watch } = useForm<Element>({
     defaultValues: element,
   })
 
@@ -76,12 +83,17 @@ const ElementForm = ({
                 closeModal={closeModal}
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
+                elementClassificationData={elementClassificationData}
+                payrunData={payrunData}
+                elementCategoryData={elementCategoryData}
               />
             ),
             pagetwo: (
               <EditFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
                 // submitForm={onSubmit}
               />
             ),
@@ -92,4 +104,4 @@ const ElementForm = ({
   )
 }
 
-export default ElementForm
+export default EditElementForm

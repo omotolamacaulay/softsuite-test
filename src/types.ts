@@ -89,6 +89,7 @@ export interface SelectInputProps {
   id: string
   children: React.ReactNode
   multiple?: boolean
+  disabled?: boolean
 }
 export interface CheckboxProps {
   label: string
