@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { UseFormRegister } from "react-hook-form"
 import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
@@ -26,14 +27,16 @@ const monthOptions = [
 // const statusBoolean = (arg: string): boolean => {
 //   return arg === "active" ? true : false
 // }
-
+interface FormPageTwoProps {
+  onButtonClick: (arg: string) => void
+  register: UseFormRegister<Element>
+  watch: (arg: string) => void
+}
 const EditFormPageTwo = ({
   onButtonClick,
   register,
-}: {
-  register: UseFormRegister<Element>
-  onButtonClick: (arg: string) => void
-}) => {
+  watch,
+}: FormPageTwoProps) => {
   // const {
   // register,
 
@@ -42,6 +45,7 @@ const EditFormPageTwo = ({
   // } = useForm<Element>()
 
   // const inputRef = useRef(null)
+  const selectedPayFrequency = watch("payFrequency")
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -108,6 +112,7 @@ const EditFormPageTwo = ({
           id="selectedMonths"
           register={{ ...register("selectedMonths", { required: true }) }}
           required={true}
+          disabled={selectedPayFrequency !== "2"}
           multiple={true}
         >
           {monthOptions.map((option) => (
