@@ -11,6 +11,13 @@ type LookupData = {
   location: []
   employeeType: []
   employeeCategory: []
+  grades: []
+  gradeSteps: []
+  union: []
+  security: []
+  housing: []
+  wardrobe: []
+
   error: string[]
 }
 
@@ -24,6 +31,12 @@ const initialState: LookupData = {
   location: [],
   employeeType: [],
   employeeCategory: [],
+  grades: [],
+  gradeSteps: [],
+  union: [],
+  security: [],
+  housing: [],
+  wardrobe: [],
   loading: false,
   error: [],
 }
@@ -106,6 +119,54 @@ export const fetchEmployeeCategory = createAsyncThunk(
     return response
   },
 )
+export const fetchGrades = createAsyncThunk("lookups/fetchGrades", async () => {
+  const response = await fetch(
+    "https://650af6bedfd73d1fab094cf7.mockapi.io/grade",
+  ).then((response) => response.json())
+  return response.data
+})
+export const fetchGradeSteps = createAsyncThunk(
+  "lookups/fetchGradeSteps",
+  async (id: string) => {
+    const response = await fetch(
+      `https://650af6bedfd73d1fab094cf7.mockapi.io/grade/${id}/gradesteps`,
+    ).then((response) => response.json())
+    return response.data
+  },
+)
+export const fetchUnion = createAsyncThunk("lookups/fetchUnion", async () => {
+  const response = await fetch(
+    "https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/8/lookupvalues",
+  ).then((response) => response.json())
+  return response
+})
+export const fetchHousing = createAsyncThunk(
+  "lookups/fetchHousing",
+  async () => {
+    const response = await fetch(
+      "https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/9/lookupvalues",
+    ).then((response) => response.json())
+    return response
+  },
+)
+export const fetchWardrobe = createAsyncThunk(
+  "lookups/fetchWardrobe",
+  async () => {
+    const response = await fetch(
+      "https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/10/lookupvalues",
+    ).then((response) => response.json())
+    return response
+  },
+)
+export const fetchSecurity = createAsyncThunk(
+  "lookups/fetchSecurity",
+  async () => {
+    const response = await fetch(
+      "https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/11/lookupvalues",
+    ).then((response) => response.json())
+    return response
+  },
+)
 
 export const lookupSlice = createSlice({
   name: "lookups",
@@ -137,6 +198,24 @@ export const lookupSlice = createSlice({
     },
     loadEmployeeCategory: (state, action) => {
       state.employeeCategory = action.payload
+    },
+    loadGrade: (state, action) => {
+      state.grades = action.payload
+    },
+    loadGradeStep: (state, action) => {
+      state.gradeSteps = action.payload
+    },
+    loadUnion: (state, action) => {
+      state.union = action.payload
+    },
+    loadHousing: (state, action) => {
+      state.housing = action.payload
+    },
+    loadWardrobe: (state, action) => {
+      state.wardrobe = action.payload
+    },
+    loadSecurity: (state, action) => {
+      state.security = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -249,6 +328,78 @@ export const lookupSlice = createSlice({
         state.loading = false
         state.employeeCategory = []
       })
+      .addCase(fetchGrades.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchGrades.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.grades = action.payload
+      })
+      .addCase(fetchGrades.rejected, (state) => {
+        state.loading = false
+        state.grades = []
+      })
+      .addCase(fetchGradeSteps.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchGradeSteps.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.gradeSteps = action.payload
+      })
+      .addCase(fetchGradeSteps.rejected, (state) => {
+        state.loading = false
+        state.gradeSteps = []
+      })
+      .addCase(fetchUnion.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchUnion.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.union = action.payload
+      })
+      .addCase(fetchUnion.rejected, (state) => {
+        state.loading = false
+        state.union = []
+      })
+      .addCase(fetchHousing.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchHousing.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.housing = action.payload
+      })
+      .addCase(fetchHousing.rejected, (state) => {
+        state.loading = false
+        state.housing = []
+      })
+      .addCase(fetchWardrobe.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchWardrobe.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.wardrobe = action.payload
+      })
+      .addCase(fetchWardrobe.rejected, (state) => {
+        state.loading = false
+        state.wardrobe = []
+      })
+      .addCase(fetchSecurity.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchSecurity.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.security = action.payload
+      })
+      .addCase(fetchSecurity.rejected, (state) => {
+        state.loading = false
+        state.security = []
+      })
   },
 })
 
@@ -261,6 +412,13 @@ export const {
   loadJobTitle,
   loadLocation,
   loadEmployeetype,
+  loadEmployeeCategory,
+  loadGrade,
+  loadGradeStep,
+  loadUnion,
+  loadHousing,
+  loadWardrobe,
+  loadSecurity,
 } = lookupSlice.actions
 
 // The function below is called a selector and allows us to select a value from
