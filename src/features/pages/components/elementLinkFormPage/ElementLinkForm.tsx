@@ -14,8 +14,28 @@ import { addSingleElementLink } from "../../../counter/elementLinkSlice"
 
 const ElementLinkForm = ({
   setShowElementModal,
+  suborganizationsData,
+  jobTitleData,
+  locationData,
+  employeeTypeData,
+  employeeCategoryData,
+  gradeData,
+  unionData,
+  housingData,
+  wardrobeData,
+  securityData,
 }: {
   setShowElementModal: React.Dispatch<React.SetStateAction<boolean>>
+  suborganizationsData
+  jobTitleData
+  locationData
+  employeeTypeData
+  employeeCategoryData
+  gradeData
+  unionData
+  housingData
+  wardrobeData
+  securityData
 }) => {
   const [page, setPage] = useState("pageone")
   const navigate = useNavigate()
@@ -52,7 +72,7 @@ const ElementLinkForm = ({
       },
     ],
   }
-  const { handleSubmit, register } = useForm<ElementLink>({
+  const { handleSubmit, register, watch } = useForm<ElementLink>({
     defaultValues: elementLink || emptyState,
   })
   const nextPage = (page: string) => {
@@ -106,12 +126,24 @@ const ElementLinkForm = ({
                 closeModal={closeModal}
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
+                suborganizationsData={suborganizationsData}
+                jobTitleData={jobTitleData}
+                locationData={locationData}
+                employeeTypeData={employeeTypeData}
+                employeeCategoryData={employeeCategoryData}
               />
             ),
             pagetwo: (
               <ElementFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
+                gradeData={gradeData}
+                unionData={unionData}
+                housingData={housingData}
+                wardrobeData={wardrobeData}
+                securityData={securityData}
               />
             ),
             pagethree: (
@@ -119,6 +151,7 @@ const ElementLinkForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 closeModal={closeModal}
+                watch={watch}
               />
             ),
           }[page]

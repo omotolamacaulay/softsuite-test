@@ -1,18 +1,24 @@
+//@ts-nocheck
 import { UseFormRegister } from "react-hook-form"
 import Input from "../../../layout/components/common/Input"
 import SelectInput from "../../../layout/components/common/SelectInput"
 import RadioButton from "../../../layout/components/common/RadioButton"
+import Checkbox from "../../../layout/components/common/Checkbox"
 import { ElementLink } from "../../../../types"
 
 const ElementFormPageThree = ({
   onButtonClick,
   closeModal,
   register,
+  watch,
 }: {
   onButtonClick: (arg: string) => void
   closeModal: () => void
   register: UseFormRegister<ElementLink>
+  watch: (arg: string) => void
 }) => {
+  const amountType = watch("amountType")
+  const status = watch("status")
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -24,22 +30,27 @@ const ElementFormPageThree = ({
             register={{ ...register("amountType") }}
           >
             <>
-              <option disabled value="">
-                Select an Amount Type
-              </option>
-              <option>Dollars</option>
-              <option>Naira</option>
-              <option>Pounds</option>
-              <option>Euros</option>
-              <option>Yen</option>
+              <option value="">Select an Amount Type</option>
+              <option>Fixed Value</option>
+              <option>Rate of Salary</option>
             </>
           </SelectInput>
         </div>
         <div className="input-group">
           <Input
-            id="amount"
-            label="Enter Amount"
-            register={{ ...register("amount") }}
+            id={amountType === "Fixed Value" ? "amount" : "rate"}
+            label={
+              amountType === "Fixed Value"
+                ? "Amount"
+                : amountType === "Rate of Salary"
+                ? "Rate(%)"
+                : "..."
+            }
+            register={
+              amountType === "Fixed Value"
+                ? { ...register("amount") }
+                : { ...register("rate") }
+            }
             placeholder="Input Amount"
           />
         </div>
@@ -86,12 +97,16 @@ const ElementFormPageThree = ({
           />
         </div>
         <div className="input-group">
-          {/* <Checkbox
+          <Checkbox
             label="Status"
             id="status"
+            value={status === "" ? false : true}
             required={true}
-            register={{ ...register("status", { required: true }) }}
-          /> */}
+            register={{ ...register("status") }}
+          />
+          <span className="status-span">
+            {status === true ? "Active" : "Inactive"}
+          </span>
         </div>
       </div>
 

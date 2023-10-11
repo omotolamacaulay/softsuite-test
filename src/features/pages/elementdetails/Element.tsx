@@ -9,6 +9,18 @@ import {
   setCurrentEditElementLink,
   deleteSingleElementLink,
 } from "../../counter/elementLinkSlice"
+import {
+  fetchSuborganizations,
+  fetchJobTitle,
+  fetchlocation,
+  fetchEmployeeType,
+  fetchEmployeeCategory,
+  fetchGrades,
+  fetchUnion,
+  fetchHousing,
+  fetchWardrobe,
+  fetchSecurity,
+} from "../../counter/lookupSlice"
 import { ElementLink } from "../../../types"
 import Icons from "../../assets/images"
 import { useTable, useSortBy } from "react-table"
@@ -19,11 +31,12 @@ import ReactPaginate from "react-paginate"
 import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
 import SideModal from "../components/sideModal/SideModal"
 import Spinner from "../components/spinner/Spinner"
+import useDataLookup from "../../hooks/useDataLookup"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
-  const [showSideModal, setShowSideModal] = useState(false)
-  const [showElementModal, setShowElementModal] = useState(false)
+  const [showSideModal, setShowSideModal] = useState<boolean>(false)
+  const [showElementModal, setShowElementModal] = useState<boolean>(false)
   const [formType, setFormType] = useState<"ADD" | "EDIT">("EDIT")
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
@@ -36,6 +49,27 @@ const ElementDetail = () => {
   const elementLinks = useAppSelector(
     (state) => state.elementlinks.elementLinks,
   )
+  const elementClassificationData = useAppSelector(
+    (state) => state.lookups.elementClassification,
+  )
+  const elementCategoryData = useAppSelector(
+    (state) => state.lookups.elementCategory,
+  )
+  const payrunData = useAppSelector((state) => state.lookups.payrun)
+  const suborganizationsData = useAppSelector(
+    (state) => state.lookups.suborganizations,
+  )
+  const jobTitleData = useAppSelector((state) => state.lookups.jobTitle)
+  const locationData = useAppSelector((state) => state.lookups.location)
+  const employeeTypeData = useAppSelector((state) => state.lookups.employeeType)
+  const employeeCategoryData = useAppSelector(
+    (state) => state.lookups.employeeCategory,
+  )
+  const gradeData = useAppSelector((state) => state.lookups.grades)
+  const unionData = useAppSelector((state) => state.lookups.union)
+  const housingData = useAppSelector((state) => state.lookups.housing)
+  const wardrobeData = useAppSelector((state) => state.lookups.wardrobe)
+  const securityData = useAppSelector((state) => state.lookups.security)
 
   useEffect(() => {
     dispatch(fetchSingleElement(id))
@@ -45,14 +79,30 @@ const ElementDetail = () => {
     dispatch(fetchElementLink(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
-  //   const formatDate = (date: string) => {
-  //     return moment(date).format("MMM DD YYYY, h:mm a")
-  //   }
+  useEffect(() => {
+    dispatch(fetchSuborganizations())
+    dispatch(fetchJobTitle())
+    dispatch(fetchlocation())
+    dispatch(fetchEmployeeType())
+    dispatch(fetchEmployeeCategory())
+    dispatch(fetchGrades())
+    dispatch(fetchUnion())
+    dispatch(fetchHousing())
+    dispatch(fetchWardrobe())
+    dispatch(fetchSecurity())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const viewLinkDetails = (id: any) => {
     const index = elementLinks.findIndex((link) => link.id === id)
     setCurrentLinkDetails(elementLinks[index])
     setShowSideModal(true)
   }
+  const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
+  const { getDataName: getClassificationData } = useDataLookup(
+    elementClassificationData,
+  )
+  const { getDataName: getPayrun } = useDataLookup(payrunData)
   const columns = useMemo(
     () => [
       {
@@ -173,15 +223,19 @@ const ElementDetail = () => {
             </div>
             <div className="single__detail">
               <p className="element__label">Element Classification</p>
-              <p className="element__text">{element?.classificationId}</p>
+              <p className="element__text">
+                {getClassificationData(element?.classificationId)}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label">ELEMENT category</p>
-              <p className="element__text">{element?.categoryId}</p>
+              <p className="element__text">
+                {getCategoryName(element?.categoryValueId)}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label">payrun</p>
-              <p className="element__text">{element?.payRunId}</p>
+              <p className="element__text">{getPayrun(element?.payRunId)}</p>
             </div>
             <div className="single__detail">
               <p className="element__label">Effective Start Date</p>
@@ -193,11 +247,23 @@ const ElementDetail = () => {
             </div>
             <div className="single__detail">
               <p className="element__label">PROCESSING TYPE</p>
-              <p className="element__text">{element?.processingType}</p>
+              <p className="element__text">
+                {element?.processingType === "1"
+                  ? "Open"
+                  : element?.processingType === "2"
+                  ? "Closed"
+                  : ""}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label">PAY frequency</p>
-              <p className="element__text">{element?.payFrequency}</p>
+              <p className="element__text">
+                {element?.payFrequency === "1"
+                  ? "Monthly"
+                  : element?.payFrequency === "2"
+                  ? "Selected Months"
+                  : ""}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label">Pay Months</p>
@@ -205,11 +271,28 @@ const ElementDetail = () => {
             </div>
             <div className="single__detail">
               <p className="element__label">Prorate</p>
-              <p className="element__text">{element?.prorate}</p>
+              <p className="element__text">
+                {element?.prorate === "1"
+                  ? "Yes"
+                  : element?.prorate === "2"
+                  ? "No"
+                  : ""}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label">Status</p>
-              <p className="element__text">{element?.status}</p>
+              <p className="element__text">
+                {element?.status === true ||
+                element?.status === "active" ||
+                element?.status === "Active"
+                  ? "Active"
+                  : element?.status === false ||
+                    element?.status === "inactive" ||
+                    element?.status === "Inactive" ||
+                    element?.status === ""
+                  ? "Inactive"
+                  : "Unknown"}
+              </p>
             </div>
             <div className="single__detail">
               <p className="element__label" style={{ display: "none" }}>
@@ -250,10 +333,32 @@ const ElementDetail = () => {
           {showElementModal ? (
             <ElementLinkModal>
               {formType === "ADD" ? (
-                <ElementLinkForm setShowElementModal={setShowElementModal} />
+                <ElementLinkForm
+                  setShowElementModal={setShowElementModal}
+                  suborganizationsData={suborganizationsData}
+                  jobTitleData={jobTitleData}
+                  locationData={locationData}
+                  employeeTypeData={employeeTypeData}
+                  employeeCategoryData={employeeCategoryData}
+                  gradeData={gradeData}
+                  unionData={unionData}
+                  housingData={housingData}
+                  wardrobeData={wardrobeData}
+                  securityData={securityData}
+                />
               ) : (
                 <EditElementLinkForm
                   setShowElementModal={setShowElementModal}
+                  suborganizationsData={suborganizationsData}
+                  jobTitleData={jobTitleData}
+                  locationData={locationData}
+                  employeeTypeData={employeeTypeData}
+                  employeeCategoryData={employeeCategoryData}
+                  gradeData={gradeData}
+                  unionData={unionData}
+                  housingData={housingData}
+                  wardrobeData={wardrobeData}
+                  securityData={securityData}
                 />
               )}
             </ElementLinkModal>

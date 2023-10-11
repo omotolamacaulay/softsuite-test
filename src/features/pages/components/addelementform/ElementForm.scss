@@ -19,6 +19,30 @@
     margin-bottom: 24px;
     display: grid;
     grid-template-columns: 1fr;
+    position: relative;
+  }
+  .closeAdd {
+    display: none;
+  }
+  .openAdd {
+    display: block;
+    border: 1px solid #e5e5e5;
+    padding: 16px;
+  }
+  .additional {
+    text-decoration: underline;
+    color: #2d416f;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .status-span {
+    position: absolute;
+    left: 77px;
+    top: 40px;
+    color: #828282;
+    font-size: 13px;
+    font-weight: 400;
   }
   input[type="date"],
   input[type="text"],
@@ -144,8 +168,8 @@
   .switch {
     display: inline-block;
     position: relative;
-    width: 60px;
-    height: 34px;
+    width: 50px;
+    height: 24px;
   }
 
   .switch-label {
@@ -167,7 +191,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #e05453;
     -webkit-transition: 0.4s;
     transition: 0.4s;
     border-radius: 34px;
@@ -176,8 +200,8 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 16px;
+    width: 16px;
     left: 4px;
     bottom: 4px;
     background-color: white;

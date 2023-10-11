@@ -4,7 +4,7 @@ import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import SelectInput from "../../../layout/components/common/SelectInput"
-// import Checkbox from "../../../layout/components/common/Checkbox"
+import Checkbox from "../../../layout/components/common/Checkbox"
 
 const monthOptions = [
   {
@@ -24,9 +24,6 @@ const monthOptions = [
   { value: "December", label: "December" },
 ]
 
-// const statusBoolean = (arg: string): boolean => {
-//   return arg === "active" ? true : false
-// }
 interface FormPageTwoProps {
   onButtonClick: (arg: string) => void
   register: UseFormRegister<Element>
@@ -36,16 +33,15 @@ const EditFormPageTwo = ({
   onButtonClick,
   register,
   watch,
+  control,
 }: FormPageTwoProps) => {
   // const {
-  // register,
-
-  // trigger,
   //   formState: { errors },
   // } = useForm<Element>()
 
-  // const inputRef = useRef(null)
   const selectedPayFrequency = watch("payFrequency")
+  const status = watch("status")
+  console.log(status)
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -111,7 +107,7 @@ const EditFormPageTwo = ({
           label="Selected Months"
           id="selectedMonths"
           register={{ ...register("selectedMonths", { required: true }) }}
-          required={true}
+          // required={true}
           disabled={selectedPayFrequency !== "2"}
           multiple={true}
         >
@@ -139,12 +135,16 @@ const EditFormPageTwo = ({
         </div>
 
         <div className="input-group">
-          {/* <Checkbox
+          <Checkbox
             label="Status"
             id="status"
+            value={status === "" ? false : true}
             required={true}
-            register={{ ...register("status", { required: true }) }}
-          /> */}
+            register={{ ...register("status") }}
+          />
+          <span className="status-span">
+            {status === true ? "Active" : "Inactive"}
+          </span>
         </div>
       </div>
 

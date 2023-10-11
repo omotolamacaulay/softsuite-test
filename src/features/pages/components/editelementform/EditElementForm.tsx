@@ -27,7 +27,7 @@ const EditElementForm = ({
     (state) => state.elements.currentEditElement,
   ) as Element
 
-  const { handleSubmit, register, watch } = useForm<Element>({
+  const { handleSubmit, register, watch, control } = useForm<Element>({
     defaultValues: element,
   })
 
@@ -94,6 +94,7 @@ const EditElementForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
+                control={control}
                 // submitForm={onSubmit}
               />
             ),

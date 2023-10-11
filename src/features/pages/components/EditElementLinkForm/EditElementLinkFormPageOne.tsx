@@ -1,17 +1,58 @@
+//@ts-nocheck
+import { useEffect } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { ElementLink } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import SelectInput from "../../../layout/components/common/SelectInput"
+import { fetchDepartments } from "../../../counter/lookupSlice"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
 const EditElementLinkFormPageOne = ({
   onButtonClick,
   closeModal,
   register,
+  watch,
+  suborganizationsData,
+  jobTitleData,
+  locationData,
+  employeeTypeData,
+  employeeCategoryData,
 }: {
   onButtonClick: (arg: string) => void
   closeModal: () => void
   register: UseFormRegister<ElementLink>
+  watch: (arg: string) => void
+  suborganizationsData: {
+    id: number
+    name: string
+  }[]
+  jobTitleData: {
+    id: number
+    name: string
+  }[]
+  locationData: {
+    id: number
+    name: string
+  }[]
+  employeeTypeData: {
+    id: number
+    name: string
+  }[]
+  employeeCategoryData: {
+    id: number
+    name: string
+  }[]
 }) => {
+  const dispatch = useAppDispatch()
+  const departmentsData = useAppSelector((state) => state.lookups.departments)
+  const selectedSuborganizationId = watch("suborganizationId")
+  console.log(selectedSuborganizationId)
+  useEffect(() => {
+    if (selectedSuborganizationId > 0) {
+      dispatch(fetchDepartments(selectedSuborganizationId))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSuborganizationId])
   return (
     <div className="pg-1">
       <div className="input-group">
@@ -29,14 +70,15 @@ const EditElementLinkFormPageOne = ({
             id="suborganizationId"
             label="Suborganization"
             required
-            register={{ ...register("suborganizationId", { required: true }) }}
+            register={{ ...register("suborganizationId") }}
           >
             <>
-              <option disabled value="">
-                Suborganization
-              </option>
-              <option>Solution Delivery</option>
-              <option>Service Provision</option>
+              <option value="">Select a Suborganization</option>
+              {suborganizationsData.map((suborganization) => (
+                <option key={suborganization.id} value={suborganization.id}>
+                  {suborganization.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>
@@ -45,16 +87,18 @@ const EditElementLinkFormPageOne = ({
             id="departmentId"
             label="Department"
             required
-            register={{ ...register("departmentId", { required: true }) }}
+            disabled={!selectedSuborganizationId}
+            register={{ ...register("departmentId") }}
           >
             <>
-              <option disabled value="">
-                Select a Department
-              </option>
-              <option>Bills and Payment</option>
-              <option>Procurement</option>
-              <option>IT</option>
-              <option>Human Resources</option>
+              <option value="">Select a Department</option>
+              {departmentsData &&
+                departmentsData.length > 0 &&
+                departmentsData.map((department) => (
+                  <option key={department.id} value={department.id}>
+                    {department.name}
+                  </option>
+                ))}
             </>
           </SelectInput>
         </div>
@@ -65,24 +109,24 @@ const EditElementLinkFormPageOne = ({
             id="jobTitleId"
             label="Job Title"
             required
-            register={{ ...register("jobTitleId", { required: true }) }}
+            register={{ ...register("jobTitleId") }}
           >
             <>
               <option disabled value="">
                 Select a Job Title
               </option>
-              <option>Backend Developer</option>
-              <option>Frontend Developer</option>
-              <option>QA Engineer</option>
-              <option>Product Designer</option>
-              <option>Product Manager</option>
+              {jobTitleData.map((jobTitle) => (
+                <option key={jobTitle.id} value={jobTitle.id}>
+                  {jobTitle.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>
         <div className="input-group">
           <SelectInput
             id="locationId"
-            label="Job Title"
+            label="Location"
             required
             register={{ ...register("locationId") }}
           >
@@ -90,9 +134,11 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Location
               </option>
-              <option>Headquarters</option>
-              <option>Subsidiary Branch</option>
-              <option>Overseas</option>
+              {locationData.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>
@@ -109,10 +155,11 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select an employee Type
               </option>
-              <option>Full Time</option>
-              <option>Trainee</option>
-              <option>Part Time</option>
-              <option>Contract</option>
+              {employeeTypeData.map((employeeType) => (
+                <option key={employeeType.id} value={employeeType.id}>
+                  {employeeType.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>
@@ -127,10 +174,11 @@ const EditElementLinkFormPageOne = ({
               <option disabled value="">
                 Select a Employee Category
               </option>
-              <option>Full Time</option>
-              <option>Trainee</option>
-              <option>Part Time</option>
-              <option>Contract</option>
+              {employeeCategoryData.map((employeeCategory) => (
+                <option key={employeeCategory.id} value={employeeCategory.id}>
+                  {employeeCategory.name}
+                </option>
+              ))}
             </>
           </SelectInput>
         </div>

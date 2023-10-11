@@ -58,6 +58,14 @@ export interface ElementLink {
       lookupId: number
       lookupValueId: number
     },
+    {
+      lookupId: number
+      lookupValueId: number
+    },
+    {
+      lookupId: number
+      lookupValueId: number
+    },
   ]
 }
 export type InputProps = {
@@ -93,6 +101,8 @@ export interface SelectInputProps {
 }
 export interface CheckboxProps {
   label: string
+  value: string
+  onChange: (arg: boolean) => void
   register: Record<string, string | any>
   required: boolean
   id: string

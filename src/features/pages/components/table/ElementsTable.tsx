@@ -6,6 +6,8 @@ import Icons from "../../../assets/images"
 import "./ElementsTable.scss"
 import { Element } from "../../../../types"
 import HamburgerButton from "../hamburger/Hamburger"
+import useDataLookup from "../../../hooks/useDataLookup"
+import { DataItem } from "../../../hooks/useDataLookup"
 
 // interface ElementProps {
 //   name: string
@@ -22,13 +24,21 @@ interface ElementsTableProps {
   elements: Element[]
   setShowModal: Dispatch<SetStateAction<boolean>>
   setFormType: Dispatch<SetStateAction<"ADD" | "EDIT">>
+  elementCategoryData: DataItem[]
+  elementClassificationData: DataItem[]
 }
 
 const ElementsTable: React.FC<ElementsTableProps> = ({
   elements,
   setShowModal,
   setFormType,
+  elementCategoryData,
+  elementClassificationData,
 }) => {
+  const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
+  const { getDataName: getClassificationData } = useDataLookup(
+    elementClassificationData,
+  )
   const columns = useMemo(
     () => [
       {
@@ -46,17 +56,49 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
       {
         Header: "Element Category",
         accessor: "categoryValueId",
+        Cell: ({ row }) => (
+          <span className={`username ${row.original.status}`}>
+            {getCategoryName(row.original.categoryValueId)}
+          </span>
+        ),
       },
       {
         Header: "Element Classification",
         accessor: "classificationValueId",
+        Cell: ({ row }) => (
+          <span className={`username ${row.original.status}`}>
+            {getClassificationData(row.original.classificationId)}
+          </span>
+        ),
       },
       {
         Header: "Status",
         accessor: "status",
         Cell: ({ cell }) => (
-          <span className={`status-span ${cell.row.original.status}`}>
-            {cell.value}
+          <span
+            className={`status-span ${
+              cell.row.original.status === true ||
+              cell.row.original.status === "active" ||
+              cell.row.original.status === "Active"
+                ? "Active"
+                : cell.row.original.status === false ||
+                  cell.row.original.status === "inactive" ||
+                  cell.row.original.status === "Inactive" ||
+                  cell.row.original.status === ""
+                ? "Inactive"
+                : "Unknown"
+            }`}
+          >
+            {cell.value === true ||
+            cell.value === "active" ||
+            cell.value === "Active"
+              ? "Active"
+              : cell.value === false ||
+                cell.value === "inactive" ||
+                cell.value === "Inactive" ||
+                cell.value === ""
+              ? "Inactive"
+              : "Unknown"}
           </span>
         ),
       },

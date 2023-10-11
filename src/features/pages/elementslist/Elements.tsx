@@ -123,6 +123,8 @@ function Elements() {
             )}
             setShowModal={setShowModal}
             setFormType={setFormType}
+            elementClassificationData={elementClassificationData}
+            elementCategoryData={elementCategoryData}
           />
 
           <div className="pagination_wrapper">
