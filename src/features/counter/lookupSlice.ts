@@ -5,6 +5,7 @@ type LookupData = {
   elementCategory: []
   elementClassification: []
   payrun: []
+  suborganizations: []
   error: string[]
 }
 
@@ -12,6 +13,7 @@ const initialState: LookupData = {
   elementCategory: [],
   elementClassification: [],
   payrun: [],
+  suborganizations: [],
   loading: false,
   error: [],
 }
@@ -40,6 +42,15 @@ export const fetchPayrun = createAsyncThunk("lookups/fetchPayrun", async () => {
   ).then((response) => response.json())
   return response
 })
+export const fetchSuborganizations = createAsyncThunk(
+  "lookups/fetchSuborganizations",
+  async () => {
+    const response = await fetch(
+      "https://https://650af6bedfd73d1fab094cf7.mockapi.io/suborganizations",
+    ).then((response) => response.json())
+    return response
+  },
+)
 
 export const lookupSlice = createSlice({
   name: "lookups",
@@ -53,6 +64,9 @@ export const lookupSlice = createSlice({
     },
     loadPayrun: (state, action) => {
       state.elementClassification = action.payload
+    },
+    loadSuborganization: (state, action) => {
+      state.suborganizations = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -93,11 +107,27 @@ export const lookupSlice = createSlice({
         state.loading = false
         state.payrun = []
       })
+      .addCase(fetchSuborganizations.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(fetchSuborganizations.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = []
+        state.suborganizations = action.payload
+      })
+      .addCase(fetchSuborganizations.rejected, (state) => {
+        state.loading = false
+        state.suborganizations = []
+      })
   },
 })
 
-export const { loadElementCategory, loadElementClassification, loadPayrun } =
-  lookupSlice.actions
+export const {
+  loadElementCategory,
+  loadElementClassification,
+  loadPayrun,
+  loadSuborganization,
+} = lookupSlice.actions
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
