@@ -58,6 +58,14 @@ export interface ElementLink {
       lookupId: number
       lookupValueId: number
     },
+    {
+      lookupId: number
+      lookupValueId: number
+    },
+    {
+      lookupId: number
+      lookupValueId: number
+    },
   ]
 }
 export type InputProps = {
