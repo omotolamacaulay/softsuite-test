@@ -9,7 +9,13 @@ import {
   setCurrentEditElementLink,
   deleteSingleElementLink,
 } from "../../counter/elementLinkSlice"
-import { fetchSuborganizations } from "../../counter/lookupSlice"
+import {
+  fetchSuborganizations,
+  fetchJobTitle,
+  fetchlocation,
+  fetchEmployeeType,
+  fetchEmployeeCategory,
+} from "../../counter/lookupSlice"
 import { ElementLink } from "../../../types"
 import Icons from "../../assets/images"
 import { useTable, useSortBy } from "react-table"
@@ -48,7 +54,12 @@ const ElementDetail = () => {
   const suborganizationsData = useAppSelector(
     (state) => state.lookups.suborganizations,
   )
-
+  const jobTitleData = useAppSelector((state) => state.lookups.jobTitle)
+  const locationData = useAppSelector((state) => state.lookups.location)
+  const employeeTypeData = useAppSelector((state) => state.lookups.employeeType)
+  const employeeCategoryData = useAppSelector(
+    (state) => state.lookups.employeeCategory,
+  )
   useEffect(() => {
     dispatch(fetchSingleElement(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,6 +70,11 @@ const ElementDetail = () => {
   }, [id])
   useEffect(() => {
     dispatch(fetchSuborganizations())
+    dispatch(fetchJobTitle())
+    dispatch(fetchlocation())
+    dispatch(fetchEmployeeType())
+    dispatch(fetchEmployeeCategory())
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -305,11 +321,19 @@ const ElementDetail = () => {
                 <ElementLinkForm
                   setShowElementModal={setShowElementModal}
                   suborganizationsData={suborganizationsData}
+                  jobTitleData={jobTitleData}
+                  locationData={locationData}
+                  employeeTypeData={employeeTypeData}
+                  employeeCategoryData={employeeCategoryData}
                 />
               ) : (
                 <EditElementLinkForm
                   setShowElementModal={setShowElementModal}
                   suborganizationsData={suborganizationsData}
+                  jobTitleData={jobTitleData}
+                  locationData={locationData}
+                  employeeTypeData={employeeTypeData}
+                  employeeCategoryData={employeeCategoryData}
                 />
               )}
             </ElementLinkModal>
