@@ -15,6 +15,11 @@ import {
   fetchlocation,
   fetchEmployeeType,
   fetchEmployeeCategory,
+  fetchGrades,
+  fetchUnion,
+  fetchHousing,
+  fetchWardrobe,
+  fetchSecurity,
 } from "../../counter/lookupSlice"
 import { ElementLink } from "../../../types"
 import Icons from "../../assets/images"
@@ -60,6 +65,12 @@ const ElementDetail = () => {
   const employeeCategoryData = useAppSelector(
     (state) => state.lookups.employeeCategory,
   )
+  const gradeData = useAppSelector((state) => state.lookups.grades)
+  const unionData = useAppSelector((state) => state.lookups.union)
+  const housingData = useAppSelector((state) => state.lookups.housing)
+  const wardrobeData = useAppSelector((state) => state.lookups.wardrobe)
+  const securityData = useAppSelector((state) => state.lookups.security)
+
   useEffect(() => {
     dispatch(fetchSingleElement(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,7 +85,11 @@ const ElementDetail = () => {
     dispatch(fetchlocation())
     dispatch(fetchEmployeeType())
     dispatch(fetchEmployeeCategory())
-
+    dispatch(fetchGrades())
+    dispatch(fetchUnion())
+    dispatch(fetchHousing())
+    dispatch(fetchWardrobe())
+    dispatch(fetchSecurity())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -325,6 +340,11 @@ const ElementDetail = () => {
                   locationData={locationData}
                   employeeTypeData={employeeTypeData}
                   employeeCategoryData={employeeCategoryData}
+                  gradeData={gradeData}
+                  unionData={unionData}
+                  housingData={housingData}
+                  wardrobeData={wardrobeData}
+                  securityData={securityData}
                 />
               ) : (
                 <EditElementLinkForm
@@ -334,6 +354,11 @@ const ElementDetail = () => {
                   locationData={locationData}
                   employeeTypeData={employeeTypeData}
                   employeeCategoryData={employeeCategoryData}
+                  gradeData={gradeData}
+                  unionData={unionData}
+                  housingData={housingData}
+                  wardrobeData={wardrobeData}
+                  securityData={securityData}
                 />
               )}
             </ElementLinkModal>

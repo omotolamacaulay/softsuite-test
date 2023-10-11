@@ -21,6 +21,21 @@
     grid-template-columns: 1fr;
     position: relative;
   }
+  .closeAdd {
+    display: none;
+  }
+  .openAdd {
+    display: block;
+    border: 1px solid #e5e5e5;
+    padding: 16px;
+  }
+  .additional {
+    text-decoration: underline;
+    color: #2d416f;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
   .status-span {
     position: absolute;
     left: 77px;

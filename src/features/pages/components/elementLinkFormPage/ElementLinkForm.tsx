@@ -19,6 +19,11 @@ const ElementLinkForm = ({
   locationData,
   employeeTypeData,
   employeeCategoryData,
+  gradeData,
+  unionData,
+  housingData,
+  wardrobeData,
+  securityData,
 }: {
   setShowElementModal: React.Dispatch<React.SetStateAction<boolean>>
   suborganizationsData
@@ -26,6 +31,11 @@ const ElementLinkForm = ({
   locationData
   employeeTypeData
   employeeCategoryData
+  gradeData
+  unionData
+  housingData
+  wardrobeData
+  securityData
 }) => {
   const [page, setPage] = useState("pageone")
   const navigate = useNavigate()
@@ -128,6 +138,12 @@ const ElementLinkForm = ({
               <ElementFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
+                watch={watch}
+                gradeData={gradeData}
+                unionData={unionData}
+                housingData={housingData}
+                wardrobeData={wardrobeData}
+                securityData={securityData}
               />
             ),
             pagethree: (
@@ -135,6 +151,7 @@ const ElementLinkForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 closeModal={closeModal}
+                watch={watch}
               />
             ),
           }[page]
