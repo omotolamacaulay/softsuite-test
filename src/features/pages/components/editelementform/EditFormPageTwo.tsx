@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { UseFormRegister, useForm } from "react-hook-form"
+import { UseFormRegister } from "react-hook-form"
 import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
@@ -35,9 +35,9 @@ const EditFormPageTwo = ({
   watch,
   control,
 }: FormPageTwoProps) => {
-  const {
-    formState: { errors },
-  } = useForm<Element>()
+  // const {
+  //   formState: { errors },
+  // } = useForm<Element>()
 
   const selectedPayFrequency = watch("payFrequency")
   const status = watch("status")
