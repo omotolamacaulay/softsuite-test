@@ -4,7 +4,7 @@ import { Element } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import SelectInput from "../../../layout/components/common/SelectInput"
-// import Checkbox from "../../../layout/components/common/Checkbox"
+import Checkbox from "../../../layout/components/common/Checkbox"
 // import dayjs from "dayjs"
 
 const monthOptions = [
@@ -31,6 +31,7 @@ interface FormPageTwoProps {
 }
 const FormPageTwo = ({ onButtonClick, register, watch }: FormPageTwoProps) => {
   const selectedPayFrequency = watch("payFrequency")
+  const status = watch("status")
   const {
     formState: { errors },
   } = useForm<Element>()
@@ -103,7 +104,7 @@ const FormPageTwo = ({ onButtonClick, register, watch }: FormPageTwoProps) => {
           label="Selected Months"
           id="selectedMonths"
           register={{ ...register("selectedMonths", { required: true }) }}
-          required={true}
+          // required={true}
           disabled={selectedPayFrequency !== "2"}
           multiple={true}
         >
@@ -112,6 +113,9 @@ const FormPageTwo = ({ onButtonClick, register, watch }: FormPageTwoProps) => {
               {option.label}
             </option>
           ))}
+          {errors?.selectedMonths?.type === "required" && (
+            <p>This field is required</p>
+          )}
           <></>
         </SelectInput>
       </div>
@@ -131,12 +135,16 @@ const FormPageTwo = ({ onButtonClick, register, watch }: FormPageTwoProps) => {
         </div>
 
         <div className="input-group">
-          {/* <Checkbox
+          <Checkbox
             label="Status"
             id="status"
+            value={status === "" ? false : true}
             required={true}
-            register={{ ...register("status", { required: true }) }}
-          /> */}
+            register={{ ...register("status") }}
+          />
+          <span className="status-span">
+            {status === true ? "Active" : "Inactive"}
+          </span>
         </div>
       </div>
 
