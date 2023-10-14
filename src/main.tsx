@@ -6,6 +6,8 @@ import App from "./App"
 // import "./index.css"
 import { BrowserRouter } from "react-router-dom"
 import "../src/features/styles/index.scss"
+// import { ApiProvider } from "@reduxjs/toolkit/dist/query/react"
+// import { apiSlice } from "./features/counter/elementSlice"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
