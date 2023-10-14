@@ -1,0 +1,59 @@
+.confirm-modal-body {
+  //   padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  img {
+    margin: 24px;
+  }
+  p {
+    color: #57678c;
+    font-size: 24px;
+    margin-bottom: 13px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .buttonGroup {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+  }
+  button {
+    border-radius: 4px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    font-size: 16px;
+
+    line-height: 16px;
+    padding: 16px;
+    // width: 100%;
+    margin-left: auto;
+    // background: #4baa79;
+    // color: #fff;
+    // width: 100%;
+  }
+  span {
+    color: #57678c;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 27px;
+  }
+  .cancel {
+    color: #c8c8c8;
+    font-size: 16px;
+    background-color: #fff;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1.5px #c8c8c8 solid;
+    width: 150px;
+  }
+  .confirm {
+    background: #e05453;
+    color: #fff;
+    font-weight: 600;
+    width: 228px;
+  }
+}
