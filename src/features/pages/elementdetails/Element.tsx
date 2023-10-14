@@ -3,24 +3,11 @@ import "./Element.scss"
 import { useParams, Link } from "react-router-dom"
 import { useMemo, useEffect, useState, ChangeEvent } from "react"
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
-import { fetchSingleElement } from "../../counter/elementSlice"
 import {
   fetchElementLink,
   setCurrentEditElementLink,
   deleteSingleElementLink,
 } from "../../counter/elementLinkSlice"
-import {
-  fetchSuborganizations,
-  fetchJobTitle,
-  fetchlocation,
-  fetchEmployeeType,
-  fetchEmployeeCategory,
-  fetchGrades,
-  fetchUnion,
-  fetchHousing,
-  fetchWardrobe,
-  fetchSecurity,
-} from "../../counter/lookupSlice"
 import { ElementLink } from "../../../types"
 import Icons from "../../assets/images"
 import { useTable, useSortBy } from "react-table"
@@ -32,6 +19,22 @@ import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
 import SideModal from "../components/sideModal/SideModal"
 import Spinner from "../components/spinner/Spinner"
 import useDataLookup from "../../hooks/useDataLookup"
+import {
+  useFetchSingleElementQuery,
+  useFetchPayrunQuery,
+  useFetchElementCategoryQuery,
+  useFetchElementClassificationQuery,
+  useFetchSuborganizationsQuery,
+  useFetchJobTitleQuery,
+  useFetchLocationQuery,
+  useFetchEmployeeTypeQuery,
+  useFetchEmployeeCategoryQuery,
+  useFetchGradesQuery,
+  useFetchUnionQuery,
+  useFetchHousingQuery,
+  useFetchWardrobeQuery,
+  useFetchSecurityQuery,
+} from "../../counter/apiSlice"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -44,54 +47,34 @@ const ElementDetail = () => {
   const [currentLinkDetails, setCurrentLinkDetails] = useState<ElementLink>()
   const dispatch = useAppDispatch()
   const { id } = useParams() as { id: string }
-  const element = useAppSelector((state) => state.elements.element)
-  const loading = useAppSelector((state) => state.elements.loading)
   const elementLinks = useAppSelector(
     (state) => state.elementlinks.elementLinks,
   )
-  const elementClassificationData = useAppSelector(
-    (state) => state.lookups.elementClassification,
-  )
-  const elementCategoryData = useAppSelector(
-    (state) => state.lookups.elementCategory,
-  )
-  const payrunData = useAppSelector((state) => state.lookups.payrun)
-  const suborganizationsData = useAppSelector(
-    (state) => state.lookups.suborganizations,
-  )
-  const jobTitleData = useAppSelector((state) => state.lookups.jobTitle)
-  const locationData = useAppSelector((state) => state.lookups.location)
-  const employeeTypeData = useAppSelector((state) => state.lookups.employeeType)
-  const employeeCategoryData = useAppSelector(
-    (state) => state.lookups.employeeCategory,
-  )
-  const gradeData = useAppSelector((state) => state.lookups.grades)
-  const unionData = useAppSelector((state) => state.lookups.union)
-  const housingData = useAppSelector((state) => state.lookups.housing)
-  const wardrobeData = useAppSelector((state) => state.lookups.wardrobe)
-  const securityData = useAppSelector((state) => state.lookups.security)
+  const { data: payrunData } = useFetchPayrunQuery()
+  const { data: elementCategoryData } = useFetchElementCategoryQuery()
+  const { data: elementClassificationData } =
+    useFetchElementClassificationQuery()
+  const { data: suborganizationsData } = useFetchSuborganizationsQuery()
+  const { data: jobTitleData } = useFetchJobTitleQuery()
+  const { data: locationData } = useFetchLocationQuery()
+  const { data: employeeTypeData } = useFetchEmployeeTypeQuery()
+  const { data: employeeCategoryData } = useFetchEmployeeCategoryQuery()
+  const { data: gradeData } = useFetchGradesQuery()
+  const { data: unionData } = useFetchUnionQuery()
+  const { data: housingData } = useFetchHousingQuery()
+  const { data: wardrobeData } = useFetchWardrobeQuery()
 
-  useEffect(() => {
-    dispatch(fetchSingleElement(id))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  const { data: securityData } = useFetchSecurityQuery()
+  const {
+    data: singleElement,
+    isLoading,
+    isSuccess,
+  } = useFetchSingleElementQuery(id)
+
   useEffect(() => {
     dispatch(fetchElementLink(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
-  useEffect(() => {
-    dispatch(fetchSuborganizations())
-    dispatch(fetchJobTitle())
-    dispatch(fetchlocation())
-    dispatch(fetchEmployeeType())
-    dispatch(fetchEmployeeCategory())
-    dispatch(fetchGrades())
-    dispatch(fetchUnion())
-    dispatch(fetchHousing())
-    dispatch(fetchWardrobe())
-    dispatch(fetchSecurity())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const viewLinkDetails = (id: any) => {
     const index = elementLinks.findIndex((link) => link.id === id)
@@ -199,7 +182,7 @@ const ElementDetail = () => {
     setItemsPerPage(+e.currentTarget.value)
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div>
         <Spinner />
@@ -216,93 +199,103 @@ const ElementDetail = () => {
             </Link>
           </div>
           <h2>Element Details</h2>
-          <div className="element__detail">
-            <div className="single__detail">
-              <p className="element__label">Element Name</p>
-              <p className="element__text">{element?.name}</p>
+          {isSuccess && (
+            <div className="element__detail">
+              <div className="single__detail">
+                <p className="element__label">Element Name</p>
+                <p className="element__text">{singleElement?.data?.name}</p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Element Classification</p>
+                <p className="element__text">
+                  {getClassificationData(singleElement?.data?.classificationId)}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">ELEMENT category</p>
+                <p className="element__text">
+                  {getCategoryName(singleElement?.data?.categoryValueId)}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">payrun</p>
+                <p className="element__text">
+                  {getPayrun(singleElement?.data?.payRunId)}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Effective Start Date</p>
+                <p className="element__text">
+                  {singleElement?.data?.effectiveStartDate}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Effective END Date</p>
+                <p className="element__text">
+                  {singleElement?.data?.effectiveEndDate}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">PROCESSING TYPE</p>
+                <p className="element__text">
+                  {singleElement?.data?.processingType === "1"
+                    ? "Open"
+                    : singleElement?.data?.processingType === "2"
+                    ? "Closed"
+                    : ""}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">PAY frequency</p>
+                <p className="element__text">
+                  {singleElement?.data?.payFrequency === "1"
+                    ? "Monthly"
+                    : singleElement?.data?.payFrequency === "2"
+                    ? "Selected Months"
+                    : ""}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Pay Months</p>
+                <p className="element__text">
+                  {singleElement?.data?.selectedMonths}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Prorate</p>
+                <p className="element__text">
+                  {singleElement?.data?.prorate === "1"
+                    ? "Yes"
+                    : singleElement?.data?.prorate === "2"
+                    ? "No"
+                    : ""}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label">Status</p>
+                <p className="element__text">
+                  {singleElement?.data?.status === true ||
+                  singleElement?.data?.status === "active" ||
+                  singleElement?.data?.status === "Active"
+                    ? "Active"
+                    : singleElement?.data?.status === false ||
+                      singleElement?.data?.status === "inactive" ||
+                      singleElement?.data?.status === "Inactive" ||
+                      singleElement?.data?.status === ""
+                    ? "Inactive"
+                    : "Unknown"}
+                </p>
+              </div>
+              <div className="single__detail">
+                <p className="element__label" style={{ display: "none" }}>
+                  Prorate
+                </p>
+                <p className="element__text" style={{ display: "none" }}>
+                  Yes
+                </p>
+              </div>
             </div>
-            <div className="single__detail">
-              <p className="element__label">Element Classification</p>
-              <p className="element__text">
-                {getClassificationData(element?.classificationId)}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">ELEMENT category</p>
-              <p className="element__text">
-                {getCategoryName(element?.categoryValueId)}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">payrun</p>
-              <p className="element__text">{getPayrun(element?.payRunId)}</p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">Effective Start Date</p>
-              <p className="element__text">{element?.effectiveStartDate}</p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">Effective END Date</p>
-              <p className="element__text">{element?.effectiveEndDate}</p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">PROCESSING TYPE</p>
-              <p className="element__text">
-                {element?.processingType === "1"
-                  ? "Open"
-                  : element?.processingType === "2"
-                  ? "Closed"
-                  : ""}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">PAY frequency</p>
-              <p className="element__text">
-                {element?.payFrequency === "1"
-                  ? "Monthly"
-                  : element?.payFrequency === "2"
-                  ? "Selected Months"
-                  : ""}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">Pay Months</p>
-              <p className="element__text">{element?.selectedMonths}</p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">Prorate</p>
-              <p className="element__text">
-                {element?.prorate === "1"
-                  ? "Yes"
-                  : element?.prorate === "2"
-                  ? "No"
-                  : ""}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label">Status</p>
-              <p className="element__text">
-                {element?.status === true ||
-                element?.status === "active" ||
-                element?.status === "Active"
-                  ? "Active"
-                  : element?.status === false ||
-                    element?.status === "inactive" ||
-                    element?.status === "Inactive" ||
-                    element?.status === ""
-                  ? "Inactive"
-                  : "Unknown"}
-              </p>
-            </div>
-            <div className="single__detail">
-              <p className="element__label" style={{ display: "none" }}>
-                Prorate
-              </p>
-              <p className="element__text" style={{ display: "none" }}>
-                Yes
-              </p>
-            </div>
-          </div>
+          )}
         </div>
         <h2 className="links__header">Elements Links</h2>
         <div className="searchGroup" style={{ marginBottom: "24px" }}>
@@ -335,12 +328,12 @@ const ElementDetail = () => {
               {formType === "ADD" ? (
                 <ElementLinkForm
                   setShowElementModal={setShowElementModal}
-                  suborganizationsData={suborganizationsData}
+                  suborganizationsData={suborganizationsData.data}
                   jobTitleData={jobTitleData}
                   locationData={locationData}
                   employeeTypeData={employeeTypeData}
                   employeeCategoryData={employeeCategoryData}
-                  gradeData={gradeData}
+                  gradeData={gradeData.data}
                   unionData={unionData}
                   housingData={housingData}
                   wardrobeData={wardrobeData}
@@ -349,12 +342,12 @@ const ElementDetail = () => {
               ) : (
                 <EditElementLinkForm
                   setShowElementModal={setShowElementModal}
-                  suborganizationsData={suborganizationsData}
+                  suborganizationsData={suborganizationsData.data}
                   jobTitleData={jobTitleData}
                   locationData={locationData}
                   employeeTypeData={employeeTypeData}
                   employeeCategoryData={employeeCategoryData}
-                  gradeData={gradeData}
+                  gradeData={gradeData.data}
                   unionData={unionData}
                   housingData={housingData}
                   wardrobeData={wardrobeData}

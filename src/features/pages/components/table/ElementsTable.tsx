@@ -26,6 +26,7 @@ interface ElementsTableProps {
   setFormType: Dispatch<SetStateAction<"ADD" | "EDIT">>
   elementCategoryData: DataItem[]
   elementClassificationData: DataItem[]
+  isSuccess: boolean
 }
 
 const ElementsTable: React.FC<ElementsTableProps> = ({
@@ -34,6 +35,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
   setFormType,
   elementCategoryData,
   elementClassificationData,
+  isSuccess,
 }) => {
   const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
   const { getDataName: getClassificationData } = useDataLookup(
@@ -58,7 +60,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "categoryValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {getCategoryName(row.original.categoryValueId)}
+            {isSuccess && getCategoryName(row.original.categoryValueId)}
           </span>
         ),
       },
@@ -67,7 +69,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "classificationValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {getClassificationData(row.original.classificationId)}
+            {isSuccess && getClassificationData(row.original.classificationId)}
           </span>
         ),
       },
@@ -146,42 +148,46 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
 
   return (
     <div className="users__tabBody">
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render("Header")}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <img src={Icons["Filter"]} alt="" />
+      {isSuccess && (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render("Header")}
+                    <span style={{ marginLeft: "8px" }}>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <img src={Icons["Filter"]} alt="" />
+                        ) : (
+                          <img src={Icons["Filter"]} alt="" />
+                        )
                       ) : (
                         <img src={Icons["Filter"]} alt="" />
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                })}
+                      )}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }

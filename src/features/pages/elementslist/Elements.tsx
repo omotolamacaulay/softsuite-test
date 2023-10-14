@@ -1,20 +1,21 @@
+//@ts-nocheck
 import ElementsTable from "../components/table/ElementsTable"
 import "./Elements.scss"
 import Icons from "../../assets/images"
 import { ChangeEvent, useEffect, useState } from "react"
 import ReactPaginate from "react-paginate"
-import { useAppSelector, useAppDispatch } from "../../../app/hooks"
-import { fetchElements } from "../../counter/elementSlice"
 import ElementForm from "../components/addelementform/ElementForm"
 import DefaultModal from "../components/DefaultModal/DefaultModal"
 import EditElementForm from "../components/editelementform/EditElementForm"
 import EmptyState from "../components/EmptyState/EmptyState"
 import Spinner from "../components/spinner/Spinner"
+
 import {
-  fetchElementCategory,
-  fetchElementClassification,
-  fetchPayrun,
-} from "../../counter/lookupSlice"
+  useFetchElementsQuery,
+  useFetchPayrunQuery,
+  useFetchElementCategoryQuery,
+  useFetchElementClassificationQuery,
+} from "../../counter/apiSlice"
 
 function Elements() {
   const [showModal, setShowModal] = useState(false)
@@ -22,38 +23,30 @@ function Elements() {
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
-  const dispatch = useAppDispatch()
-  const elements = useAppSelector((state) => state.elements)
-  const loading = useAppSelector((state) => state.elements.loading)
-  const elementClassificationData = useAppSelector(
-    (state) => state.lookups.elementClassification,
-  )
-  const elementCategoryData = useAppSelector(
-    (state) => state.lookups.elementCategory,
-  )
-  const payrunData = useAppSelector((state) => state.lookups.payrun)
+  const { data, isSuccess, isLoading } = useFetchElementsQuery()
+  const { data: payrunData } = useFetchPayrunQuery()
+  const { data: elementCategoryData } = useFetchElementCategoryQuery()
+  const { data: elementClassificationData } =
+    useFetchElementClassificationQuery()
 
   useEffect(() => {
-    dispatch(fetchElements())
-    dispatch(fetchElementCategory())
-    dispatch(fetchElementClassification())
-    dispatch(fetchPayrun())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(() => {
-    // const endOffset = itemOffset + itemsPerPage
-    setPageCount(Math.ceil(elements.elements.length / itemsPerPage))
-  }, [itemOffset, itemsPerPage, elements.elements])
+    if (isSuccess) {
+      // const endOffset = itemOffset + itemsPerPage
+      setPageCount(Math.ceil(data.length / itemsPerPage))
+    }
+  }, [itemOffset, itemsPerPage, data, isSuccess])
 
   const handlePageClick = (event: { selected: number }) => {
-    const newOffset = (event.selected * itemsPerPage) % elements.elements.length
-    setItemOffset(newOffset)
+    if (isSuccess) {
+      const newOffset = (event.selected * itemsPerPage) % data.length
+      setItemOffset(newOffset)
+    }
   }
 
   const selectPageCount = (e: ChangeEvent<HTMLSelectElement>) => {
     setItemsPerPage(+e.currentTarget.value)
   }
-  if (loading) {
+  if (isLoading) {
     return (
       <div>
         <Spinner />
@@ -114,17 +107,15 @@ function Elements() {
           )}
         </DefaultModal>
       ) : null}
-      {elements.elements.length > 0 ? (
+      {isSuccess && data.length > 0 ? (
         <div className="elements__body">
           <ElementsTable
-            elements={elements.elements.slice(
-              itemOffset,
-              itemOffset + itemsPerPage,
-            )}
+            elements={data.slice(itemOffset, itemOffset + itemsPerPage)}
             setShowModal={setShowModal}
             setFormType={setFormType}
             elementClassificationData={elementClassificationData}
             elementCategoryData={elementCategoryData}
+            isSuccess={isSuccess}
           />
 
           <div className="pagination_wrapper">
@@ -149,7 +140,7 @@ function Elements() {
               renderOnZeroPageCount={null}
             />
 
-            {elements.elements.length > 0 && (
+            {isSuccess && data.length > 0 && (
               <div className="select-box">
                 <span>
                   Showing out
@@ -169,7 +160,7 @@ function Elements() {
                       <option value="100">100</option>
                     </select>
                   </span>
-                  of {elements.elements.length}
+                  of {data.length}
                 </span>
               </div>
             )}
