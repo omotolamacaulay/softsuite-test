@@ -1,10 +1,9 @@
 //@ts-nocheck
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { ElementLink } from "../../../../types"
 import SelectInput from "../../../layout/components/common/SelectInput"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { fetchGradeSteps } from "../../../counter/lookupSlice"
+import { useFetchGradeStepsQuery } from "../../../counter/apiSlice"
 const ElementFormPageTwo = ({
   onButtonClick,
   register,
@@ -40,15 +39,13 @@ const ElementFormPageTwo = ({
   watch: (arg: string) => void
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const gradeStepsData = useAppSelector((state) => state.lookups.gradeSteps)
   const selectedGradeStepsId = watch("grade")
-  useEffect(() => {
-    if (selectedGradeStepsId > 0) {
-      dispatch(fetchGradeSteps(selectedGradeStepsId))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGradeStepsId])
+  const { data: gradeStepsData, isSuccess } = useFetchGradeStepsQuery(
+    selectedGradeStepsId,
+    {
+      skip: selectedGradeStepsId <= 0,
+    },
+  )
   const toggleAdd = () => {
     setIsOpen((prev) => !prev)
   }
@@ -84,9 +81,9 @@ const ElementFormPageTwo = ({
           >
             <>
               <option value="">Select a Grade Step</option>
-              {gradeStepsData &&
-                gradeStepsData.length > 0 &&
-                gradeStepsData.map((gradeStep) => (
+              {isSuccess &&
+                gradeStepsData.data.length > 0 &&
+                gradeStepsData.data.map((gradeStep) => (
                   <option key={gradeStep.id} value={gradeStep.id}>
                     {gradeStep.name} - {gradeStep.amount}
                   </option>

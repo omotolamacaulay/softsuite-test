@@ -1,11 +1,9 @@
 //@ts-nocheck
-import { useEffect } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { ElementLink } from "../../../../types"
 import Input from "../../../layout/components/common/Input"
 import SelectInput from "../../../layout/components/common/SelectInput"
-import { fetchDepartments } from "../../../counter/lookupSlice"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useFetchDepartmentsQuery } from "../../../counter/apiSlice"
 
 const EditElementLinkFormPageOne = ({
   onButtonClick,
@@ -43,16 +41,13 @@ const EditElementLinkFormPageOne = ({
     name: string
   }[]
 }) => {
-  const dispatch = useAppDispatch()
-  const departmentsData = useAppSelector((state) => state.lookups.departments)
   const selectedSuborganizationId = watch("suborganizationId")
-  console.log(selectedSuborganizationId)
-  useEffect(() => {
-    if (selectedSuborganizationId > 0) {
-      dispatch(fetchDepartments(selectedSuborganizationId))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSuborganizationId])
+  const { data: departmentsData, isSuccess } = useFetchDepartmentsQuery(
+    selectedSuborganizationId,
+    {
+      skip: selectedSuborganizationId <= 0, // Skip the query if selectedSuborganizationId is less than or equal to 0
+    },
+  )
   return (
     <div className="pg-1">
       <div className="input-group">
@@ -92,9 +87,9 @@ const EditElementLinkFormPageOne = ({
           >
             <>
               <option value="">Select a Department</option>
-              {departmentsData &&
-                departmentsData.length > 0 &&
-                departmentsData.map((department) => (
+              {isSuccess &&
+                departmentsData.data.length > 0 &&
+                departmentsData.data.map((department) => (
                   <option key={department.id} value={department.id}>
                     {department.name}
                   </option>

@@ -50,14 +50,13 @@ const EditElementLinkFormPageTwo = ({
   //   }
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const gradeStepsData = useAppSelector((state) => state.lookups.gradeSteps)
   const selectedGradeStepsId = watch("grade")
-  useEffect(() => {
-    if (selectedGradeStepsId > 0) {
-      dispatch(fetchGradeSteps(selectedGradeStepsId))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGradeStepsId])
+  const { data: gradeStepsData, isSuccess } = useFetchGradeStepsQuery(
+    selectedGradeStepsId,
+    {
+      skip: selectedGradeStepsId <= 0,
+    },
+  )
   const toggleAdd = () => {
     setIsOpen((prev) => !prev)
   }
@@ -93,7 +92,7 @@ const EditElementLinkFormPageTwo = ({
           >
             <>
               <option value="">Select a Grade Step</option>
-              {gradeStepsData &&
+              {isSuccess &&
                 gradeStepsData.length > 0 &&
                 gradeStepsData.map((gradeStep) => (
                   <option key={gradeStep.id} value={gradeStep.id}>
