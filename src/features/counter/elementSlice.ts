@@ -4,11 +4,13 @@ import { Element } from "../../types"
 type ElementData = {
   error: string[]
   currentEditElement: Element | null
+  clearElement: Element | null
 }
 
 const initialState: ElementData = {
   error: [],
   currentEditElement: null,
+  clearElement: null,
 }
 
 export const elementSlice = createSlice({
@@ -18,9 +20,12 @@ export const elementSlice = createSlice({
     setCurrentEditElement: (state, action: PayloadAction<Element>) => {
       state.currentEditElement = action.payload
     },
+    setClearElement: (state) => {
+      state.clearElement = null
+    },
   },
 })
 
-export const { setCurrentEditElement } = elementSlice.actions
+export const { setCurrentEditElement, setClearElement } = elementSlice.actions
 
 export default elementSlice.reducer
