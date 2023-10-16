@@ -12,7 +12,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://650af6bedfd73d1fab094cf7.mockapi.io",
   }),
-  tagTypes: ["elements"],
+  tagTypes: ["elements", "elementLinks"],
   endpoints: (builder) => ({
     // Include endpoints from elementsApi
     fetchElements: builder.query<Element[], void>({
@@ -26,6 +26,9 @@ export const apiSlice = createApi({
     }),
     fetchSingleElement: builder.query<Element, string>({
       query: (id) => `elements/${id}`,
+      transformResponse: (response: any) => {
+        return response.data
+      },
     }),
     addSingleElement: builder.mutation<Element, Partial<Element>>({
       query: (newElement) => ({
@@ -53,6 +56,12 @@ export const apiSlice = createApi({
     // Include the new endpoints from elementLinksApi
     fetchElementLink: builder.query<ElementLink[], string>({
       query: (path) => `elements/${path}/elementlinks`,
+      transformResponse: (response: any) => {
+        return response.data.content.sort(
+          (a: { id: number }, b: { id: number }) => b.id - a.id,
+        ) as ElementLink[]
+      },
+      providesTags: ["elementLinks"],
     }),
     fetchSingleElementLink: builder.query<ElementLink, ElementLinkIds>({
       query: (value) => `elements/${value.elementId}/elementlinks/${value.id}`,
@@ -63,6 +72,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["elementLinks"],
     }),
     updateElementLink: builder.mutation<ElementLink, ElementLink>({
       query: (data) => ({
@@ -70,12 +80,14 @@ export const apiSlice = createApi({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["elementLinks"],
     }),
     deleteSingleElementLink: builder.mutation<void, ElementLinkIds>({
       query: (data) => ({
         url: `elements/${data.elementId}/elementlinks/${data.id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["elementLinks"],
     }),
     // Include endpoints from lookupApi
     fetchElementCategory: builder.query({
@@ -89,6 +101,9 @@ export const apiSlice = createApi({
     }),
     fetchSuborganizations: builder.query({
       query: () => "suborganizations",
+      transformResponse: (response: any) => {
+        return response.data
+      },
     }),
     fetchDepartments: builder.query({
       query: (id) => `suborganizations/${id}/departments`,
@@ -107,6 +122,9 @@ export const apiSlice = createApi({
     }),
     fetchGrades: builder.query({
       query: () => "grade",
+      transformResponse: (response: any) => {
+        return response.data
+      },
     }),
     fetchGradeSteps: builder.query({
       query: (id) => `grade/${id}/gradesteps`,
