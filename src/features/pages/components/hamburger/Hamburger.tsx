@@ -101,7 +101,7 @@ const HamburgerButton = ({
         <AlertModal>
           <ConfirmModal
             text="Are you sure you want to 
-          delete Element?"
+          delete this Element?"
             closeConfirmModal={() => {
               setConfirmModal(false)
             }}
