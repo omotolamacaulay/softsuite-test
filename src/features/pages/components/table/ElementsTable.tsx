@@ -60,7 +60,7 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "categoryValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isSuccess && getCategoryName(row.original.categoryValueId)}
+            {isSuccess ? getCategoryName(row.original.categoryValueId) : ""}
           </span>
         ),
       },
@@ -69,7 +69,9 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "classificationValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isSuccess && getClassificationData(row.original.classificationId)}
+            {isSuccess
+              ? getClassificationData(row.original.classificationId)
+              : ""}
           </span>
         ),
       },
