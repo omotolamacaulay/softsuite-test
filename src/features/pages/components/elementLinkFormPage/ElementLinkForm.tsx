@@ -1,16 +1,17 @@
 //@ts-nocheck
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import ElementFormPageOne from "./ElementFormPageOne"
 import ElementFormPageTwo from "./ElementFormPageTwo"
 import ElementFormPageThree from "./ElementFormPageThree"
 import MultiProgressElement from "./MultiProgressElement"
 import { useForm } from "react-hook-form"
-import { useAppSelector, useAppDispatch } from "../../../../app/hooks"
 import { ElementLink } from "../../../../types"
 import "../addelementform/ElementForm.scss"
 import "./ElementLinkForm.scss"
-import { addSingleElementLink } from "../../../counter/elementLinkSlice"
+import { useAddSingleElementLinkMutation } from "../../../counter/apiSlice"
+import AlertModal from "../AlertModal/AlertMotal"
+import SuccessModal from "../SuccessModal/SuccessModal"
 
 const ElementLinkForm = ({
   setShowElementModal,
@@ -38,12 +39,10 @@ const ElementLinkForm = ({
   securityData
 }) => {
   const [page, setPage] = useState("pageone")
-  const navigate = useNavigate()
+  const [addElementLink, isSuccess] = useAddSingleElementLinkMutation()
+  const { id } = useParams() as { id: string }
+  const [alertModal, setAlertModal] = useState(false)
 
-  const elementLink = useAppSelector(
-    (state) => state.elementlinks.currentEditElementLink,
-  )
-  const element = useAppSelector((state) => state.elements.element)
   const emptyState = {
     elementId: 0,
     suborganizationId: 0,
@@ -73,13 +72,12 @@ const ElementLinkForm = ({
     ],
   }
   const { handleSubmit, register, watch } = useForm<ElementLink>({
-    defaultValues: elementLink || emptyState,
+    defaultValues: emptyState,
   })
   const nextPage = (page: string) => {
     setPage(page)
   }
   const closeModal = () => setShowElementModal(false)
-  const dispatch = useAppDispatch()
 
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
@@ -98,15 +96,14 @@ const ElementLinkForm = ({
     }
   }
 
-  const onSubmit = async (data: ElementLink) => {
-    const elementId = element.id
+  const onSubmit = async (data: ElementLink, e?: Event) => {
+    e.preventDefault()
+    const elementId = id
     data.elementId = elementId
-    const actionResult = await dispatch(addSingleElementLink(data))
-    if (addSingleElementLink.fulfilled.match(actionResult)) {
-      console.log("Element updated successfully:", actionResult.payload)
+    await addElementLink(data)
+    if (isSuccess) {
+      setAlertModal(true)
     }
-    setShowElementModal(false)
-    navigate(0)
   }
 
   return (
@@ -157,6 +154,17 @@ const ElementLinkForm = ({
           }[page]
         }
       </form>
+      {alertModal && (
+        <AlertModal>
+          <SuccessModal
+            text="Element Link Added successfully"
+            closeSuccessModal={() => {
+              setAlertModal(false)
+              setShowElementModal(false)
+            }}
+          />
+        </AlertModal>
+      )}
     </div>
   )
 }

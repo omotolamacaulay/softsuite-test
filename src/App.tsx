@@ -1,6 +1,6 @@
 import { DashboardLayout } from "./features/layout/components/DashboardLayout"
 import "./App.css"
-import { Route, Routes, Navigate } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import Elements from "./features/pages/elementslist/Elements"
 import Notfound from "./features/pages/components/notFound/Notfound"
 import ElementDetail from "./features/pages/elementdetails/Element"

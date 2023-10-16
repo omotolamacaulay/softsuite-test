@@ -1,15 +1,17 @@
 //@ts-nocheck
 import { useState } from "react"
-import EditElementLinkFormPageOne from "./EditElementLinkFormPageOne"
-import EditElementLinkFormPageTwo from "./EditElementLinkFormPageTwo"
-import EditElementLinkFormPageThree from "./EditElementLinkFormPageThree"
 import MultiProgressElement from "../elementLinkFormPage/MultiProgressElement"
 import { useForm } from "react-hook-form"
-import { useAppSelector, useAppDispatch } from "../../../../app/hooks"
+import { useAppSelector } from "../../../../app/hooks"
 import { ElementLink } from "../../../../types"
 import "../addelementform/ElementForm.scss"
 import "../elementLinkFormPage/ElementLinkForm.scss"
-import { updateElementLink } from "../../../counter/elementLinkSlice"
+import ElementFormPageOne from "../elementLinkFormPage/ElementFormPageOne"
+import ElementFormPageTwo from "../elementLinkFormPage/ElementFormPageTwo"
+import ElementFormPageThree from "../elementLinkFormPage/ElementFormPageThree"
+import { useUpdateElementLinkMutation } from "../../../counter/apiSlice"
+import AlertModal from "../AlertModal/AlertMotal"
+import SuccessModal from "../SuccessModal/SuccessModal"
 
 const EditElementLinkForm = ({
   setShowElementModal,
@@ -37,6 +39,8 @@ const EditElementLinkForm = ({
   securityData
 }) => {
   const [page, setPage] = useState("pageone")
+  const [updateElementLink, isSuccess] = useUpdateElementLinkMutation()
+  const [alertModal, setAlertModal] = useState(false)
   const elementLink = useAppSelector(
     (state) => state.elementlinks.currentEditElementLink,
   )
@@ -75,7 +79,7 @@ const EditElementLinkForm = ({
     setPage(page)
   }
   const closeModal = () => setShowElementModal(false)
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
       case "1":
@@ -93,12 +97,16 @@ const EditElementLinkForm = ({
     }
   }
 
-  const onSubmit = async (data: ElementLink) => {
-    const actionResult = await dispatch(updateElementLink(data))
-    if (updateElementLink.fulfilled.match(actionResult)) {
-      console.log("Element updated successfully:", actionResult.payload)
+  const onSubmit = async (data: ElementLink, e?: Event) => {
+    e.preventDefault()
+    await updateElementLink(data)
+    if (isSuccess) {
+      setAlertModal(true)
     }
-    setShowElementModal(false)
+    // if (updateElementLink.fulfilled.match(actionResult)) {
+    //   console.log("Element updated successfully:", actionResult.payload)
+    // }
+    // setShowElementModal(false)
   }
 
   return (
@@ -114,7 +122,7 @@ const EditElementLinkForm = ({
         {
           {
             pageone: (
-              <EditElementLinkFormPageOne
+              <ElementFormPageOne
                 closeModal={closeModal}
                 onButtonClick={nextPage}
                 register={register}
@@ -127,7 +135,7 @@ const EditElementLinkForm = ({
               />
             ),
             pagetwo: (
-              <EditElementLinkFormPageTwo
+              <ElementFormPageTwo
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
@@ -139,7 +147,7 @@ const EditElementLinkForm = ({
               />
             ),
             pagethree: (
-              <EditElementLinkFormPageThree
+              <ElementFormPageThree
                 onButtonClick={nextPage}
                 register={register}
                 closeModal={closeModal}
@@ -149,6 +157,17 @@ const EditElementLinkForm = ({
           }[page]
         }
       </form>
+      {alertModal && (
+        <AlertModal>
+          <SuccessModal
+            text="Element Link Updated successfully"
+            closeSuccessModal={() => {
+              setAlertModal(false)
+              setShowElementModal(false)
+            }}
+          />
+        </AlertModal>
+      )}
     </div>
   )
 }

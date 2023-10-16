@@ -1,16 +1,15 @@
 //@ts-nocheck
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import MultiStepProgressBar from "../formpage/progressBar/MultiStepProgressBar"
 import FormpageOne from "../formpage/FormpageOne"
 import FormPageTwo from "../formpage/FormPageTwo"
 import { useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import "./ElementForm.scss"
-import { addSingleElement, updateElement } from "../../../counter/elementSlice"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useAppSelector } from "../../../../app/hooks"
 import AlertModal from "../AlertModal/AlertMotal"
 import SuccessModal from "../SuccessModal/SuccessModal"
+import { useAddSingleElementMutation } from "../../../counter/apiSlice"
 
 const ElementForm = ({
   setShowModal,
@@ -25,10 +24,9 @@ const ElementForm = ({
 }) => {
   const [page, setPage] = useState("pageone")
   const [alertModal, setAlertModal] = useState(false)
-  const navigate = useNavigate()
+
   const element = useAppSelector((state) => state.elements.currentEditElement)
 
-  const dispatch = useAppDispatch()
   const emptyState = {
     name: "",
     description: "",
@@ -61,6 +59,7 @@ const ElementForm = ({
     setPage(page)
   }
   const closeModal = () => setShowModal(false)
+  const [addElement, isSuccess] = useAddSingleElementMutation()
   console.log(errors)
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
@@ -78,27 +77,22 @@ const ElementForm = ({
   const onSubmit = async (data: Element, e?: Event) => {
     e.preventDefault()
     data.modifiedBy = "Omotola Macaulay"
-    let id: string = ""
+    // let id: string = ""
     try {
+      await addElement(data)
+      // if (addSingleElement.fulfilled.match(actionResult)) {
+      //   console.log("Element updated successfully:", actionResult.payload)
+      // id = actionResult.data.id
+      // }
+      // setShowModal(false)
       // setAlertModal(true)
-      if (data.id) {
-        id = data.id
-        dispatch(updateElement(data))
-      } else {
-        const actionResult = await dispatch(addSingleElement(data))
-
-        if (addSingleElement.fulfilled.match(actionResult)) {
-          console.log("Element updated successfully:", actionResult.payload)
-          id = actionResult.payload.id
-        }
-        setShowModal(false)
-        navigate(`/elements/${id}`)
-        setAlertModal(true)
-      }
+      // navigate(`/elements/${id}`)
     } catch (error) {
       console.error("An error occurred while processing the element:", error)
     }
-    setAlertModal(true)
+    if (isSuccess) {
+      setAlertModal(true)
+    }
   }
 
   return (
@@ -138,7 +132,10 @@ const ElementForm = ({
         <AlertModal>
           <SuccessModal
             text="Element Added successfully"
-            closeSuccessModal={() => setAlertModal(false)}
+            closeSuccessModal={() => {
+              setAlertModal(false)
+              setShowModal(false)
+            }}
           />
         </AlertModal>
       )}

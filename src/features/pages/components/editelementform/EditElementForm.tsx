@@ -9,6 +9,9 @@ import { Element } from "../../../../types"
 import "./EditElementForm.scss"
 import { updateElement } from "../../../counter/elementSlice"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useUpdateElementMutation } from "../../../counter/apiSlice"
+import AlertModal from "../AlertModal/AlertMotal"
+import SuccessModal from "../SuccessModal/SuccessModal"
 
 const EditElementForm = ({
   setShowModal,
@@ -22,6 +25,7 @@ const EditElementForm = ({
   elementCategoryData
 }) => {
   const [page, setPage] = useState("pageone")
+  const [alertModal, setAlertModal] = useState(false)
   const navigate = useNavigate()
   const element = useAppSelector(
     (state) => state.elements.currentEditElement,
@@ -35,7 +39,7 @@ const EditElementForm = ({
     setPage(page)
   }
   const closeModal = () => setShowModal(false)
-
+  const [updateElement, isSuccess] = useUpdateElementMutation()
   const dispatch = useAppDispatch()
 
   const nextPageNumber = (pageNumber: string) => {
@@ -55,15 +59,18 @@ const EditElementForm = ({
     let id: string = ""
     try {
       if (data.id) {
-        const actionResult = await dispatch(updateElement(data))
-        if (updateElement.fulfilled.match(actionResult)) {
-          id = actionResult.payload.elementId
-        }
+        await updateElement(data)
+        // if (updateElement.fulfilled.match(actionResult)) {
+        //   id = actionResult.payload.elementId
+        // }
       }
-      setShowModal(false)
-      navigate(`/elements/${id}`)
+      // setShowModal(false)
+      // navigate(`/elements/${id}`)
     } catch (error) {
       console.error("An error occurred while processing the element:", error)
+    }
+    if (isSuccess) {
+      setAlertModal(true)
     }
   }
 
@@ -101,6 +108,17 @@ const EditElementForm = ({
           }[page]
         }
       </form>
+      {alertModal && (
+        <AlertModal>
+          <SuccessModal
+            text="Element Updated successfully"
+            closeSuccessModal={() => {
+              setAlertModal(false)
+              setShowModal(false)
+            }}
+          />
+        </AlertModal>
+      )}
     </div>
   )
 }
