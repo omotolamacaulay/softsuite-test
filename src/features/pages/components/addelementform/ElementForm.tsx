@@ -1,14 +1,12 @@
 //@ts-nocheck
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import MultiStepProgressBar from "../formpage/progressBar/MultiStepProgressBar"
 import FormpageOne from "../formpage/FormpageOne"
 import FormPageTwo from "../formpage/FormPageTwo"
 import { useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import "./ElementForm.scss"
-// import { addSingleElement, updateElement } from "../../../counter/elementSlice"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useAppSelector } from "../../../../app/hooks"
 import AlertModal from "../AlertModal/AlertMotal"
 import SuccessModal from "../SuccessModal/SuccessModal"
 import { useAddSingleElementMutation } from "../../../counter/apiSlice"
@@ -26,10 +24,9 @@ const ElementForm = ({
 }) => {
   const [page, setPage] = useState("pageone")
   const [alertModal, setAlertModal] = useState(false)
-  const navigate = useNavigate()
+
   const element = useAppSelector((state) => state.elements.currentEditElement)
 
-  const dispatch = useAppDispatch()
   const emptyState = {
     name: "",
     description: "",
@@ -80,7 +77,7 @@ const ElementForm = ({
   const onSubmit = async (data: Element, e?: Event) => {
     e.preventDefault()
     data.modifiedBy = "Omotola Macaulay"
-    let id: string = ""
+    // let id: string = ""
     try {
       await addElement(data)
       // if (addSingleElement.fulfilled.match(actionResult)) {
