@@ -1,3 +1,4 @@
+@import "../../../styles/breakpoints";
 .side__modal {
   background-color: rgba(0, 0, 0, 0.4);
   position: fixed;
@@ -16,9 +17,12 @@
 
   &-body {
     background-color: white;
-    width: 745px;
+    width: 85%;
     padding: 24px 40px;
     // text-align: center;
     border-radius: 8px;
+    @include md-breakpoint {
+      width: 745px;
+    }
   }
 }
