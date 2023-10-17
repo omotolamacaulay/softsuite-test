@@ -41,7 +41,6 @@ const EditFormPageTwo = ({
 
   const selectedPayFrequency = watch("payFrequency")
   const status = watch("status")
-  console.log(status)
   return (
     <div className="pg-1">
       <div className="form-group">

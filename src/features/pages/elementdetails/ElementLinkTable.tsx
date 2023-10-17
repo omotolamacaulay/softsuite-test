@@ -9,10 +9,11 @@ import { useDeleteSingleElementLinkMutation } from "../../counter/apiSlice"
 import AlertModal from "../components/AlertModal/AlertMotal"
 import SuccessModal from "../components/SuccessModal/SuccessModal"
 import ConfirmModal from "../components/ConfirmModal/ConfirmModal"
-import useDataLookup from "../../hooks/useDataLookup"
 import { DataItem } from "../../hooks/useDataLookup"
 import { ElementLink } from "../../../types"
-// import { useFetchDepartmentsQuery } from "../../counter/apiSlice"
+import useGetDepartmentname from "../../hooks/useGetDepartmentName"
+import useGetEmployeeCategory from "../../hooks/useGetEmployeeCategory"
+import useFetchSuborganizations from "../../hooks/useGetSuborganization"
 
 interface ElementsTableProps {
   suborganizationsData: DataItem[]
@@ -35,18 +36,10 @@ const ElementLinkTable = ({
 ElementsTableProps) => {
   const dispatch = useAppDispatch()
   const [deleteElementLink, isSuccess] = useDeleteSingleElementLinkMutation()
-  //   const [departmentData, setDepartmentData] = useState({})
   const [confirmModal, setConfirmModal] = useState(false)
   const [alertModal, setAlertModal] = useState(false)
   const [selectedElementLinkId, setSelectedElementLinkId] = useState("")
   const { id } = useParams() as { id: string }
-  const { getDataName: getsuborganizations } =
-    useDataLookup(suborganizationsData)
-
-  //   console.log(suborganizationsData)
-  //   console.log(useDataLookup(suborganizationsData))
-  const { getDataName: getElementCategory } =
-    useDataLookup(employeeCategoryData)
 
   const columns = useMemo(
     () => [
@@ -59,24 +52,39 @@ ElementsTableProps) => {
         accessor: "suborganizationId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isTableSuccess
-              ? getsuborganizations(row.original.suborganizationId)
-              : ""}
+            {
+              useFetchSuborganizations(
+                row.original.suborganizationId,
+                suborganizationsData,
+                isTableSuccess,
+              ).suborganizationName
+            }
           </span>
         ),
       },
       {
         Header: "Department",
         accessor: "departmentId",
+        Cell: ({ row }) => (
+          <span className={`username ${row.original.status}`}>
+            {useGetDepartmentname(
+              row.original.suborganizationId,
+              row.original.departmentId,
+            )}
+          </span>
+        ),
       },
       {
         Header: "Employee Category",
         accessor: "employeeCategoryId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isTableSuccess
-              ? getElementCategory(row.original.employeeCategoryId)
-              : ""}
+            {
+              useGetEmployeeCategory(
+                row.original.employeeCategoryId,
+                employeeCategoryData,
+              ).employeeCategoryName
+            }
           </span>
         ),
       },

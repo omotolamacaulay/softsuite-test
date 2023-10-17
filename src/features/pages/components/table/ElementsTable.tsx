@@ -6,19 +6,10 @@ import Icons from "../../../assets/images"
 import "./ElementsTable.scss"
 import { Element } from "../../../../types"
 import HamburgerButton from "../hamburger/Hamburger"
-import useDataLookup from "../../../hooks/useDataLookup"
 import { DataItem } from "../../../hooks/useDataLookup"
-
-// interface ElementProps {
-//   name: string
-//   categoryValueId: number
-//   classificationValueId: number
-//   elementClassification: string
-//   effectiveEndDate: string
-//   modifiedBy: string
-//   status: string
-//   effectiveStartDate: string
-// }
+// import { getDataName } from "../../../utils"
+import useGetElementCategory from "../../../hooks/useGetElementCategory"
+import useGetElementClassification from "../../../hooks/useGetElementClassification"
 
 interface ElementsTableProps {
   elements: Element[]
@@ -37,10 +28,10 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
   elementClassificationData,
   isSuccess,
 }) => {
-  const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
-  const { getDataName: getClassificationData } = useDataLookup(
-    elementClassificationData,
-  )
+  // const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
+  // const { getDataName: getClassificationData } = useDataLookup(
+  //   elementClassificationData,
+  // )
   const columns = useMemo(
     () => [
       {
@@ -60,7 +51,13 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "categoryValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isSuccess ? getCategoryName(row.original.categoryValueId) : ""}
+            {
+              useGetElementCategory(
+                row.original.categoryValueId,
+                elementCategoryData,
+                isSuccess,
+              ).elementCategoryName
+            }
           </span>
         ),
       },
@@ -69,9 +66,13 @@ const ElementsTable: React.FC<ElementsTableProps> = ({
         accessor: "classificationValueId",
         Cell: ({ row }) => (
           <span className={`username ${row.original.status}`}>
-            {isSuccess
-              ? getClassificationData(row.original.classificationId)
-              : ""}
+            {
+              useGetElementClassification(
+                row.original.classificationId,
+                elementClassificationData,
+                isSuccess,
+              ).elementClassificationName
+            }
           </span>
         ),
       },
