@@ -1,20 +1,22 @@
 //@ts-nocheck
 import { Link } from "react-router-dom"
 import Icons from "../../assets/images"
+import useGetElementCategory from "../../hooks/useGetElementCategory"
+import useGetElementClassification from "../../hooks/useGetElementClassification"
+import useGetPayrun from "../../hooks/useGetPayrun"
+
 type ElementDetailsProps = {
   singleElement: Element
   isSuccess: boolean
-  getPayrun: (payRunId: number) => string
-  getClassificationData: (classificationId: number) => string
-  getCategoryName: (categoryValueId: number | undefined) => string
 }
 const ElementDetails: React.FC<ElementDetailsProps> = ({
   singleElement,
   isSuccess,
-  getPayrun,
-  getClassificationData,
-  getCategoryName,
 }) => {
+  const { elementCategoryData } = useGetElementCategory()
+  const { elementClassificationData } = useGetElementClassification()
+  const { payrunData } = useGetPayrun()
+
   return (
     <div className="page__header">
       <div className="element__back">
@@ -23,7 +25,7 @@ const ElementDetails: React.FC<ElementDetailsProps> = ({
         </Link>
       </div>
       <h2>Element Details</h2>
-      {isSuccess ? (
+      {
         <div className="element__detail">
           <div className="single__detail">
             <p className="element__label">Element Name</p>
@@ -32,19 +34,30 @@ const ElementDetails: React.FC<ElementDetailsProps> = ({
           <div className="single__detail">
             <p className="element__label">Element Classification</p>
             <p className="element__text">
-              {getClassificationData(singleElement?.classificationId)}
+              {
+                useGetElementClassification(
+                  singleElement?.classificationId,
+                  elementClassificationData,
+                  isSuccess,
+                ).elementClassificationName
+              }
             </p>
           </div>
           <div className="single__detail">
             <p className="element__label">ELEMENT category</p>
             <p className="element__text">
-              {getCategoryName(singleElement?.categoryValueId)}
+              {
+                useGetElementCategory(
+                  singleElement?.categoryValueId,
+                  elementCategoryData,
+                ).elementCategoryName
+              }
             </p>
           </div>
           <div className="single__detail">
             <p className="element__label">payrun</p>
             <p className="element__text">
-              {getPayrun(singleElement?.payRunId)}
+              {useGetPayrun(singleElement?.payRunId, payrunData).payrunName}
             </p>
           </div>
           <div className="single__detail">
@@ -113,9 +126,7 @@ const ElementDetails: React.FC<ElementDetailsProps> = ({
             </p>
           </div>
         </div>
-      ) : (
-        ""
-      )}
+      }
     </div>
   )
 }

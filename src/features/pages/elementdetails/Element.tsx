@@ -11,12 +11,9 @@ import ReactPaginate from "react-paginate"
 import ElementLinkModal from "../components/ElementLinkModal/ElementLinkModal"
 import SideModal from "../components/sideModal/SideModal"
 import Spinner from "../components/spinner/Spinner"
-import useDataLookup from "../../hooks/useDataLookup"
+
 import {
   useFetchSingleElementQuery,
-  useFetchPayrunQuery,
-  useFetchElementCategoryQuery,
-  useFetchElementClassificationQuery,
   useFetchSuborganizationsQuery,
   useFetchJobTitleQuery,
   useFetchLocationQuery,
@@ -31,6 +28,7 @@ import {
 } from "../../counter/apiSlice"
 import ElementDetails from "./ElementDetails"
 import ElementLinkTable from "./ElementLinkTable"
+import SideModalContent from "./SideModalContent"
 
 const ElementDetail = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -42,10 +40,6 @@ const ElementDetail = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [currentLinkDetails, setCurrentLinkDetails] = useState<ElementLink>()
   const { id } = useParams() as { id: string }
-  const { data: payrunData } = useFetchPayrunQuery()
-  const { data: elementCategoryData } = useFetchElementCategoryQuery()
-  const { data: elementClassificationData } =
-    useFetchElementClassificationQuery()
   const { data: suborganizationsData, isSuccess: isTableSuccess } =
     useFetchSuborganizationsQuery()
   const { data: jobTitleData } = useFetchJobTitleQuery()
@@ -63,11 +57,8 @@ const ElementDetail = () => {
     isLoading,
     isSuccess,
   } = useFetchSingleElementQuery(id)
-  const {
-    data: elementLinks,
-    isLoading: isLinksLoading,
-    isSuccess: isLinksSuccess,
-  } = useFetchElementLinkQuery(id)
+  const { data: elementLinks, isSuccess: isLinksSuccess } =
+    useFetchElementLinkQuery(id)
   const viewLinkDetails = (id: any) => {
     if (isLinksSuccess) {
       const index = elementLinks.findIndex((link) => link.id === id)
@@ -75,23 +66,6 @@ const ElementDetail = () => {
       setShowSideModal(true)
     }
   }
-  console.log(gradeData)
-  const { getDataName: getCategoryName } = useDataLookup(elementCategoryData)
-  const { getDataName: getClassificationData } = useDataLookup(
-    elementClassificationData,
-  )
-  const { getDataName: getPayrun } = useDataLookup(payrunData)
-
-  const { getDataName: getEmployeeCategory } =
-    useDataLookup(employeeCategoryData)
-  const { getDataName: getsuborganizations } =
-    useDataLookup(suborganizationsData)
-  const { getDataName: getLocation } = useDataLookup(locationData)
-  useDataLookup(suborganizationsData)
-  const { getDataName: getEmployeeType } = useDataLookup(employeeTypeData)
-  const { getDataName: getGrade } = useDataLookup(gradeData)
-  const { getDataName: getHousing } = useDataLookup(housingData)
-  const { getDataName: getWardrobe } = useDataLookup(wardrobeData)
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen)
   }
@@ -124,13 +98,7 @@ const ElementDetail = () => {
     <div className="elements">
       <div className="element">
         {isSuccess && (
-          <ElementDetails
-            singleElement={singleElement}
-            isSuccess={isSuccess}
-            getCategoryName={getCategoryName}
-            getClassificationData={getClassificationData}
-            getPayrun={getPayrun}
-          />
+          <ElementDetails singleElement={singleElement} isSuccess={isSuccess} />
         )}
 
         <h2 className="links__header">Elements Links</h2>
@@ -223,141 +191,21 @@ const ElementDetail = () => {
           ) : (
             ""
           )}
-          {showSideModal ? (
+          {showSideModal && (
             <SideModal>
-              {isLinksSuccess ? (
-                <div className="elementLinkDetails">
-                  <div className="page__header" style={{ padding: "32px" }}>
-                    <button
-                      // type="button"
-                      className="closeElementLink"
-                      onClick={() => setShowSideModal(false)}
-                    >
-                      <img src={Icons["CloseModal"]} alt="" />
-                    </button>
-                    <h2>Element Detail</h2>
-                    <div className="element__detail">
-                      <div className="single__detail">
-                        <p className="element__label">NAME</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.name}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">sub organization</p>
-                        <p className="element__text">
-                          {getsuborganizations(
-                            currentLinkDetails?.suborganizationId,
-                          )}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Department</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.departmentId}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Location</p>
-                        <p className="element__text">
-                          {getLocation(currentLinkDetails?.locationId)}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Employee Type</p>
-                        <p className="element__text">
-                          {getEmployeeType(currentLinkDetails?.employeeTypeId)}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Employee Category</p>
-                        <p className="element__text">
-                          {getEmployeeCategory(
-                            currentLinkDetails?.employeeCategoryId,
-                          )}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Effective Date</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.effectiveStartDate}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Status</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.status === true ||
-                          currentLinkDetails?.status === "active" ||
-                          currentLinkDetails?.status === "Active"
-                            ? "Active"
-                            : currentLinkDetails?.status === false ||
-                              currentLinkDetails?.status === "inactive" ||
-                              currentLinkDetails?.status === "Inactive" ||
-                              currentLinkDetails?.status === ""
-                            ? "Inactive"
-                            : "Unknown"}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">GRADE</p>
-                        <p className="element__text">
-                          {getGrade(currentLinkDetails?.grade)}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Grade Step</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.gradeStep}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Amount Type</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.amountType}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Amount/Rate</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.amount
-                            ? `NGN ${currentLinkDetails?.amount}`
-                            : `${currentLinkDetails?.rate}%`}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Wardrobe</p>
-                        <p className="element__text">
-                          {getWardrobe(
-                            currentLinkDetails?.additionalInfo[0].lookupValueId,
-                          )}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Housing</p>
-                        <p className="element__text">
-                          {getHousing(
-                            currentLinkDetails?.additionalInfo[1].lookupValueId,
-                          )}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Effective Start Date</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.effectiveStartDate}
-                        </p>
-                      </div>
-                      <div className="single__detail">
-                        <p className="element__label">Effective End Date</p>
-                        <p className="element__text">
-                          {currentLinkDetails?.effectiveEndDate}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
+              <SideModalContent
+                currentLinkDetails={currentLinkDetails}
+                setShowSideModal={setShowSideModal}
+                employeeCategoryData={employeeCategoryData}
+                suborganizationsData={suborganizationsData}
+                locationData={locationData}
+                employeeTypeData={employeeTypeData}
+                gradeData={gradeData}
+                wardrobeData={wardrobeData}
+                housingData={housingData}
+              />
             </SideModal>
-          ) : null}
+          )}
           <div className="pagination_wrapper">
             <ReactPaginate
               nextLabel=">"
