@@ -9,12 +9,11 @@ import DefaultModal from "../components/DefaultModal/DefaultModal"
 import EditElementForm from "../components/editelementform/EditElementForm"
 import EmptyState from "../components/EmptyState/EmptyState"
 import Spinner from "../components/spinner/Spinner"
-
+import useGetElementCategory from "../../hooks/useGetElementCategory"
+import useGetElementClassification from "../../hooks/useGetElementClassification"
 import {
   useFetchElementsQuery,
   useFetchPayrunQuery,
-  useFetchElementCategoryQuery,
-  useFetchElementClassificationQuery,
 } from "../../counter/apiSlice"
 
 function Elements() {
@@ -25,9 +24,8 @@ function Elements() {
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const { data, isSuccess, isLoading } = useFetchElementsQuery()
   const { data: payrunData } = useFetchPayrunQuery()
-  const { data: elementCategoryData } = useFetchElementCategoryQuery()
-  const { data: elementClassificationData } =
-    useFetchElementClassificationQuery()
+  const { elementCategoryData } = useGetElementCategory()
+  const { elementClassificationData } = useGetElementClassification()
 
   useEffect(() => {
     if (isSuccess) {
