@@ -15,6 +15,13 @@
       grid-template-columns: 1fr 1fr;
     }
   }
+  .error-span {
+    background-color: #fdf6f6;
+    color: #e05453;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 8px;
+  }
   .input-group {
     margin-bottom: 24px;
     display: grid;
@@ -46,6 +53,7 @@
   }
   input[type="date"],
   input[type="text"],
+  input[type="number"],
   select {
     height: 56px;
     width: 100%;
@@ -58,6 +66,10 @@
     &:disabled {
       background-color: #e1e1e1;
     }
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
   input[type="date"]::-webkit-datetime-edit-text,
   input[type="date"]::-webkit-datetime-edit-month-field,

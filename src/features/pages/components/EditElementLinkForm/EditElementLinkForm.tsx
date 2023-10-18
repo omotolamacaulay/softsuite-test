@@ -72,7 +72,13 @@ const EditElementLinkForm = ({
       },
     ],
   }
-  const { handleSubmit, register, watch } = useForm<ElementLink>({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+    trigger,
+  } = useForm<ElementLink>({
     defaultValues: elementLink || emptyState,
   })
   const nextPage = (page: string) => {
@@ -99,14 +105,20 @@ const EditElementLinkForm = ({
 
   const onSubmit = async (data: ElementLink, e?: Event) => {
     e.preventDefault()
-    await updateElementLink(data)
+    try {
+      const output = await trigger()
+      console.log(output)
+      if (output === true) {
+        await updateElementLink(data)
+      } else {
+        return
+      }
+    } catch (error) {
+      console.error("An error occurred while processing the element:", error)
+    }
     if (isSuccess) {
       setAlertModal(true)
     }
-    // if (updateElementLink.fulfilled.match(actionResult)) {
-    //   console.log("Element updated successfully:", actionResult.payload)
-    // }
-    // setShowElementModal(false)
   }
 
   return (
@@ -132,6 +144,8 @@ const EditElementLinkForm = ({
                 locationData={locationData}
                 employeeTypeData={employeeTypeData}
                 employeeCategoryData={employeeCategoryData}
+                trigger={trigger}
+                errors={errors}
               />
             ),
             pagetwo: (
@@ -152,6 +166,7 @@ const EditElementLinkForm = ({
                 register={register}
                 closeModal={closeModal}
                 watch={watch}
+                errors={errors}
               />
             ),
           }[page]

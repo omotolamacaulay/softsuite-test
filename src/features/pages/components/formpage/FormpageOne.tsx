@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { UseFormRegister, useForm } from "react-hook-form"
+import { UseFormRegister } from "react-hook-form"
 // import { Select, ConfigProvider, Space, Input } from "antd"
 import { Element } from "../../../../types"
 import "../addelementform/ElementForm.scss"
@@ -13,7 +13,8 @@ interface FormPageOneProps {
   closeModal: () => void
   register: UseFormRegister<Element>
   watch: (arg: string) => void
-  // formStateErrors: Record<string, any>
+  errors: Record<string, any>
+  trigger
   elementClassificationData: {
     id: number
     name: string
@@ -32,14 +33,12 @@ const FormpageOne = ({
   closeModal,
   register,
   watch,
-  // formStateErrors,
+  trigger,
+  errors,
   elementClassificationData,
   payrunData,
   elementCategoryData,
 }: FormPageOneProps) => {
-  const {
-    formState: { errors },
-  } = useForm<Element>()
   const selectedClassificationId = watch("classificationId")
   const selectedClassification = elementClassificationData.find(
     (classification) => classification.id === selectedClassificationId,
@@ -47,8 +46,6 @@ const FormpageOne = ({
   const selectedClassificationName = selectedClassification
     ? selectedClassification.name
     : ""
-
-  console.log(errors)
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -66,14 +63,16 @@ const FormpageOne = ({
             required
             placeholder="Input Name"
           />
+          {errors?.name?.type === "required" && (
+            <span className="error-span">This field is required</span>
+          )}
+          {errors?.name?.type === "maxLength" && (
+            <p>First name cannot exceed 50 characters</p>
+          )}
+          {errors?.name?.type === "pattern" && (
+            <p>Alphabetical characters only</p>
+          )}
         </div>
-        {errors?.name?.type === "required" && <p>This field is required</p>}
-        {errors?.name?.type === "maxLength" && (
-          <p>First name cannot exceed 50 characters</p>
-        )}
-        {errors?.name?.type === "pattern" && (
-          <p>Alphabetical characters only</p>
-        )}
         <div className="input-group">
           <SelectInput
             id="classificationId"
@@ -90,6 +89,11 @@ const FormpageOne = ({
               ))}
             </>
           </SelectInput>
+          {errors?.classificationId?.type === "required" && (
+            <span className="error-span">
+              Element Classification is required.
+            </span>
+          )}
         </div>
       </div>
       <div className="form-group">
@@ -122,16 +126,21 @@ const FormpageOne = ({
               })}
             </>
           </SelectInput>
+          {errors?.categoryValueId?.type === "required" && (
+            <span className="error-span">Element Category is required.</span>
+          )}
         </div>
         <div className="input-group">
           <SelectInput
             label="Payrun"
             id="payRunId"
-            register={{ ...register("payRunId") }}
+            register={{ ...register("payRunId", { required: true }) }}
             required
           >
             <>
-              <option value="">Select a payrun</option>
+              <option disabled value="">
+                Select a payrun
+              </option>
               {payrunData.map((payrun) => (
                 <option key={payrun.id} value={payrun.id}>
                   {payrun.name}
@@ -139,16 +148,28 @@ const FormpageOne = ({
               ))}
             </>
           </SelectInput>
+          {errors?.payRunId?.type === "required" && (
+            <span className="error-span">Payrun is required.</span>
+          )}
         </div>
       </div>
       <div className="input-group">
         <TextArea
           label="Description"
-          register={{ ...register("description", { required: true }) }}
-          id="descroption"
+          register={{
+            ...register("description", {
+              required: true,
+              maxLength: 500,
+              pattern: /^[A-Za-z]+$/i,
+            }),
+          }}
+          id="description"
           required
           placeholder="Enter Description"
         />
+        {errors?.description?.type === "required" && (
+          <span className="error-span">Please enter a description</span>
+        )}
       </div>
       <div className="input-group">
         <TextArea
@@ -158,6 +179,9 @@ const FormpageOne = ({
           id="reportingName"
           placeholder="Enter Reporting Name"
         />
+        {errors?.reportingName?.type === "required" && (
+          <span className="error-span">Reporting Name is required.</span>
+        )}
       </div>
       <div className="button-group">
         <button
@@ -171,27 +195,14 @@ const FormpageOne = ({
           className="btn primary-btn"
           type="button"
           value="Next"
-          onClick={() => {
-            onButtonClick("pagetwo")
-            // trigger([
-            //   "name",
-            //   // "classificationId",
-            //   // "classificationValueId",
-            //   // "payRunId",
-            //   // "description",
-            //   // "reportingName",
-            // ])
-            // console.log(trigger())
-            //   onButtonClick("pagetwo")
-            //   console.log(trigger())
-            //   trigger().then((res) => {
-            //     console.log(res)
-            //     // if (!res) {
-            //     //   return
-            //     // } else {
-            //     //   onButtonClick("pagetwo")
-            //     // }
-            //   })
+          onClick={async () => {
+            const output = await trigger()
+            // console.log(output)
+            if (output === true) {
+              onButtonClick("pagetwo")
+            } else {
+              return
+            }
           }}
         >
           Next

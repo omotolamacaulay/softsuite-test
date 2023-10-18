@@ -23,6 +23,7 @@
 
   input[type="date"],
   input[type="text"],
+  input[type="number"],
   select {
     height: 56px;
     width: 100%;
@@ -44,6 +45,10 @@
     //   line-height: 20px;
     //   font-weight: 400;
     // }
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
   input[type="date"]::-webkit-datetime-edit-text,
   input[type="date"]::-webkit-datetime-edit-month-field,
