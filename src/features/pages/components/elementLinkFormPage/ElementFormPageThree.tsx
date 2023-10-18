@@ -11,11 +11,15 @@ const ElementFormPageThree = ({
   closeModal,
   register,
   watch,
+  trigger,
+  errors,
 }: {
   onButtonClick: (arg: string) => void
   closeModal: () => void
   register: UseFormRegister<ElementLink>
   watch: (arg: string) => void
+  errors: Record<string, any>
+  trigger
 }) => {
   const amountType = watch("amountType")
   const status = watch("status")
@@ -27,7 +31,7 @@ const ElementFormPageThree = ({
             id="amountType"
             label="Amount Type"
             required
-            register={{ ...register("amountType") }}
+            register={{ ...register("amountType", { required: true }) }}
           >
             <>
               <option value="">Select an Amount Type</option>
@@ -35,10 +39,15 @@ const ElementFormPageThree = ({
               <option>Rate of Salary</option>
             </>
           </SelectInput>
+          {errors?.amountType?.type === "required" && (
+            <span className="error-span">Amount Type is required.</span>
+          )}
         </div>
-        <div className="input-group">
+        {/* <div className="input-group">
           <Input
             id={amountType === "Fixed Value" ? "amount" : "rate"}
+            required={true}
+            disabled={!amountType}
             label={
               amountType === "Fixed Value"
                 ? "Amount"
@@ -48,11 +57,46 @@ const ElementFormPageThree = ({
             }
             register={
               amountType === "Fixed Value"
-                ? { ...register("amount") }
-                : { ...register("rate") }
+                ? { ...register("amount", { required: true }) }
+                : { ...register("rate", { required: true }) }
             }
             placeholder="Input Amount"
           />
+          {errors?.amount?.type === "required" && (
+            <span className="error-span">This field is required.</span>
+          )}
+          {errors?.rate?.type === "required" && (
+            <span className="error-span">This field is required.</span>
+          )}
+        </div> */}
+        <div className="input-group">
+          {amountType === "Fixed Value" ? (
+            <Input
+              id="amount"
+              required={true}
+              label="Amount"
+              type="number"
+              register={{ ...register("amount", { required: true }) }}
+              placeholder="Input Amount"
+            />
+          ) : amountType === "Rate of Salary" ? (
+            <Input
+              id="rate"
+              required={true}
+              label="Rate"
+              type="number"
+              register={{ ...register("rate", { required: true }) }}
+              placeholder="Input Rate"
+            />
+          ) : (
+            <Input id="frt" disabled={true} label="..." />
+          )}
+          {errors?.amount?.type === "required" && (
+            <span className="error-span">This field is required.</span>
+          )}
+          {errors?.rate?.type === "required" && (
+            <span className="error-span">This field is required.</span>
+          )}
         </div>
       </div>
       <div className="form-group">
@@ -62,7 +106,6 @@ const ElementFormPageThree = ({
             register={{
               ...register("effectiveStartDate"),
             }}
-            required
             placeholder="Effective Start Date"
             id="effectiveStartDate"
             type="date"
@@ -75,7 +118,6 @@ const ElementFormPageThree = ({
             register={{
               ...register("effectiveEndDate"),
             }}
-            required
             placeholder="Effective End Date"
             id="effectiveEndDate"
             type="date"

@@ -10,6 +10,8 @@ const ElementFormPageOne = ({
   closeModal,
   register,
   watch,
+  trigger,
+  errors,
   suborganizationsData,
   jobTitleData,
   locationData,
@@ -19,6 +21,8 @@ const ElementFormPageOne = ({
   onButtonClick: (arg: string) => void
   closeModal: () => void
   register: UseFormRegister<ElementLink>
+  errors: Record<string, any>
+  trigger
   suborganizationsData: {
     id: number
     name: string
@@ -54,10 +58,25 @@ const ElementFormPageOne = ({
         <Input
           id="name"
           label="Element Link Name"
-          register={{ ...register("name", { required: true }) }}
+          register={{
+            ...register("name", {
+              required: true,
+              maxLength: 50,
+              pattern: /^[A-Za-z]+$/i,
+            }),
+          }}
           required
           placeholder="Input Name"
         />
+        {errors?.name?.type === "required" && (
+          <span className="error-span">This field is required</span>
+        )}
+        {errors?.name?.type === "maxLength" && (
+          <p>First name cannot exceed 50 characters</p>
+        )}
+        {errors?.name?.type === "pattern" && (
+          <p>Alphabetical characters only</p>
+        )}
       </div>
       <div className="form-group">
         <div className="input-group">
@@ -190,8 +209,14 @@ const ElementFormPageOne = ({
           className="btn primary-btn"
           type="button"
           value="Next"
-          onClick={() => {
-            onButtonClick("pagetwo")
+          onClick={async () => {
+            const output = await trigger()
+            // console.log(output)
+            if (output === true) {
+              onButtonClick("pagetwo")
+            } else {
+              return
+            }
           }}
         >
           Next

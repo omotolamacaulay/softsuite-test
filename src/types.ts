@@ -72,6 +72,7 @@ export type InputProps = {
   label: string
   register: Record<string, string | any>
   required?: boolean
+  disabled?: boolean
   placeholder?: string
   id: string
   type?: string

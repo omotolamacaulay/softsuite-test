@@ -52,6 +52,7 @@ const ElementForm = ({
     register,
     watch,
     formState: { errors },
+    trigger,
   } = useForm<Element>({
     defaultValues: element || emptyState,
   })
@@ -60,7 +61,6 @@ const ElementForm = ({
   }
   const closeModal = () => setShowModal(false)
   const [addElement, isSuccess] = useAddSingleElementMutation()
-  console.log(errors)
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
       case "1":
@@ -79,14 +79,13 @@ const ElementForm = ({
     data.modifiedBy = "Omotola Macaulay"
     // let id: string = ""
     try {
-      await addElement(data)
-      // if (addSingleElement.fulfilled.match(actionResult)) {
-      //   console.log("Element updated successfully:", actionResult.payload)
-      // id = actionResult.data.id
-      // }
-      // setShowModal(false)
-      // setAlertModal(true)
-      // navigate(`/elements/${id}`)
+      const output = await trigger()
+      console.log(output)
+      if (output === true) {
+        await addElement(data)
+      } else {
+        return
+      }
     } catch (error) {
       console.error("An error occurred while processing the element:", error)
     }
@@ -112,10 +111,11 @@ const ElementForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
-                formStateErrors={errors}
+                errors={errors}
                 elementClassificationData={elementClassificationData}
                 payrunData={payrunData}
                 elementCategoryData={elementCategoryData}
+                trigger={trigger}
               />
             ),
             pagetwo: (
@@ -123,6 +123,8 @@ const ElementForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
+                errors={errors}
+                trigger={trigger}
               />
             ),
           }[page]

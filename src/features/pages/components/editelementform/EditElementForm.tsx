@@ -1,14 +1,12 @@
 //@ts-nocheck
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import MultiStepProgressBar from "../formpage/progressBar/MultiStepProgressBar"
 import EditFormPageOne from "./EditFormPageOne"
 import EditFormPageTwo from "./EditFormPageTwo"
 import { useForm } from "react-hook-form"
 import { Element } from "../../../../types"
 import "./EditElementForm.scss"
-import { updateElement } from "../../../counter/elementSlice"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useAppSelector } from "../../../../app/hooks"
 import { useUpdateElementMutation } from "../../../counter/apiSlice"
 import AlertModal from "../AlertModal/AlertMotal"
 import SuccessModal from "../SuccessModal/SuccessModal"
@@ -26,12 +24,17 @@ const EditElementForm = ({
 }) => {
   const [page, setPage] = useState("pageone")
   const [alertModal, setAlertModal] = useState(false)
-  const navigate = useNavigate()
   const element = useAppSelector(
     (state) => state.elements.currentEditElement,
   ) as Element
 
-  const { handleSubmit, register, watch, control } = useForm<Element>({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+    trigger,
+  } = useForm<Element>({
     defaultValues: element,
   })
 
@@ -40,7 +43,6 @@ const EditElementForm = ({
   }
   const closeModal = () => setShowModal(false)
   const [updateElement, isSuccess] = useUpdateElementMutation()
-  const dispatch = useAppDispatch()
 
   const nextPageNumber = (pageNumber: string) => {
     switch (pageNumber) {
@@ -56,10 +58,17 @@ const EditElementForm = ({
   }
 
   const onSubmit = async (data: Element) => {
-    let id: string = ""
+    // let id: string = ""
     try {
-      if (data.id) {
-        await updateElement(data)
+      if (output === true) {
+        const output = await trigger()
+        console.log(output)
+        if (data.id) {
+          await updateElement(data)
+        } else {
+          return
+        }
+
         // if (updateElement.fulfilled.match(actionResult)) {
         //   id = actionResult.payload.elementId
         // }
@@ -91,9 +100,11 @@ const EditElementForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
+                errors={errors}
                 elementClassificationData={elementClassificationData}
                 payrunData={payrunData}
                 elementCategoryData={elementCategoryData}
+                trigger={trigger}
               />
             ),
             pagetwo: (
@@ -101,8 +112,8 @@ const EditElementForm = ({
                 onButtonClick={nextPage}
                 register={register}
                 watch={watch}
-                control={control}
-                // submitForm={onSubmit}
+                errors={errors}
+                trigger={trigger}
               />
             ),
           }[page]

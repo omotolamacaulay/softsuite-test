@@ -5,6 +5,7 @@ import Input from "../../../layout/components/common/Input"
 import RadioButton from "../../../layout/components/common/RadioButton"
 import SelectInput from "../../../layout/components/common/SelectInput"
 import Checkbox from "../../../layout/components/common/Checkbox"
+// import dayjs from "dayjs"
 
 const monthOptions = [
   {
@@ -23,24 +24,23 @@ const monthOptions = [
   { value: "November", label: "November" },
   { value: "December", label: "December" },
 ]
-
 interface FormPageTwoProps {
   onButtonClick: (arg: string) => void
   register: UseFormRegister<Element>
   watch: (arg: string) => void
+  trigger
+  errors: Record<string, any>
 }
-const EditFormPageTwo = ({
+const FormPageTwo = ({
   onButtonClick,
   register,
   watch,
-  control,
+  trigger,
+  errors,
 }: FormPageTwoProps) => {
-  // const {
-  //   formState: { errors },
-  // } = useForm<Element>()
-
   const selectedPayFrequency = watch("payFrequency")
   const status = watch("status")
+
   return (
     <div className="pg-1">
       <div className="form-group">
@@ -53,11 +53,15 @@ const EditFormPageTwo = ({
                 // valueAsDate: true,
               }),
             }}
-            required
             placeholder="Effective Start Date"
             id="effectiveStartDate"
             type="date"
           />
+          {errors?.effectiveStartDate?.type === "required" && (
+            <span className="error-span">
+              Please input an effective start date
+            </span>
+          )}
         </div>
         <div className="input-group">
           <Input
@@ -68,11 +72,15 @@ const EditFormPageTwo = ({
                 // valueAsDate: true,
               }),
             }}
-            required
             placeholder="Effective End Date"
             id="effectiveEndDate"
             type="date"
           />
+          {errors?.effectiveEndDate?.type === "required" && (
+            <span className="error-span">
+              Please input an effective end date
+            </span>
+          )}
         </div>
       </div>
       <div className="form-group">
@@ -81,12 +89,15 @@ const EditFormPageTwo = ({
             label="Processing Type"
             id="processingType"
             register={{ ...register("processingType", { required: true }) }}
-            required={true}
+            // required={true}
             options={[
               { value: 1, label: "Open" },
               { value: 2, label: "Closed" },
             ]}
           />
+          {errors?.processingType?.type === "required" && (
+            <span className="error-span">Please select a Processing Type</span>
+          )}
         </div>
         <div className="input-group">
           <RadioButton
@@ -99,13 +110,16 @@ const EditFormPageTwo = ({
               { value: 2, label: "Selected Months" },
             ]}
           />
+          {errors?.payFrequency?.type === "required" && (
+            <span className="error-span">Please select the Pay Frequency</span>
+          )}
         </div>
       </div>
       <div className="input-group">
         <SelectInput
           label="Selected Months"
           id="selectedMonths"
-          register={{ ...register("selectedMonths", { required: true }) }}
+          register={{ ...register("selectedMonths") }}
           // required={true}
           disabled={selectedPayFrequency !== "2"}
           multiple={true}
@@ -115,6 +129,9 @@ const EditFormPageTwo = ({
               {option.label}
             </option>
           ))}
+          {/* {errors?.selectedMonths?.type === "required" && (
+            <p>This field is required</p>
+          )} */}
           <></>
         </SelectInput>
       </div>
@@ -131,6 +148,9 @@ const EditFormPageTwo = ({
               { value: 2, label: "No" },
             ]}
           />
+          {errors?.prorate?.type === "required" && (
+            <span className="error-span">Prorate is required</span>
+          )}
         </div>
 
         <div className="input-group">
@@ -144,6 +164,9 @@ const EditFormPageTwo = ({
           <span className="status-span">
             {status === true ? "Active" : "Inactive"}
           </span>
+          {/* {errors?.status?.type === "required" && (
+            <span className="error-span">This field is required</span>
+          )} */}
         </div>
       </div>
 
@@ -161,4 +184,4 @@ const EditFormPageTwo = ({
   )
 }
 
-export default EditFormPageTwo
+export default FormPageTwo
